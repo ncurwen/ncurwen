@@ -4,9 +4,6 @@
 
 import { application } from "./application"
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
-
 import ThemeController from "./theme_controller"
 application.register("theme", ThemeController)
 
@@ -18,3 +15,6 @@ application.register("copy", CopyController)
 
 import TocController from "./toc_controller"
 application.register("toc", TocController)
+
+import GalleryController from "./gallery_controller"
+application.register("gallery", GalleryController)

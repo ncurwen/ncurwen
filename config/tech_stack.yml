@@ -1,26 +1,26 @@
 groups:
-  - heading: Languages
+  - heading: Favorite Languages
     items:
       - Ruby
       - JavaScript
-      - TypeScript
       - SQL
       - Bash
-  - heading: Frameworks
+      - Python
+  - heading: Favorite Frameworks
     items:
       - Rails
       - Hotwire (Turbo + Stimulus)
       - Tailwind / daisyUI
-      - React
+      - Vue
       - Sidekiq
   - heading: Data & Infra
     items:
       - PostgreSQL
-      - SQLite
+      - mySQL
       - Redis
       - Docker
-      - Kamal
       - GitHub Actions
+      - AWS
   - heading: Garden tools
     items:
       - Trowel
