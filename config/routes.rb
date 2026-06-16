@@ -12,6 +12,5 @@ Rails.application.routes.draw do
   root "pages#home"
   get "/experience" => "pages#experience", as: :experience
   get "/garden"     => "pages#garden",     as: :garden
-  get "/writing"    => "pages#writing",    as: :writing
   get "/contact"    => "pages#contact",    as: :contact
 end

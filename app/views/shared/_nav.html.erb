@@ -12,7 +12,6 @@
       <ul class="menu menu-horizontal gap-1 px-1 font-mono text-sm">
         <li><%= link_to "experience", experience_path, data: { turbo_action: "advance" } %></li>
         <li><%= link_to "garden",     garden_path,     data: { turbo_action: "advance" } %></li>
-        <li><%= link_to "writing",    writing_path,    data: { turbo_action: "advance" } %></li>
         <li><%= link_to "contact",    contact_path,    data: { turbo_action: "advance" } %></li>
       </ul>
     </div>
@@ -28,6 +27,16 @@
         <span class="hidden lg:inline">github</span>
       </a>
 
+      <a href="https://www.linkedin.com/in/nick-curwen-33528572/"
+         target="_blank" rel="noopener"
+         class="btn btn-ghost btn-sm hidden sm:inline-flex font-mono"
+         aria-label="LinkedIn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/>
+        </svg>
+        <span class="hidden lg:inline">linkedin</span>
+      </a>
+
       <label class="swap swap-rotate btn btn-ghost btn-circle" aria-label="Toggle theme">
         <input type="checkbox" data-theme-target="toggle" data-action="change->theme#toggle" />
         <svg class="swap-off h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5.64 17l-.71.71a1 1 0 0 0 0 1.41 1 1 0 0 0 1.41 0l.71-.71A1 1 0 0 0 5.64 17ZM5 12a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h1A1 1 0 0 0 5 12Zm7-7a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v1A1 1 0 0 0 12 5Zm5.66 1.71a1 1 0 0 0 .71-.29l.71-.71a1 1 0 0 0-1.41-1.41l-.71.71a1 1 0 0 0 0 1.41 1 1 0 0 0 .7.29ZM20.71 6a1 1 0 0 0 1.41 0l.71-.71a1 1 0 1 0-1.41-1.41l-.71.71a1 1 0 0 0 0 1.41ZM21 11h-1a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Zm-9 8a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1A1 1 0 0 0 12 19ZM18.36 17A1 1 0 0 0 17 18.36l.71.71a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41ZM12 6.5A5.5 5.5 0 1 0 17.5 12 5.51 5.51 0 0 0 12 6.5Zm0 9A3.5 3.5 0 1 1 15.5 12 3.5 3.5 0 0 1 12 15.5Z"/></svg>
@@ -41,9 +50,9 @@
         <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-40 p-2 shadow bg-base-200 rounded-box w-52 font-mono">
           <li><%= link_to "experience", experience_path, data: { turbo_action: "advance" } %></li>
           <li><%= link_to "garden",     garden_path,     data: { turbo_action: "advance" } %></li>
-          <li><%= link_to "writing",    writing_path,    data: { turbo_action: "advance" } %></li>
           <li><%= link_to "contact",    contact_path,    data: { turbo_action: "advance" } %></li>
           <li><a href="https://github.com/ncurwen" target="_blank" rel="noopener">github</a></li>
+          <li><a href="https://www.linkedin.com/in/nick-curwen-33528572/" target="_blank" rel="noopener">linkedin</a></li>
         </ul>
       </div>
     </div>

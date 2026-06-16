@@ -4,18 +4,27 @@
   <div class="hero-content text-center max-w-3xl">
     <div>
       <p class="font-mono text-primary text-sm mb-4">$ whoami</p>
-      <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4">
-        Hi, I'm Nick Curwen.
-      </h1>
-      <p class="text-xl md:text-2xl mb-2">I'm a</p>
-      <p class="font-mono text-2xl md:text-4xl text-primary typewriter-caret"
-         data-controller="typewriter"
-         data-typewriter-phrases-value='["senior software developer.","tech enthusiast.","gardener."]'>
-        <span data-typewriter-target="text">senior software developer.</span>
-      </p>
+      <div class="flex flex-col md:flex-row items-center gap-6 md:gap-8 text-center md:text-left">
+        <div class="avatar shrink-0">
+          <div class="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+            <%= image_tag "me.jpeg", alt: "Nick Curwen" %>
+          </div>
+        </div>
+        <div>
+          <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4">
+            Hi, I'm Nick Curwen.
+          </h1>
+          <p class="text-xl md:text-2xl mb-2">I'm a</p>
+          <p class="font-mono text-2xl md:text-4xl text-primary typewriter-caret"
+             data-controller="typewriter"
+             data-typewriter-phrases-value='["software developer.","tech enthusiast.","gardener."]'>
+            <span data-typewriter-target="text">software developer.</span>
+          </p>
+        </div>
+      </div>
       <p class="mt-8 text-base-content/80 text-lg max-w-xl mx-auto">
-        I build calm, fast Rails apps for small teams — and grow tomatoes when the laptop closes.
-        Drop in to see what I'm working on, or get in touch.
+        I love building things with technology, and I enjoy growing tomatoes whenever my laptop shuts down.
+        Drop in to see what I've worked on, or get in touch.
       </p>
 
       <div class="flex flex-wrap gap-3 justify-center mt-8">
