@@ -1,0 +1,29 @@
+groups:
+  - heading: Languages
+    items:
+      - Ruby
+      - JavaScript
+      - TypeScript
+      - SQL
+      - Bash
+  - heading: Frameworks
+    items:
+      - Rails
+      - Hotwire (Turbo + Stimulus)
+      - Tailwind / daisyUI
+      - React
+      - Sidekiq
+  - heading: Data & Infra
+    items:
+      - PostgreSQL
+      - SQLite
+      - Redis
+      - Docker
+      - Kamal
+      - GitHub Actions
+  - heading: Garden tools
+    items:
+      - Trowel
+      - Compost
+      - Patience
+      - A very large watering can

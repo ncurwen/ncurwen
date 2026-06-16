@@ -1,0 +1,64 @@
+positions:
+  - company: Info-Tech Research Group
+    location: London, Ontario, Canada
+    period: Jan 2014 — Present
+    summary: Eight years across co-op, full-time, and senior IC roles in the same R&D organisation — Ruby on Rails web apps for an enterprise research advisory.
+    roles:
+      - title: Senior Software Developer
+        period: Aug 2022 — Present
+      - title: Software Developer
+        period: May 2018 — Jul 2022
+      - title: Software Developer
+        period: Jan 2016 — Jan 2017
+        bullets:
+          - MVC web application development across the full stack — Ruby on Rails, jQuery, CoffeeScript, MySQL, HTML, SCSS, Bootstrap
+          - Solutions design and stakeholder communication
+          - Application maintenance, support, and code review via GitHub pull requests
+          - Day-to-day Agile delivery
+      - title: Cooperative Education Student — Software Developer
+        period: Jan 2014 — Aug 2015 (three co-op terms)
+        bullets:
+          - Collaborated with the Data Driven Research team using Ruby on Rails, MySQL, JavaScript, HTML and CSS
+          - Set up VMWare-based Linux dev environments
+          - Practised GitHub-driven collaboration, scrum and Agile early in my career
+
+  - company: Buffone IT Inc.
+    location: Contract, part-time
+    period: Sep 2020 — Jun 2021
+    summary: Two concurrent part-time mandates — a Data Developer role for one client and an AWS Specialist role for another.
+    roles:
+      - title: Data Developer & AWS Specialist
+        bullets:
+          - "Data: provisioned and managed artifact repositories"
+          - "Data: designed and built custom ETLs from varied sources on Talend Cloud"
+          - "Data: built data pipelines on Snowflake for high-volume processing"
+          - "AWS: automated CI and deployments across environments with CodePipeline and Lambda"
+          - "AWS: extended infrastructure-as-code with CloudFormation, including diagnosing and fixing existing stacks"
+          - "AWS: used the VPC Reachability Analyzer and similar techniques to harden network security"
+
+  - company: FranchiseGrade.com
+    location: Remote
+    period: Jan 2017 — Dec 2017
+    summary: Small, fast-moving product team building data infrastructure around franchise disclosure documents.
+    roles:
+      - title: Software Developer
+        bullets:
+          - Built micro-services using Docker, API services and AWS Lambdas
+          - Ruby on Rails web application development with RSpec for unit and integration tests
+          - Wrote Python spiders to scrape documents and metadata from the web
+          - Automated PDF extraction and storage with chained AWS Lambdas (Node.js and Python)
+          - Designed solutions to complex problems from loose specifications
+          - Leveraged AWS (SNS, SQS, Lambda, CloudFormation, ECS) for scalability
+          - Full Agile delivery — scrum, kanban, planning and retros
+
+  - company: Freelance Web Developer
+    location: London, Ontario, Canada
+    period: Mar 2012 — Mar 2014
+    summary: Webmaster and IT support for small businesses while studying.
+    roles:
+      - title: Webmaster & IT Support
+        bullets:
+          - Built affordable WordPress CMS websites for small-business clients
+          - Provided IT support across nearly anything tech-related
+          - Designed digital presences spanning website, social media and email
+          - Configured and maintained home servers to client requirements

@@ -1,0 +1,92 @@
+<% content_for :title, "Contact — Nick Curwen" %>
+
+<section class="max-w-3xl mx-auto px-4 py-12">
+  <header class="mb-10">
+    <p class="font-mono text-primary text-sm mb-1">$ mail nick</p>
+    <h1 class="text-3xl md:text-4xl font-bold">Get in touch</h1>
+    <p class="mt-2 text-base-content/70">
+      Hiring, collaborating, swapping seedlings — all welcome. Easiest right now is email
+      or GitHub; the form below will be live shortly.
+    </p>
+  </header>
+
+  <div class="grid gap-8 md:grid-cols-5">
+    <aside class="md:col-span-2 space-y-4">
+      <div class="card bg-base-200">
+        <div class="card-body p-5" data-controller="copy">
+          <h2 class="card-title text-base font-mono">email</h2>
+          <div class="flex items-center gap-2">
+            <code class="text-sm break-all" data-copy-target="source">the.only.nick.curwen@gmail.com</code>
+            <button type="button"
+                    class="btn btn-xs btn-ghost"
+                    data-action="copy#copy"
+                    aria-label="Copy email">
+              copy
+            </button>
+          </div>
+          <div class="toast toast-end hidden" data-copy-target="toast">
+            <div role="alert" class="alert alert-success">
+              <span>copied!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-base-200">
+        <div class="card-body p-5">
+          <h2 class="card-title text-base font-mono">github</h2>
+          <a href="https://github.com/ncurwen" target="_blank" rel="noopener"
+             class="link link-primary font-mono break-all">
+            github.com/ncurwen
+          </a>
+        </div>
+      </div>
+
+      <div class="card bg-base-200">
+        <div class="card-body p-5">
+          <h2 class="card-title text-base font-mono">elsewhere</h2>
+          <a href="https://agilepanda.dev" target="_blank" rel="noopener"
+             class="link link-primary font-mono break-all">
+            agilepanda.dev
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <form class="md:col-span-3 card bg-base-200" aria-describedby="contact-coming-soon">
+      <fieldset class="fieldset card-body gap-3" disabled>
+        <legend class="fieldset-legend font-mono">send a message</legend>
+
+        <div>
+          <label class="label font-mono text-xs" for="contact-name">your name</label>
+          <input id="contact-name" type="text" placeholder="grace hopper" class="input w-full" />
+        </div>
+
+        <div>
+          <label class="label font-mono text-xs" for="contact-email">your email</label>
+          <input id="contact-email" type="email" placeholder="you@example.com" class="input w-full" />
+        </div>
+
+        <div>
+          <label class="label font-mono text-xs" for="contact-subject">subject</label>
+          <input id="contact-subject" type="text" placeholder="hi nick — about..." class="input w-full" />
+        </div>
+
+        <div>
+          <label class="label font-mono text-xs" for="contact-message">message</label>
+          <textarea id="contact-message" class="textarea w-full h-32" placeholder="hello..."></textarea>
+        </div>
+
+        <div class="card-actions justify-end pt-2">
+          <button type="button" class="btn btn-primary font-mono" tabindex="-1" role="button" aria-disabled="true">
+            send →
+          </button>
+        </div>
+
+        <p id="contact-coming-soon" class="label text-xs mt-2">
+          📮 Form delivery coming soon — for now please use email or GitHub above.
+        </p>
+      </fieldset>
+    </form>
+  </div>
+</section>

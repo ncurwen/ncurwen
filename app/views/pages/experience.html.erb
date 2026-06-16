@@ -1,0 +1,126 @@
+<% content_for :title, "Experience — Nick Curwen" %>
+<% featured  = SiteData.portfolio[:featured] %>
+<% groups    = SiteData.tech_stack[:groups] %>
+<% positions = SiteData.work_history[:positions] %>
+<% schools   = SiteData.education[:schools] %>
+
+<% work_children = positions.map { |p|
+     { id: "work-#{p[:company].parameterize}", label: p[:company] }
+   } %>
+
+<%= render "shared/toc",
+            sections: [
+              { id: "featured",  label: "Featured project" },
+              { id: "skills",    label: "Skills" },
+              { id: "work",      label: "Work experience", children: work_children },
+              { id: "education", label: "Education" }
+            ] %>
+
+<section class="max-w-4xl mx-auto px-4 py-12 space-y-16">
+  <header id="top" class="scroll-mt-24">
+    <p class="font-mono text-primary text-sm mb-1">$ cat resume.txt</p>
+    <h1 class="text-3xl md:text-4xl font-bold">Experience</h1>
+    <p class="mt-2 text-base-content/70 max-w-2xl">
+      Twelve years of building software — full-stack Rails, data pipelines and AWS
+      infrastructure — for an enterprise R&amp;D shop and a handful of smaller teams.
+      Side project: <a href="https://agilepanda.dev" target="_blank" rel="noopener" class="link link-primary font-mono">agilepanda.dev</a>.
+      Source on <a href="https://github.com/ncurwen" target="_blank" rel="noopener" class="link link-primary font-mono">GitHub</a>.
+    </p>
+  </header>
+
+  <section id="featured" class="scroll-mt-24">
+    <p class="font-mono text-primary text-sm mb-1">$ ls projects/</p>
+    <h2 class="text-2xl font-bold mb-4">Featured project</h2>
+    <%= render "shared/project_card", project: featured, featured: true %>
+  </section>
+
+  <section id="skills" class="scroll-mt-24">
+    <p class="font-mono text-primary text-sm mb-1">$ cat tools.txt</p>
+    <h2 class="text-2xl font-bold mb-6">Skills</h2>
+    <div class="grid gap-6 md:grid-cols-2">
+      <% groups.each do |group| %>
+        <%= render "shared/badge_group", group: group %>
+      <% end %>
+    </div>
+  </section>
+
+  <section id="work" class="scroll-mt-24">
+    <p class="font-mono text-primary text-sm mb-1">$ history --work</p>
+    <h2 class="text-2xl font-bold mb-6">Work experience</h2>
+
+    <div class="space-y-6">
+      <% positions.each do |position| %>
+        <article id="work-<%= position[:company].parameterize %>" class="card bg-base-200 border border-base-300 scroll-mt-24">
+          <div class="card-body">
+            <header class="flex flex-wrap items-baseline justify-between gap-2 mb-1">
+              <h3 class="card-title font-mono">
+                <%= position[:company] %>
+              </h3>
+              <span class="font-mono text-sm text-base-content/70"><%= position[:period] %></span>
+            </header>
+            <% if position[:location].present? %>
+              <p class="font-mono text-xs text-base-content/60"><%= position[:location] %></p>
+            <% end %>
+            <% if position[:summary].present? %>
+              <p class="text-base-content/80 mt-2"><%= position[:summary] %></p>
+            <% end %>
+
+            <div class="mt-4 space-y-4">
+              <% Array(position[:roles]).each do |role| %>
+                <div>
+                  <div class="flex flex-wrap items-baseline justify-between gap-2">
+                    <h4 class="font-bold"><%= role[:title] %></h4>
+                    <% if role[:period].present? %>
+                      <span class="font-mono text-xs text-base-content/60"><%= role[:period] %></span>
+                    <% end %>
+                  </div>
+                  <% if role[:bullets].present? %>
+                    <ul class="list-disc list-outside ml-5 mt-2 space-y-1 text-base-content/80 text-sm">
+                      <% role[:bullets].each do |bullet| %>
+                        <li><%= bullet %></li>
+                      <% end %>
+                    </ul>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </article>
+      <% end %>
+    </div>
+  </section>
+
+  <section id="education" class="scroll-mt-24">
+    <p class="font-mono text-primary text-sm mb-1">$ cat education.txt</p>
+    <h2 class="text-2xl font-bold mb-6">Education</h2>
+    <div class="space-y-4">
+      <% schools.each do |school| %>
+        <article class="card bg-base-200 border border-base-300">
+          <div class="card-body">
+            <header class="flex flex-wrap items-baseline justify-between gap-2">
+              <h3 class="card-title font-mono"><%= school[:school] %></h3>
+              <span class="font-mono text-sm text-base-content/70"><%= school[:period] %></span>
+            </header>
+            <p class="text-base-content/80"><%= school[:credential] %></p>
+            <% if school[:location].present? %>
+              <p class="font-mono text-xs text-base-content/60"><%= school[:location] %></p>
+            <% end %>
+            <% if school[:honours].present? %>
+              <div class="flex flex-wrap gap-2 pt-2">
+                <% school[:honours].each do |h| %>
+                  <span class="badge badge-soft badge-sm font-mono"><%= h %></span>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </article>
+      <% end %>
+    </div>
+  </section>
+
+  <div class="text-center pt-4">
+    <%= link_to "get in touch →", contact_path,
+                class: "btn btn-primary btn-wide font-mono",
+                data: { turbo_action: "advance" } %>
+  </div>
+</section>

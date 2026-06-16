@@ -1,0 +1,11 @@
+<%# locals: group %>
+<div>
+  <h3 class="font-mono text-sm uppercase tracking-wider text-base-content/60 mb-2">
+    <%= group[:heading] %>
+  </h3>
+  <div class="flex flex-wrap gap-2">
+    <% Array(group[:items]).each do |item| %>
+      <span class="badge badge-outline font-mono"><%= item %></span>
+    <% end %>
+  </div>
+</div>

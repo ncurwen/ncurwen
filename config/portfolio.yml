@@ -1,0 +1,10 @@
+featured:
+  name: agilepanda.dev
+  url: https://agilepanda.dev
+  blurb: Lightweight agile tooling for small product teams who want flow without ceremony.
+  stack:
+    - Rails
+    - Hotwire
+    - Tailwind
+    - DaisyUI
+  emoji: "🦊"
