@@ -1,0 +1,23 @@
+<div class="space-y-4">
+  <% schools.each do |school| %>
+    <article class="card bg-base-200 border border-base-300">
+      <div class="card-body">
+        <header class="flex flex-wrap items-baseline justify-between gap-2">
+          <h3 class="card-title font-mono"><%= school[:school] %></h3>
+          <span class="font-mono text-sm text-base-content/70"><%= school[:period] %></span>
+        </header>
+        <p class="text-base-content/80"><%= school[:credential] %></p>
+        <% if school[:location].present? %>
+          <p class="font-mono text-xs text-base-content/60"><%= school[:location] %></p>
+        <% end %>
+        <% if school[:honours].present? %>
+          <div class="flex flex-wrap gap-2 pt-2">
+            <% school[:honours].each do |h| %>
+              <span class="badge badge-soft badge-sm font-mono"><%= h %></span>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </article>
+  <% end %>
+</div>

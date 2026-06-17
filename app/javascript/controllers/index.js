@@ -4,17 +4,17 @@
 
 import { application } from "./application"
 
-import ThemeController from "./theme_controller"
-application.register("theme", ThemeController)
-
-import TypewriterController from "./typewriter_controller"
-application.register("typewriter", TypewriterController)
-
 import CopyController from "./copy_controller"
 application.register("copy", CopyController)
+
+import GalleryController from "./gallery_controller"
+application.register("gallery", GalleryController)
+
+import ThemeController from "./theme_controller"
+application.register("theme", ThemeController)
 
 import TocController from "./toc_controller"
 application.register("toc", TocController)
 
-import GalleryController from "./gallery_controller"
-application.register("gallery", GalleryController)
+import TypewriterController from "./typewriter_controller"
+application.register("typewriter", TypewriterController)

@@ -1,0 +1,40 @@
+<div class="space-y-6">
+  <% positions.each do |position| %>
+    <article id="<%= WorkHistoryComponent.anchor(position[:company]) %>" class="card bg-base-200 border border-base-300 scroll-mt-24">
+      <div class="card-body">
+        <header class="flex flex-wrap items-baseline justify-between gap-2 mb-1">
+          <h3 class="card-title font-mono">
+            <%= position[:company] %>
+          </h3>
+          <span class="font-mono text-sm text-base-content/70"><%= position[:period] %></span>
+        </header>
+        <% if position[:location].present? %>
+          <p class="font-mono text-xs text-base-content/60"><%= position[:location] %></p>
+        <% end %>
+        <% if position[:summary].present? %>
+          <p class="text-base-content/80 mt-2"><%= position[:summary] %></p>
+        <% end %>
+
+        <div class="mt-4 space-y-4">
+          <% Array(position[:roles]).each do |role| %>
+            <div>
+              <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <h4 class="font-bold"><%= role[:title] %></h4>
+                <% if role[:period].present? %>
+                  <span class="font-mono text-xs text-base-content/60"><%= role[:period] %></span>
+                <% end %>
+              </div>
+              <% if role[:bullets].present? %>
+                <ul class="list-disc list-outside ml-5 mt-2 space-y-1 text-base-content/80 text-sm">
+                  <% role[:bullets].each do |bullet| %>
+                    <li><%= bullet %></li>
+                  <% end %>
+                </ul>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </article>
+  <% end %>
+</div>

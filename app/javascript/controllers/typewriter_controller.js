@@ -8,17 +8,22 @@ export default class extends Controller {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
     if (!this.phrasesValue?.length) return
     this.index = 0
+    this.stopped = false
     this.cycle()
   }
 
   disconnect() {
+    this.stopped = true
     clearTimeout(this.timer)
   }
 
   async cycle() {
+    if (this.stopped) return
     const phrase = this.phrasesValue[this.index]
     await this.type(phrase)
+    if (this.stopped) return
     await this.wait(this.holdMsValue)
+    if (this.stopped) return
     await this.erase()
     this.index = (this.index + 1) % this.phrasesValue.length
     this.cycle()

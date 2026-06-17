@@ -12,6 +12,19 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%# Set the theme before first paint to avoid a flash of the default theme. %>
+    <%# Keys/values must stay in sync with theme_controller.js. %>
+    <%= javascript_tag nonce: true do %>
+      (function () {
+        try {
+          var stored = localStorage.getItem("ncurwen-theme")
+          var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+          document.documentElement.dataset.theme = stored || (prefersDark ? "ncurwen-dark" : "ncurwen-light")
+        } catch (e) {}
+      })()
+    <% end %>
+
+    <%= turbo_refreshes_with(method: :morph, scroll: :preserve) %>
     <%= yield :head %>
 
     <link rel="icon" href="/icon.png" type="image/png">

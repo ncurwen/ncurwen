@@ -2,7 +2,7 @@
   <div class="navbar bg-base-200/80 backdrop-blur sticky top-0 z-30 border-b border-base-300">
     <div class="navbar-start">
       <%= link_to root_path,
-                  class: "btn btn-ghost text-lg font-mono normal-case px-2",
+                  class: "btn btn-ghost text-lg font-mono normal-case gap-0",
                   data: { turbo_action: "advance" } do %>
         <span class="text-primary">~/</span><span>ncurwen</span><span class="text-primary">.dev</span>
       <% end %>
@@ -52,7 +52,6 @@
           <li><%= link_to "garden",     garden_path,     data: { turbo_action: "advance" } %></li>
           <li><%= link_to "contact",    contact_path,    data: { turbo_action: "advance" } %></li>
           <li><a href="https://github.com/ncurwen" target="_blank" rel="noopener">github</a></li>
-          <li><a href="https://www.linkedin.com/in/nick-curwen-33528572/" target="_blank" rel="noopener">linkedin</a></li>
         </ul>
       </div>
     </div>

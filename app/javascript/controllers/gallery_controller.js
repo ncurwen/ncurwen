@@ -2,12 +2,15 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["dialog", "image", "caption", "counter"]
-  static values  = { images: Array, currentIndex: { type: Number, default: 0 } }
+  static values  = { images: Array }
 
-  open(event) {
-    const index = parseInt(event.currentTarget.dataset.galleryIndexParam, 10)
+  connect() {
+    this.index = 0
+  }
+
+  open({ params: { index } }) {
     if (Number.isNaN(index)) return
-    this.currentIndexValue = index
+    this.index = index
     this.render()
     this.dialogTarget.showModal()
   }
@@ -17,13 +20,13 @@ export default class extends Controller {
   }
 
   next() {
-    this.currentIndexValue = (this.currentIndexValue + 1) % this.imagesValue.length
+    this.index = (this.index + 1) % this.imagesValue.length
     this.render()
   }
 
   prev() {
     const len = this.imagesValue.length
-    this.currentIndexValue = (this.currentIndexValue - 1 + len) % len
+    this.index = (this.index - 1 + len) % len
     this.render()
   }
 
@@ -38,13 +41,13 @@ export default class extends Controller {
   }
 
   render() {
-    const entry = this.imagesValue[this.currentIndexValue]
+    const entry = this.imagesValue[this.index]
     if (!entry) return
     this.imageTarget.src = entry.url
     this.imageTarget.alt = entry.basename
     this.captionTarget.textContent = entry.date || entry.basename
     const total = String(this.imagesValue.length).padStart(2, "0")
-    const current = String(this.currentIndexValue + 1).padStart(2, "0")
+    const current = String(this.index + 1).padStart(2, "0")
     this.counterTarget.textContent = `${current} / ${total}`
   }
 }

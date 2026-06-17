@@ -86,7 +86,6 @@
   .typewriter-caret::after {
     content: "_";
     display: inline-block;
-    margin-left: 0.1em;
     animation: caret-blink 1s steps(1) infinite;
   }
 }

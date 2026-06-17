@@ -1,5 +1,3 @@
-<%# locals: sections %>
-
 <aside class="hidden xl:block fixed right-8 top-1/2 -translate-y-1/2 z-20 w-56"
        data-controller="toc"
        aria-label="Page sections">
@@ -12,6 +10,7 @@
         <a href="#<%= section[:id] %>"
            data-toc-target="link"
            data-section="<%= section[:id] %>"
+           data-turbo="false"
            class="link link-hover text-base-content/60 transition-colors">
           <%= section[:label] %>
         </a>
@@ -22,6 +21,7 @@
                 <a href="#<%= child[:id] %>"
                    data-toc-target="link"
                    data-section="<%= child[:id] %>"
+                   data-turbo="false"
                    class="link link-hover text-base-content/60 text-xs transition-colors">
                   <%= child[:label] %>
                 </a>

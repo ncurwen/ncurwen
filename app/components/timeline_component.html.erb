@@ -1,0 +1,21 @@
+<ul class="timeline timeline-vertical timeline-snap-icon timeline-compact max-w-3xl">
+  <% entries.each_with_index do |entry, i| %>
+    <li>
+      <% if i > 0 %><hr class="bg-primary/40" /><% end %>
+      <div class="timeline-middle">
+        <span class="inline-flex w-7 h-7 rounded-full bg-primary text-primary-content ring-2 ring-primary/20 ring-offset-2 ring-offset-base-100 items-center justify-center text-xs"><%= icon %></span>
+      </div>
+      <div class="timeline-end timeline-box bg-base-200 border-base-300 my-2">
+        <time class="font-mono text-xs text-base-content/60" datetime="<%= entry[:date] %>">
+          <%= entry[:date].strftime("%Y-%m-%d") %>
+        </time>
+        <h3 class="font-bold text-lg mt-1"><%= entry[:title] %></h3>
+        <p class="text-base-content/80 mt-1"><%= entry[:body] %></p>
+        <% if entry[:tag].present? %>
+          <span class="badge badge-soft badge-sm font-mono mt-3">#<%= entry[:tag] %></span>
+        <% end %>
+      </div>
+      <% if i < entries.length - 1 %><hr class="bg-primary/40" /><% end %>
+    </li>
+  <% end %>
+</ul>
