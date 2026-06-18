@@ -68,7 +68,8 @@ group :development do
 end
 
 group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
-  gem "selenium-webdriver"
+  gem "cuprite"
+  gem "minitest-mock"
+  gem "minitest-reporters"
 end
