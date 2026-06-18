@@ -6,8 +6,13 @@ positions:
     roles:
       - title: Senior Software Developer
         period: Aug 2022 — Present
+        bullets:
+          - Lead full-stack delivery on Ruby on Rails web apps for an enterprise research advisory
       - title: Software Developer
         period: May 2018 — Jul 2022
+        bullets:
+          - Drive solution design from loose requirements and review work through GitHub pull requests
+          - Owned features end to end — from design through delivery and ongoing support
       - title: Software Developer
         period: Jan 2016 — Jan 2017
         bullets:
@@ -37,7 +42,7 @@ positions:
           - "AWS: used the VPC Reachability Analyzer and similar techniques to harden network security"
 
   - company: FranchiseGrade.com
-    location: Remote
+    location: Byron, Ontario, Canada
     period: Jan 2017 — Dec 2017
     summary: Small, fast-moving product team building data infrastructure around franchise disclosure documents.
     roles:
