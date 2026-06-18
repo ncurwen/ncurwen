@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "../fonts/ubuntu.css";
+
 @plugin "daisyui" {
   themes: ;
 }
@@ -80,6 +82,10 @@
 
   --depth: 1;
   --noise: 1;
+}
+
+@theme {
+  --font-sans: "Ubuntu";
 }
 
 /* Page content scrolls inside #page-body (see application.html.erb), keeping
