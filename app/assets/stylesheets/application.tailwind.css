@@ -88,10 +88,44 @@
     display: inline-block;
     animation: caret-blink 1s steps(1) infinite;
   }
+
+  .toc-active-section {
+    border-radius: var(--radius-box);
+    padding-left: 1rem;
+    margin-left: -1rem;
+    padding-block: 0.75rem;
+    margin-block: -0.75rem;
+    box-shadow: inset 3px 0 0 0 var(--color-primary);
+    background-color: color-mix(in oklch, var(--color-primary) 7%, transparent);
+    transition: background-color 250ms ease, box-shadow 250ms ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .toc-active-section {
+      transition: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Blinking cursor for the garden hero's tailed-log eyebrow. */
+    .gallery-cursor {
+      animation: caret-blink 1s steps(1) infinite;
+    }
+
+    /* The garden hero reveals on load. */
+    .gallery-hero {
+      animation: gallery-reveal 600ms ease-out both;
+    }
+  }
 }
 
 @keyframes caret-blink {
   50% { opacity: 0; }
+}
+
+@keyframes gallery-reveal {
+  from { opacity: 0; transform: translateY(0.75rem); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 ::view-transition-old(root),

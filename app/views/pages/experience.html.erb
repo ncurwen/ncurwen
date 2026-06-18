@@ -18,7 +18,7 @@
 
 <section class="max-w-4xl mx-auto px-4 py-12 space-y-16">
   <header id="top" class="scroll-mt-24">
-    <%= render "shared/cli_prompt", text: "cat resume.txt", classes: "mb-1" %>
+    <%= cli_prompt_tag("cat resume.txt", classes: "mb-1") %>
     <h1 class="text-3xl md:text-4xl font-bold">Experience</h1>
     <p class="mt-2 text-base-content/70 max-w-2xl">
       Twelve years of building software — full-stack Rails, data pipelines and AWS
@@ -29,12 +29,12 @@
   </header>
 
   <section id="featured" class="scroll-mt-24">
-    <%= render "shared/section_heading", command: "ls projects/", title: "Featured project", title_class: "mb-4" %>
+    <%= section_heading_tag(command: "ls projects/", title: "Featured project", title_class: "mb-4") %>
     <%= render "shared/project_card", project: featured, featured: true %>
   </section>
 
   <section id="skills" class="scroll-mt-24">
-    <%= render "shared/section_heading", command: "cat tools.txt", title: "Skills" %>
+    <%= section_heading_tag(command: "cat tools.txt", title: "Skills") %>
     <div class="grid gap-6 md:grid-cols-2">
       <% groups.each do |group| %>
         <%= render "shared/badge_group", group: group %>
@@ -43,12 +43,12 @@
   </section>
 
   <section id="work" class="scroll-mt-24">
-    <%= render "shared/section_heading", command: "history --work", title: "Work experience" %>
+    <%= section_heading_tag(command: "history --work", title: "Work experience") %>
     <%= render WorkHistoryComponent.new(positions: positions) %>
   </section>
 
   <section id="education" class="scroll-mt-24">
-    <%= render "shared/section_heading", command: "cat education.txt", title: "Education" %>
+    <%= section_heading_tag(command: "cat education.txt", title: "Education") %>
     <%= render EducationComponent.new(schools: schools) %>
   </section>
 

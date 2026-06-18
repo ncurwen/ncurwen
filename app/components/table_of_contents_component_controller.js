@@ -11,10 +11,14 @@ export default class extends Controller {
     this.onLinkClick = (e) => {
       this.pinnedId = e.currentTarget.dataset.section
       this.setActive(this.pinnedId)
+      this.highlightSection(this.pinnedId)
     }
     this.linkTargets.forEach(link => link.addEventListener("click", this.onLinkClick))
 
-    this.clearPin = () => { this.pinnedId = null }
+    this.clearPin = () => {
+      this.pinnedId = null
+      this.clearHighlight()
+    }
     this.onKeydown = (e) => {
       if (["PageDown","PageUp","ArrowDown","ArrowUp","End","Home"," "].includes(e.key)) {
         this.clearPin()
@@ -44,6 +48,23 @@ export default class extends Controller {
     window.removeEventListener("scroll", this.onScroll)
     window.removeEventListener("resize", this.onScroll)
     if (this.frame) cancelAnimationFrame(this.frame)
+    this.clearHighlight()
+  }
+
+  highlightSection(id) {
+    this.clearHighlight()
+    const el = document.getElementById(id)
+    if (el) {
+      el.classList.add("toc-active-section")
+      this.highlightedEl = el
+    }
+  }
+
+  clearHighlight() {
+    if (this.highlightedEl) {
+      this.highlightedEl.classList.remove("toc-active-section")
+      this.highlightedEl = null
+    }
   }
 
   update() {

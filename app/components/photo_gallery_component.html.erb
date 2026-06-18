@@ -1,54 +1,132 @@
-<section class="mb-16" data-controller="gallery" data-gallery-images-value="<%= gallery_data.to_json %>">
-  <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
-    <%= render "shared/cli_prompt", text: "ls images/garden/" %>
-    <p class="font-mono text-xs text-base-content/60">
-      <%= images.length %> photos<% if years_label.present? %> · <%= years_label %><% end %>
-    </p>
-  </div>
+<section class="mb-16"
+         data-controller="photo-gallery-component"
+         data-photo-gallery-component-images-value="<%= gallery_data.to_json %>">
 
-  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 auto-rows-[7rem] sm:auto-rows-[9rem] md:auto-rows-[10rem] gap-3">
-    <% images.each_with_index do |img, i| %>
-      <% feature = (i == 0) %>
+  <%# ── Hero: the latest frame, presented as the most recent log entry ───────── %>
+  <% if latest %>
+    <button type="button"
+            data-action="click->photo-gallery-component#open"
+            data-photo-gallery-component-index-param="<%= latest[:idx] %>"
+            class="gallery-hero relative block w-full overflow-hidden rounded-box bg-base-300
+                   text-left cursor-zoom-in group
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            aria-label="Open the latest photo<%= " from #{latest[:date]}" if latest[:date] %>">
+      <%= image_tag latest[:path],
+                    loading: "eager",
+                    alt: latest[:basename],
+                    class: "h-[52vh] min-h-[20rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" %>
+      <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-base-300/90 via-base-300/20 to-transparent"></div>
+      <div class="absolute inset-x-0 bottom-0 p-5 sm:p-8">
+        <p class="font-mono text-primary text-sm mb-2">
+          $ tail -f garden.log<span class="gallery-cursor">_</span>
+        </p>
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-base-content">The garden log</h1>
+        <p class="mt-3 font-mono text-xs text-base-content/70">
+          <%= images.length %> frames · <%= span_label %>
+          <% if latest[:date] %><span class="text-base-content/50"> · last entry <%= latest[:date] %></span><% end %>
+        </p>
+      </div>
+    </button>
+  <% end %>
+
+  <%# ── Filter bar: isolate a single growing year ────────────────────────────── %>
+  <div class="mt-8 mb-8 flex flex-wrap items-center gap-2" role="group" aria-label="Filter photos by year">
+    <span class="font-mono text-xs text-base-content/50 mr-1">filter:</span>
+    <button type="button"
+            data-photo-gallery-component-target="chip"
+            data-action="click->photo-gallery-component#filter"
+            data-photo-gallery-component-year-param="all"
+            aria-pressed="true"
+            class="gallery-chip btn btn-xs btn-primary font-mono">
+      all <span class="opacity-50"><%= images.length %></span>
+    </button>
+    <% chapters.each do |year, imgs| %>
       <button type="button"
-              data-action="click->gallery#open"
-              data-gallery-index-param="<%= i %>"
-              class="relative block overflow-hidden rounded-box bg-base-200 group cursor-zoom-in
-                     focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
-                     <%= 'sm:col-span-2 sm:row-span-2' if feature %>"
-              aria-label="Open photo<%= " from #{img[:date]}" if img[:date] %>">
-        <%= image_tag img[:path],
-                      loading: "lazy",
-                      alt: img[:basename],
-                      class: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" %>
-        <% if img[:date] %>
-          <span class="pointer-events-none absolute bottom-2 left-2 px-1.5 py-0.5 rounded
-                       bg-base-100/85 text-base-content font-mono text-[10px] tracking-tight
-                       opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100
-                       transition-opacity duration-200">
-            <%= img[:date] %>
-          </span>
-        <% end %>
-        <% if feature %>
-          <span class="pointer-events-none absolute top-2 left-2 px-2 py-0.5 rounded-full
-                       bg-primary text-primary-content font-mono text-[10px] uppercase tracking-wider">
-            head
-          </span>
-        <% end %>
+              data-photo-gallery-component-target="chip"
+              data-action="click->photo-gallery-component#filter"
+              data-photo-gallery-component-year-param="<%= year %>"
+              aria-pressed="false"
+              class="gallery-chip btn btn-xs font-mono">
+        <span class="inline-block w-1.5 h-1.5 rounded-full mr-1.5 align-middle"
+              style="background: <%= season_gradient(imgs) %>"></span>
+        <%= year %> <span class="opacity-50"><%= imgs.length %></span>
       </button>
     <% end %>
   </div>
 
-  <dialog data-gallery-target="dialog"
-          data-action="keydown->gallery#keydown"
+  <%# ── Year chapters ────────────────────────────────────────────────────────── %>
+  <% chapters.each do |year, imgs| %>
+    <div data-photo-gallery-component-target="chapter" data-year="<%= year %>" class="mb-12">
+      <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 mb-1">
+        <h2 class="font-mono text-base text-base-content">
+          <span class="text-base-content/40">~/garden/</span><span class="text-primary font-semibold"><%= year %></span>
+        </h2>
+        <p class="font-mono text-xs text-base-content/60">
+          <%= imgs.length %> frames<% if month_range(imgs) %> · <%= month_range(imgs) %><% end %>
+        </p>
+      </div>
+      <div class="h-px w-full rounded-full mb-4" style="background: <%= season_gradient(imgs) %>"></div>
+
+      <%# ── Optional log: what happened this year ──────────────────────────────── %>
+      <% year_notes = notes_for(year) %>
+      <% if year_notes.any? %>
+        <div class="mb-4 space-y-2">
+          <% year_notes.each do |note| %>
+            <div class="font-mono text-sm">
+              <p class="flex flex-wrap items-baseline gap-x-2">
+                <span aria-hidden="true"><%= LOG_ICON %></span>
+                <time class="text-base-content/50 text-xs" datetime="<%= note[:date] %>"><%= note[:date].strftime("%Y-%m-%d") %></time>
+                <span class="font-semibold text-base-content"><%= note[:title] %></span>
+              </p>
+              <p class="pl-6 mt-1 text-xs leading-relaxed text-base-content/70">
+                <%= note[:body] %>
+                <% if note[:tag].present? %><span class="text-primary">#<%= note[:tag] %></span><% end %>
+              </p>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 auto-rows-[7rem] sm:auto-rows-[9rem] md:auto-rows-[10rem] gap-3">
+        <% imgs.each do |img| %>
+          <button type="button"
+                  data-action="click->photo-gallery-component#open"
+                  data-photo-gallery-component-index-param="<%= img[:idx] %>"
+                  class="relative block overflow-hidden rounded-box bg-base-200 group cursor-zoom-in
+                         focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                  aria-label="Open photo<%= " from #{img[:date]}" if img[:date] %>">
+            <%= image_tag img[:path],
+                          loading: "lazy",
+                          alt: img[:basename],
+                          class: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" %>
+            <% if img[:date] %>
+              <span class="pointer-events-none absolute bottom-2 left-2 inline-flex items-center gap-1.5
+                           px-1.5 py-0.5 rounded bg-base-100/85 text-base-content font-mono text-[10px] tracking-tight
+                           opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100
+                           transition-opacity duration-200">
+                <span class="inline-block w-1.5 h-1.5 rounded-full"
+                      style="background: <%= season_color(month_of(img)) %>"></span>
+                <%= img[:date] %>
+              </span>
+            <% end %>
+          </button>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <%# ── Lightbox ─────────────────────────────────────────────────────────────── %>
+  <dialog data-photo-gallery-component-target="dialog"
+          data-action="keydown->photo-gallery-component#keydown"
           class="modal">
     <div class="modal-box max-w-6xl w-full p-0 bg-base-100 overflow-hidden">
       <div class="relative bg-base-300/40">
-        <img data-gallery-target="image"
+        <img data-photo-gallery-component-target="image"
              class="block w-full max-h-[80vh] object-contain bg-black/5"
              alt="" />
 
         <button type="button"
-                data-action="click->gallery#prev"
+                data-action="click->photo-gallery-component#prev"
                 aria-label="Previous photo"
                 class="btn btn-circle btn-ghost bg-base-100/80 hover:bg-base-100
                        absolute left-3 top-1/2 -translate-y-1/2">
@@ -58,7 +136,7 @@
         </button>
 
         <button type="button"
-                data-action="click->gallery#next"
+                data-action="click->photo-gallery-component#next"
                 aria-label="Next photo"
                 class="btn btn-circle btn-ghost bg-base-100/80 hover:bg-base-100
                        absolute right-3 top-1/2 -translate-y-1/2">
@@ -68,7 +146,7 @@
         </button>
 
         <button type="button"
-                data-action="click->gallery#close"
+                data-action="click->photo-gallery-component#close"
                 aria-label="Close gallery"
                 class="btn btn-circle btn-ghost bg-base-100/80 hover:bg-base-100
                        absolute top-3 right-3">
@@ -79,9 +157,12 @@
       </div>
 
       <div class="flex items-center justify-between px-5 py-3 border-t border-base-300 font-mono text-xs">
-        <span data-gallery-target="caption" class="text-base-content/70"></span>
+        <span class="inline-flex items-center gap-2 text-base-content/70">
+          <span data-photo-gallery-component-target="dot" class="inline-block w-2 h-2 rounded-full"></span>
+          <span data-photo-gallery-component-target="caption"></span>
+        </span>
         <span class="text-base-content/40 hidden sm:inline">← → to navigate · esc to close</span>
-        <span data-gallery-target="counter" class="text-primary"></span>
+        <span data-photo-gallery-component-target="counter" class="text-primary"></span>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop">

@@ -2,3 +2,9 @@
 // Run that command whenever you add a new controller in ViewComponent
 
 import { application } from "../javascript/controllers/application"
+
+import PhotoGalleryComponentController from "./photo_gallery_component_controller"
+application.register("photo-gallery-component", PhotoGalleryComponentController)
+
+import TableOfContentsComponentController from "./table_of_contents_component_controller"
+application.register("table-of-contents-component", TableOfContentsComponentController)

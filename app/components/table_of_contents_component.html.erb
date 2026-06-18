@@ -1,5 +1,5 @@
 <aside class="hidden xl:block fixed right-8 top-1/2 -translate-y-1/2 z-20 w-56"
-       data-controller="toc"
+       data-controller="table-of-contents-component"
        aria-label="Page sections">
   <p class="font-mono text-xs uppercase tracking-wider text-base-content/50 mb-3">
     <span class="text-primary">$</span> jump-to
@@ -8,7 +8,7 @@
     <% sections.each do |section| %>
       <li>
         <a href="#<%= section[:id] %>"
-           data-toc-target="link"
+           data-table-of-contents-component-target="link"
            data-section="<%= section[:id] %>"
            data-turbo="false"
            class="link link-hover text-base-content/60 transition-colors">
@@ -19,7 +19,7 @@
             <% section[:children].each do |child| %>
               <li>
                 <a href="#<%= child[:id] %>"
-                   data-toc-target="link"
+                   data-table-of-contents-component-target="link"
                    data-section="<%= child[:id] %>"
                    data-turbo="false"
                    class="link link-hover text-base-content/60 text-xs transition-colors">
