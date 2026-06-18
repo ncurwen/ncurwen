@@ -19,13 +19,13 @@ class WorkHistoryComponentTest < ViewComponent::TestCase
   test "renders nothing when positions are empty" do
     render_inline(WorkHistoryComponent.new(positions: []))
 
-    assert_no_selector "article.card"
+    assert_no_selector "article.timeline-entry"
   end
 
-  test "renders one article card per position" do
+  test "renders one timeline entry per position" do
     render_inline(WorkHistoryComponent.new(positions: [ position, position, position ]))
 
-    assert_selector "article.card", count: 3
+    assert_selector "article.timeline-entry", count: 3
   end
 
   test "uses a parameterized company anchor as the article id" do

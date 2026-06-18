@@ -11,22 +11,22 @@ class TableOfContentsComponentTest < ViewComponent::TestCase
   test "renders nothing when sections are empty" do
     render_inline(TableOfContentsComponent.new(sections: []))
 
-    assert_no_selector "aside[data-controller='toc']"
+    assert_no_selector "[data-controller='table-of-contents-component']"
   end
 
-  test "renders the scroll-spy aside and the mobile dropdown" do
+  test "renders the scroll-spy aside and the mobile dropdown under one controller" do
     render_inline(TableOfContentsComponent.new(sections: [ section ]))
 
-    assert_selector "aside[data-controller='toc']"
-    assert_selector "div.dropdown ul.menu"
+    assert_selector "div[data-controller='table-of-contents-component'] aside"
+    assert_selector "div[data-controller='table-of-contents-component'] div.dropdown ul.menu"
   end
 
   test "renders a toc link per section in the desktop aside" do
     sections = [ section(id: "a", label: "A"), section(id: "b", label: "B") ]
     render_inline(TableOfContentsComponent.new(sections: sections))
 
-    assert_selector "aside a[data-toc-target='link'][data-section='a'][href='#a']", text: "A"
-    assert_selector "aside a[data-toc-target='link'][data-section='b'][href='#b']", text: "B"
+    assert_selector "aside a[data-table-of-contents-component-target='link'][data-section='a'][href='#a']", text: "A"
+    assert_selector "aside a[data-table-of-contents-component-target='link'][data-section='b'][href='#b']", text: "B"
   end
 
   test "renders nested children when present" do

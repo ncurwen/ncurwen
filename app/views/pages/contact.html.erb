@@ -1,5 +1,9 @@
 <% content_for :title, "Contact — Nick Curwen" %>
 
+<% content_for :head do %>
+  <%= cloudflare_turnstile_script_tag %>
+<% end %>
+
 <section class="max-w-3xl mx-auto px-4 py-12">
   <header class="mb-10">
     <p class="font-mono text-primary text-sm mb-1">$ mail nick</p>
@@ -85,6 +89,10 @@
         <div>
           <%= f.label :message, "message", class: "label font-mono text-xs" %>
           <%= f.text_area :message, placeholder: "hello...", class: "textarea w-full h-32" %>
+        </div>
+
+        <div data-controller="cloudflare-turnstile">
+          <%= cloudflare_turnstile %>
         </div>
 
         <div class="card-actions justify-end pt-2">

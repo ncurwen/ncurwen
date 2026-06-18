@@ -3,6 +3,9 @@
 # Define an application-wide content security policy.
 # See the Securing Rails Applications Guide for more information:
 # https://guides.rubyonrails.org/security.html#content-security-policy-header
+#
+# NOTE: If you enable CSP, the contact page's Cloudflare Turnstile widget needs
+# `https://challenges.cloudflare.com` allowed in `script-src` and `frame-src`.
 
 # Rails.application.configure do
 #   config.content_security_policy do |policy|

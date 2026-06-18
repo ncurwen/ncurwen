@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import CloudflareTurnstileController from "./cloudflare_turnstile_controller"
+application.register("cloudflare-turnstile", CloudflareTurnstileController)
+
 import CopyController from "./copy_controller"
 application.register("copy", CopyController)
 

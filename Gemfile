@@ -42,6 +42,9 @@ gem "image_processing", "~> 1.2"
 gem "rollbar", "~> 3.8"
 gem "view_component", "~> 4.12"
 
+# Cloudflare Turnstile (spam protection) for the contact form
+gem "rails_cloudflare_turnstile"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

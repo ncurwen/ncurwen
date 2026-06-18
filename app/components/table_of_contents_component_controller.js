@@ -9,14 +9,20 @@ export default class extends Controller {
     this.scroller = document.getElementById("page-body")
     this.scrollTarget = this.scroller || window
 
-    this.sections = this.linkTargets
-      .map(link => document.getElementById(link.dataset.section))
+    // Links appear twice (desktop sidebar + mobile dropdown), so dedupe to keep
+    // this.sections in monotonic document order for the threshold scan in update().
+    this.sections = [...new Set(this.linkTargets.map(link => link.dataset.section))]
+      .map(id => document.getElementById(id))
       .filter(Boolean)
 
     this.onLinkClick = (e) => {
       this.pinnedId = e.currentTarget.dataset.section
       this.setActive(this.pinnedId)
       this.highlightSection(this.pinnedId)
+      // Content scrolls inside #page-body, so native fragment scrolling doesn't
+      // reach it on mobile. Scroll explicitly, then close the daisyUI dropdown.
+      document.getElementById(this.pinnedId)?.scrollIntoView({ behavior: "smooth", block: "start" })
+      document.activeElement?.blur()
     }
     this.linkTargets.forEach(link => link.addEventListener("click", this.onLinkClick))
 

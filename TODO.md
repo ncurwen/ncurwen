@@ -1,4 +1,4 @@
-- Cloudflare tunrstile
+- Enable CSP
 - Experience frontend design improvments and copy updates
 - Review garden images for sensitive metadata
 - Fill in test gaps

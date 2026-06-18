@@ -1,4 +1,13 @@
 class ContactFormsController < ApplicationController
+  before_action :validate_cloudflare_turnstile, only: :create
+
+  rate_limit to: 5, within: 1.minute,
+    with: -> { redirect_to contact_path, alert: "Too many attempts — please wait a minute and try again." }
+
+  rescue_from RailsCloudflareTurnstile::Forbidden do
+    redirect_to contact_path, alert: "Couldn't verify you're human — please try the challenge again."
+  end
+
   def create
     @contact_form = ContactForm.new(contact_form_params)
 
