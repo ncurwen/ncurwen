@@ -1,5 +1,5 @@
 <% content_for :title, "Garden — Nick Curwen" %>
 
 <section class="max-w-5xl mx-auto px-4 py-12">
-  <%= render PhotoGalleryComponent.new(images: SiteData.garden_images, notes: SiteData.garden_notes[:entries]) %>
+  <%= render PhotoGalleryComponent.new(images: GardenImages.call, notes: SiteData.fetch(:garden_notes)) %>
 </section>

@@ -1,7 +1,7 @@
 <% content_for :title, "Experience — Nick Curwen" %>
-<% groups    = SiteData.tech_stack[:groups] %>
-<% positions = SiteData.work_history[:positions] %>
-<% schools   = SiteData.education[:schools] %>
+<% groups    = SiteData.fetch(:tech_stack) %>
+<% positions = SiteData.fetch(:work_history) %>
+<% schools   = SiteData.fetch(:education) %>
 
 <% work_children = positions.map { |p|
      { id: WorkHistoryComponent.anchor(p[:company]), label: p[:company] }
