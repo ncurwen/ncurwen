@@ -11,20 +11,20 @@ export default class extends Controller {
   static targets = ["link"]
 
   connect() {
-    this.update = this.update.bind(this)
-    document.addEventListener("turbo:load", this.update)
-    this.update()
+    document.addEventListener("turbo:load", this.#update)
+    this.#update()
   }
 
   disconnect() {
-    document.removeEventListener("turbo:load", this.update)
+    document.removeEventListener("turbo:load", this.#update)
   }
 
-  update() {
+  #update = () => {
     const path = window.location.pathname
     this.linkTargets.forEach((link) => {
-      const isActive = new URL(link.href).pathname === path
-      if (isActive) {
+      // Stylesheet matches a[aria-current="page"] exactly, so set the literal
+      // value rather than toggling a boolean attribute.
+      if (new URL(link.href).pathname === path) {
         link.setAttribute("aria-current", "page")
       } else {
         link.removeAttribute("aria-current")

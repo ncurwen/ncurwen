@@ -2,7 +2,16 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["text"]
-  static values  = { phrases: Array, typeMs: { type: Number, default: 70 }, eraseMs: { type: Number, default: 35 }, holdMs: { type: Number, default: 1500 } }
+  static values = {
+    phrases: Array,
+    typeMs:  { type: Number, default: 70 },
+    eraseMs: { type: Number, default: 35 },
+    holdMs:  { type: Number, default: 1500 },
+  }
+
+  index = 0
+  stopped = false
+  timer = null
 
   connect() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
@@ -11,8 +20,7 @@ export default class extends Controller {
     // Before Turbo caches this page, restore the first phrase so the snapshot
     // (and the preview Turbo paints from it on the next visit) shows a clean
     // starting frame instead of a frozen mid-animation one.
-    this.resetForCache = () => { this.textTarget.textContent = this.phrasesValue[0] }
-    document.addEventListener("turbo:before-cache", this.resetForCache)
+    document.addEventListener("turbo:before-cache", this.#resetForCache)
 
     // While Turbo is showing the cached preview it sets data-turbo-preview on
     // <html>. That DOM is torn down a moment later when the fresh response
@@ -20,30 +28,32 @@ export default class extends Controller {
     // the real (non-preview) render to start.
     if (document.documentElement.hasAttribute("data-turbo-preview")) return
 
-    this.index = 0
-    this.stopped = false
-    this.cycle()
+    this.#cycle()
   }
 
   disconnect() {
     this.stopped = true
     clearTimeout(this.timer)
-    document.removeEventListener("turbo:before-cache", this.resetForCache)
+    document.removeEventListener("turbo:before-cache", this.#resetForCache)
   }
 
-  async cycle() {
+  #resetForCache = () => {
+    this.textTarget.textContent = this.phrasesValue[0]
+  }
+
+  async #cycle() {
     if (this.stopped) return
     const phrase = this.phrasesValue[this.index]
-    await this.type(phrase)
+    await this.#type(phrase)
     if (this.stopped) return
-    await this.wait(this.holdMsValue)
+    await this.#wait(this.holdMsValue)
     if (this.stopped) return
-    await this.erase()
+    await this.#erase()
     this.index = (this.index + 1) % this.phrasesValue.length
-    this.cycle()
+    this.#cycle()
   }
 
-  type(phrase) {
+  #type(phrase) {
     return new Promise((resolve) => {
       let i = 0
       this.textTarget.textContent = ""
@@ -56,7 +66,7 @@ export default class extends Controller {
     })
   }
 
-  erase() {
+  #erase() {
     return new Promise((resolve) => {
       const tick = () => {
         const current = this.textTarget.textContent
@@ -68,7 +78,7 @@ export default class extends Controller {
     })
   }
 
-  wait(ms) {
+  #wait(ms) {
     return new Promise((resolve) => { this.timer = setTimeout(resolve, ms) })
   }
 }

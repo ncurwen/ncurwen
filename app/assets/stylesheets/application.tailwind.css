@@ -166,6 +166,30 @@
     color: var(--color-primary);
   }
 
+  /* Primary button hover. daisyUI's default only darkens the fill a few
+     percent, which is easy to miss on this green. Deepen the colour shift and
+     add a small lift + shadow so the affordance clearly registers. */
+  .btn-primary:not(:disabled):not(.btn-disabled):hover {
+    background-color: color-mix(in oklch, var(--color-primary) 82%, black);
+    border-color: color-mix(in oklch, var(--color-primary) 82%, black);
+    box-shadow: 0 4px 12px -2px color-mix(in oklch, var(--color-primary) 45%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .btn-primary {
+      transition: background-color 150ms ease, border-color 150ms ease,
+        box-shadow 150ms ease, transform 150ms ease;
+    }
+
+    .btn-primary:not(:disabled):not(.btn-disabled):hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:not(:disabled):not(.btn-disabled):active {
+      transform: translateY(0);
+    }
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     #primary-nav .menu a {
       transition: color 150ms ease;
