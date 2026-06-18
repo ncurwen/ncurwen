@@ -82,6 +82,15 @@
   --noise: 1;
 }
 
+/* Page content scrolls inside #page-body (see application.html.erb), keeping
+   the header and footer outside the scrollbar's reach. Reserve the scrollbar
+   gutter here so the inner content width — and anything centered in it — stays
+   constant between short and tall pages; the reserved strip sits beside the
+   base-100 content, so it's invisible. */
+#page-body {
+  scrollbar-gutter: stable;
+}
+
 @layer components {
   .typewriter-caret::after {
     content: "_";

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="ncurwen-light" data-controller="theme" class="scroll-smooth">
+<html lang="en" data-theme="ncurwen-light" data-controller="theme">
   <head>
     <title><%= content_for(:title) || "Nick Curwen — senior software developer, tech enthusiast, gardener" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -35,10 +35,14 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body class="min-h-screen flex flex-col bg-base-100 text-base-content">
+  <body class="h-dvh flex flex-col bg-base-100 text-base-content overflow-hidden">
     <%= render "layouts/nav" %>
 
-    <main id="page-body" class="flex-1">
+    <%# Page content scrolls inside <main> so the header and footer sit outside
+        the scrollbar's reach and span the full window width without shifting.
+        scrollbar-gutter (in application.tailwind.css) keeps the inner width
+        constant; its reserved strip sits beside base-100 content, so it blends. %>
+    <main id="page-body" class="flex-1 overflow-y-auto scroll-smooth">
       <% if flash.any? %>
         <div class="max-w-3xl mx-auto px-4 pt-6 space-y-2">
           <% if flash[:notice] %>

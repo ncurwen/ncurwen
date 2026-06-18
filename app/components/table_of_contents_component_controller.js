@@ -4,6 +4,11 @@ export default class extends Controller {
   static targets = ["link"]
 
   connect() {
+    // Page content scrolls inside #page-body, not the window (see the layout).
+    // Fall back to the document element if it's ever absent.
+    this.scroller = document.getElementById("page-body")
+    this.scrollTarget = this.scroller || window
+
     this.sections = this.linkTargets
       .map(link => document.getElementById(link.dataset.section))
       .filter(Boolean)
@@ -35,7 +40,7 @@ export default class extends Controller {
         this.update()
       })
     }
-    window.addEventListener("scroll", this.onScroll, { passive: true })
+    this.scrollTarget.addEventListener("scroll", this.onScroll, { passive: true })
     window.addEventListener("resize", this.onScroll, { passive: true })
     this.update()
   }
@@ -45,7 +50,7 @@ export default class extends Controller {
     window.removeEventListener("wheel", this.clearPin)
     window.removeEventListener("touchmove", this.clearPin)
     window.removeEventListener("keydown", this.onKeydown)
-    window.removeEventListener("scroll", this.onScroll)
+    this.scrollTarget.removeEventListener("scroll", this.onScroll)
     window.removeEventListener("resize", this.onScroll)
     if (this.frame) cancelAnimationFrame(this.frame)
     this.clearHighlight()
@@ -74,10 +79,10 @@ export default class extends Controller {
       return
     }
 
-    const doc       = document.documentElement
-    const scrolled  = window.scrollY
-    const viewport  = window.innerHeight
-    const docHeight = doc.scrollHeight
+    const metrics   = this.scroller || document.documentElement
+    const scrolled  = metrics.scrollTop
+    const viewport  = metrics.clientHeight
+    const docHeight = metrics.scrollHeight
     const atBottom  = scrolled + viewport >= docHeight - 4
     const threshold = 120
 
