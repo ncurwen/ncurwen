@@ -1,6 +1,6 @@
 ### Hi, I'm Nick 👋
 
-I'm a Senior Software Developer at [Info-Tech Research Group](https://www.infotech.com/) with over a decade of full-stack experience — Ruby on Rails web apps, data pipelines, and AWS infrastructure. Based in London, Ontario. I build software, and I grow vegetables.
+I'm a Senior Software Developer at [Info-Tech Research Group](https://www.infotech.com/) with over a decade of full-stack experience building Ruby on Rails web apps, data pipelines, and AWS infrastructure. I'm currently working remotely and live in London, Ontario. I love building solutions with technology, and I enjoy grow green things offline.
 
 - 🛠 Building **[AgilePanda](https://agilepanda.dev)** — lightweight agile tooling (planning poker, retros, Jira sync) in Rails + Hotwire.
 - 🌱 Keeping notes from the veg patch over at **[ncurwen.dev/garden](https://ncurwen.dev/garden)** — seasonal, honest, occasionally muddy.
