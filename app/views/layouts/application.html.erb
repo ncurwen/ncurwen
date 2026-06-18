@@ -39,6 +39,17 @@
     <%= render "layouts/nav" %>
 
     <main id="page-body" class="flex-1">
+      <% if flash.any? %>
+        <div class="max-w-3xl mx-auto px-4 pt-6 space-y-2">
+          <% if flash[:notice] %>
+            <div role="alert" class="alert alert-success alert-soft"><span><%= flash[:notice] %></span></div>
+          <% end %>
+          <% if flash[:alert] %>
+            <div role="alert" class="alert alert-error alert-soft"><span><%= flash[:alert] %></span></div>
+          <% end %>
+        </div>
+      <% end %>
+
       <%= yield %>
     </main>
 

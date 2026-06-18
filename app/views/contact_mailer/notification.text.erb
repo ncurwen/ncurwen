@@ -1,0 +1,21 @@
+~/ncurwen.dev — inbox
+=====================
+
+$ mail nick
+
+<%= @name %> sent you a message
+via the contact form<% if @received_at %> · <%= @received_at.strftime("%b %-d, %Y at %-l:%M %p") %><% end %>
+
+  FROM     <%= @name %>
+  EMAIL    <%= @email %>
+  SUBJECT  <%= @subject %>
+
+---------------------
+
+<%= @message %>
+
+---------------------
+
+Just hit reply — it goes straight to <%= @name.to_s.split.first.presence || @name %>.
+
+$ echo "sent from the contact form at ncurwen.dev"

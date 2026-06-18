@@ -39,6 +39,7 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 
+gem "rollbar", "~> 3.8"
 gem "view_component", "~> 4.12"
 
 group :development, :test do
@@ -58,6 +59,9 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # Preview emails in the browser instead of sending them [https://github.com/ryanb/letter_opener]
+  gem "letter_opener"
 end
 
 group :test do

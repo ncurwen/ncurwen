@@ -5,8 +5,8 @@
     <p class="font-mono text-primary text-sm mb-1">$ mail nick</p>
     <h1 class="text-3xl md:text-4xl font-bold">Get in touch</h1>
     <p class="mt-2 text-base-content/70">
-      Hiring, collaborating, swapping seedlings — all welcome. Easiest right now is email
-      or GitHub; the form below will be live shortly.
+      Hiring, collaborating, swapping seedlings — all welcome. Drop me a line with the
+      form below, or reach me by email or GitHub.
     </p>
   </header>
 
@@ -16,7 +16,7 @@
         <div class="card-body p-5" data-controller="copy">
           <h2 class="card-title text-base font-mono">email</h2>
           <div class="flex items-center gap-2">
-            <code class="text-sm break-all" data-copy-target="source">the.only.nick.curwen@gmail.com</code>
+            <code class="text-sm break-all" data-copy-target="source">contact@ncurwen.dev</code>
             <button type="button"
                     class="btn btn-xs btn-ghost"
                     data-action="copy#copy"
@@ -45,58 +45,52 @@
       <div class="card bg-base-200">
         <div class="card-body p-5">
           <h2 class="card-title text-base font-mono">linkedin</h2>
-          <a href="https://www.linkedin.com/in/nick-curwen-33528572/" target="_blank" rel="noopener"
+          <a href="https://www.linkedin.com/in/nick-curwen/" target="_blank" rel="noopener"
              class="link link-primary font-mono break-all">
             linkedin.com/in/nick-curwen
           </a>
         </div>
       </div>
-
-      <div class="card bg-base-200">
-        <div class="card-body p-5">
-          <h2 class="card-title text-base font-mono">elsewhere</h2>
-          <a href="https://agilepanda.dev" target="_blank" rel="noopener"
-             class="link link-primary font-mono break-all">
-            agilepanda.dev
-          </a>
-        </div>
-      </div>
     </aside>
 
-    <form class="md:col-span-3 card bg-base-200" aria-describedby="contact-coming-soon">
-      <fieldset class="fieldset card-body gap-3" disabled>
+    <%= form_with model: @contact_form, url: contact_path, method: :post, class: "md:col-span-3 card bg-base-200" do |f| %>
+      <fieldset class="fieldset card-body gap-3">
         <legend class="fieldset-legend font-mono">send a message</legend>
 
+        <% if @contact_form.errors.any? %>
+          <div role="alert" class="alert alert-error alert-soft">
+            <ul class="list-disc list-inside text-sm">
+              <% @contact_form.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
         <div>
-          <label class="label font-mono text-xs" for="contact-name">your name</label>
-          <input id="contact-name" type="text" placeholder="grace hopper" class="input w-full" />
+          <%= f.label :name, "your name", class: "label font-mono text-xs" %>
+          <%= f.text_field :name, placeholder: "grace hopper", class: "input w-full" %>
         </div>
 
         <div>
-          <label class="label font-mono text-xs" for="contact-email">your email</label>
-          <input id="contact-email" type="email" placeholder="you@example.com" class="input w-full" />
+          <%= f.label :email, "your email", class: "label font-mono text-xs" %>
+          <%= f.email_field :email, placeholder: "you@example.com", class: "input w-full" %>
         </div>
 
         <div>
-          <label class="label font-mono text-xs" for="contact-subject">subject</label>
-          <input id="contact-subject" type="text" placeholder="hi nick — about..." class="input w-full" />
+          <%= f.label :subject, "subject", class: "label font-mono text-xs" %>
+          <%= f.text_field :subject, placeholder: "hi nick — about...", class: "input w-full" %>
         </div>
 
         <div>
-          <label class="label font-mono text-xs" for="contact-message">message</label>
-          <textarea id="contact-message" class="textarea w-full h-32" placeholder="hello..."></textarea>
+          <%= f.label :message, "message", class: "label font-mono text-xs" %>
+          <%= f.text_area :message, placeholder: "hello...", class: "textarea w-full h-32" %>
         </div>
 
         <div class="card-actions justify-end pt-2">
-          <button type="button" class="btn btn-primary font-mono" tabindex="-1" role="button" aria-disabled="true">
-            send →
-          </button>
+          <%= f.submit "send →", class: "btn btn-primary font-mono" %>
         </div>
-
-        <p id="contact-coming-soon" class="label text-xs mt-2">
-          📮 Form delivery coming soon — for now please use email or GitHub above.
-        </p>
       </fieldset>
-    </form>
+    <% end %>
   </div>
 </section>

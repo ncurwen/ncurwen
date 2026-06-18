@@ -1,0 +1,51 @@
+<% first_name = @name.to_s.split.first.presence || @name %>
+<% content_for :preheader, "#{@subject} — reply goes straight to #{@name}." %>
+
+<!-- Eyebrow: the command that produced this message. -->
+<p style="margin:0 0 14px 0; font-family:'SF Mono',SFMono-Regular,ui-monospace,Menlo,Consolas,'Liberation Mono',monospace; font-size:13px; color:#3F7E4E;">
+  $ mail nick
+</p>
+
+<h1 style="margin:0 0 6px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; font-size:24px; line-height:1.25; font-weight:700; color:#29322A;">
+  <%= @name %> sent you a message
+</h1>
+<p style="margin:0 0 26px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; font-size:14px; color:#677061;">
+  via the contact form<% if @received_at %> · <%= @received_at.strftime("%b %-d, %Y at %-l:%M %p") %><% end %>
+</p>
+
+<!-- Metadata, terminal-style label/value rows. -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 24px 0;">
+  <tr>
+    <td width="92" style="padding:6px 0; vertical-align:top; font-family:'SF Mono',SFMono-Regular,ui-monospace,Menlo,Consolas,'Liberation Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#8A917F;">from</td>
+    <td style="padding:6px 0; vertical-align:top; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; font-size:15px; color:#29322A;"><%= @name %></td>
+  </tr>
+  <tr>
+    <td width="92" style="padding:6px 0; vertical-align:top; font-family:'SF Mono',SFMono-Regular,ui-monospace,Menlo,Consolas,'Liberation Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#8A917F;">email</td>
+    <td style="padding:6px 0; vertical-align:top; font-family:'SF Mono',SFMono-Regular,ui-monospace,Menlo,Consolas,'Liberation Mono',monospace; font-size:14px; color:#3F7E4E;"><a href="mailto:<%= @email %>" style="color:#3F7E4E; text-decoration:none;"><%= @email %></a></td>
+  </tr>
+  <tr>
+    <td width="92" style="padding:6px 0; vertical-align:top; font-family:'SF Mono',SFMono-Regular,ui-monospace,Menlo,Consolas,'Liberation Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#8A917F;">subject</td>
+    <td style="padding:6px 0; vertical-align:top; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; font-size:15px; color:#29322A;"><%= @subject %></td>
+  </tr>
+</table>
+
+<!-- The message itself: quoted block, sans-serif for readability. -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 30px 0;">
+  <tr>
+    <td style="background-color:#F2F5EE; border-left:3px solid #3F7E4E; border-radius:0 8px 8px 0; padding:18px 22px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; font-size:15px; line-height:1.6; color:#29322A;">
+      <%= simple_format @message, {}, sanitize: true %>
+    </td>
+  </tr>
+</table>
+
+<!-- Reply affordance. -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td bgcolor="#3F7E4E" style="background-color:#3F7E4E; border-radius:8px;">
+      <a href="mailto:<%= @email %>?subject=<%= ERB::Util.url_encode("Re: #{@subject}") %>"
+         style="display:inline-block; padding:12px 22px; font-family:'SF Mono',SFMono-Regular,ui-monospace,Menlo,Consolas,'Liberation Mono',monospace; font-size:14px; font-weight:600; color:#F7FBF6; text-decoration:none;">
+        reply to <%= first_name %> &rarr;
+      </a>
+    </td>
+  </tr>
+</table>

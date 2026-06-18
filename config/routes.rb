@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   get "/experience" => "pages#experience", as: :experience
   get "/garden"     => "pages#garden",     as: :garden
   get "/contact"    => "pages#contact",    as: :contact
+  post "/contact"   => "contact_forms#create"
 end

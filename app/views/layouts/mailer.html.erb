@@ -1,13 +1,82 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
+    <title><%= content_for(:title) || "ncurwen.dev" %></title>
     <style>
-      /* Email styles need to be inline */
+      /* Inline styles do the real work; this only handles what inline can't. */
+      body { margin: 0; padding: 0; width: 100% !important; -webkit-text-size-adjust: 100%; }
+      a { color: #3F7E4E; }
+      @media only screen and (max-width: 600px) {
+        .term-pad { padding: 24px 22px !important; }
+        .term-bar { padding: 12px 18px !important; }
+      }
     </style>
   </head>
 
-  <body>
-    <%= yield %>
+  <body style="margin:0; padding:0; background-color:#EFEBDD;">
+    <!-- Preheader: first line shown in inbox list, hidden in the body. -->
+    <div style="display:none; max-height:0; overflow:hidden; opacity:0; color:#EFEBDD; font-size:1px; line-height:1px;">
+      <%= yield :preheader %>
+    </div>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+           style="background-color:#EFEBDD;">
+      <tr>
+        <td align="center" style="padding:32px 16px;">
+
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"
+                 style="width:600px; max-width:600px; background-color:#FAF9F2; border:1px solid #E2DECB; border-radius:14px; overflow:hidden;">
+
+            <!-- Title bar: the terminal window chrome. -->
+            <tr>
+              <td class="term-bar" bgcolor="#34483A"
+                  style="background-color:#34483A; padding:14px 22px; font-family:'SF Mono',SFMono-Regular,ui-monospace,Menlo,Consolas,'Liberation Mono',monospace; font-size:13px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                  <tr>
+                    <td style="vertical-align:middle; white-space:nowrap;">
+                      <span style="display:inline-block; width:11px; height:11px; border-radius:50%; background-color:#5AA46A;"></span>
+                      <span style="display:inline-block; width:11px; height:11px; border-radius:50%; background-color:#4E9A86; margin-left:6px;"></span>
+                      <span style="display:inline-block; width:11px; height:11px; border-radius:50%; background-color:#C9743F; margin-left:6px;"></span>
+                    </td>
+                    <td align="right" style="vertical-align:middle; white-space:nowrap; color:#A9C6A4; font-size:12px; letter-spacing:0.02em;">
+                      <span style="color:#8FD49B;">~/</span><span style="color:#DCEBD8;">ncurwen</span><span style="color:#8FD49B;">.dev</span><span style="color:#6E8A6B;">&nbsp;—&nbsp;inbox</span>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Content -->
+            <tr>
+              <td class="term-pad" style="padding:34px 36px 30px 36px;">
+                <%= yield %>
+              </td>
+            </tr>
+
+            <!-- Footer: echoes the site's "$ echo ..." footer. -->
+            <tr>
+              <td bgcolor="#E8E3D2"
+                  style="background-color:#E8E3D2; border-top:1px solid #DCD6C2; padding:16px 36px; font-family:'SF Mono',SFMono-Regular,ui-monospace,Menlo,Consolas,'Liberation Mono',monospace; font-size:12px; color:#6B7363;">
+                <span style="color:#3F7E4E;">$</span> echo "just hit reply — it goes straight to them"
+              </td>
+            </tr>
+
+          </table>
+
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px;">
+            <tr>
+              <td align="center" style="padding:18px 8px 0 8px; font-family:'SF Mono',SFMono-Regular,ui-monospace,Menlo,Consolas,'Liberation Mono',monospace; font-size:11px; color:#9A9684;">
+                sent from the contact form at ncurwen.dev
+              </td>
+            </tr>
+          </table>
+
+        </td>
+      </tr>
+    </table>
   </body>
 </html>
