@@ -36,40 +36,39 @@ class PhotoGalleryComponent < ViewComponent::Base
                             .transform_values { |ns| ns.sort_by { |n| n[:date] } }
   end
 
-  # Global, display-ordered list (newest first) with a stable lightbox index.
-  def indexed_images
-    @indexed_images ||= images.each_with_index.map { |img, i| img.merge(idx: i) }
+  # Display-ordered (newest first) with everything the view and the Stimulus
+  # controller need, computed once. The array position is the stable lightbox
+  # index shared with the JSON in `gallery_data`.
+  def entries
+    @entries ||= images.each_with_index.map do |img, i|
+      month = img[:date]&.slice(5, 2)&.to_i
+      img.merge(
+        idx: i,
+        url: helpers.asset_path(img[:path]),
+        month: month,
+        season: season_color(month)
+      )
+    end
   end
 
   def latest
-    indexed_images.first
+    entries.first
   end
 
   # Year chapters, newest first.
   def chapters
-    indexed_images.group_by { |img| img[:year] }
-                  .sort_by { |year, _| -year.to_i }
+    entries.group_by { |img| img[:year] }
+           .sort_by { |year, _| -year.to_i }
   end
 
+  # The subset the Stimulus controller reads, by array position.
   def gallery_data
-    images.map do |img|
-      {
-        url: helpers.asset_path(img[:path]),
-        date: img[:date],
-        basename: img[:basename],
-        year: img[:year],
-        season: season_color(month_of(img))
-      }
-    end
+    entries.map { |e| e.slice(:url, :date, :basename, :year, :season) }
   end
 
   def span_label
     years = images.map { |i| i[:year] }.compact.uniq
     years.length > 1 ? "#{years.min}–#{years.max}" : years.first
-  end
-
-  def month_of(img)
-    img[:date]&.slice(5, 2)&.to_i
   end
 
   def season(month)
@@ -86,7 +85,7 @@ class PhotoGalleryComponent < ViewComponent::Base
   end
 
   def month_range(imgs)
-    months = imgs.map { |i| month_of(i) }.compact
+    months = imgs.map { |i| i[:month] }.compact
     return nil if months.empty?
 
     lo, hi = months.min, months.max
@@ -95,7 +94,7 @@ class PhotoGalleryComponent < ViewComponent::Base
 
   # A hairline that travels from the year's first season to its last.
   def season_gradient(imgs)
-    months = imgs.map { |i| month_of(i) }.compact
+    months = imgs.map { |i| i[:month] }.compact
     return SEASON_COLOR[:spring] if months.empty?
 
     "linear-gradient(to right, #{season_color(months.min)}, #{season_color(months.max)})"

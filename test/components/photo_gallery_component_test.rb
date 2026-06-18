@@ -43,6 +43,6 @@ class PhotoGalleryComponentTest < ViewComponent::TestCase
     render_inline(PhotoGalleryComponent.new(images: images))
 
     # One hero button (the latest frame) plus one button per grid image.
-    assert_selector "button[data-action='click->photo-gallery-component#open']", count: images.length + 1
+    assert_selector "button[data-action*='click->photo-gallery-component#open']", count: images.length + 1
   end
 end

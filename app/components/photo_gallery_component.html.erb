@@ -13,6 +13,8 @@
             aria-label="Open the latest photo<%= " from #{latest[:date]}" if latest[:date] %>">
       <%= image_tag latest[:path],
                     loading: "eager",
+                    fetchpriority: "high",
+                    decoding: "async",
                     alt: latest[:basename],
                     class: "h-[52vh] min-h-[20rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" %>
       <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-base-300/90 via-base-300/20 to-transparent"></div>
@@ -55,7 +57,7 @@
   </div>
 
   <%# ── Year chapters ────────────────────────────────────────────────────────── %>
-  <% chapters.each do |year, imgs| %>
+  <% chapters.each_with_index do |(year, imgs), chapter_index| %>
     <div data-photo-gallery-component-target="chapter" data-year="<%= year %>" class="mb-12">
       <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 mb-1">
         <h2 class="font-mono text-base text-base-content">
@@ -88,7 +90,10 @@
       <% end %>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 auto-rows-[7rem] sm:auto-rows-[9rem] md:auto-rows-[10rem] gap-3">
-        <% imgs.each do |img| %>
+        <% imgs.each_with_index do |img, img_index| %>
+          <%# First row of the newest chapter sits at the fold: load it up front,
+              but at default priority so it doesn't compete with the hero (LCP). %>
+          <% above_fold = chapter_index.zero? && img_index < 4 %>
           <button type="button"
                   data-action="click->photo-gallery-component#open"
                   data-photo-gallery-component-index-param="<%= img[:idx] %>"
@@ -96,7 +101,8 @@
                          focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                   aria-label="Open photo<%= " from #{img[:date]}" if img[:date] %>">
             <%= image_tag img[:path],
-                          loading: "lazy",
+                          loading: above_fold ? "eager" : "lazy",
+                          decoding: "async",
                           alt: img[:basename],
                           class: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" %>
             <% if img[:date] %>
@@ -105,7 +111,7 @@
                            opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100
                            transition-opacity duration-200">
                 <span class="inline-block w-1.5 h-1.5 rounded-full"
-                      style="background: <%= season_color(month_of(img)) %>"></span>
+                      style="background: <%= img[:season] %>"></span>
                 <%= img[:date] %>
               </span>
             <% end %>

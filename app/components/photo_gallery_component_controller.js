@@ -7,6 +7,7 @@ export default class extends Controller {
   connect() {
     this.index = 0
     this.activeYear = "all"
+    this.preloaded = new Set()
     this.refreshActiveIndices()
   }
 
@@ -71,6 +72,25 @@ export default class extends Controller {
     this.render()
   }
 
+  // Fetch a full image into the browser cache without inserting it. Each url
+  // is fetched at most once.
+  warm(i) {
+    const entry = this.imagesValue[i]
+    if (!entry || this.preloaded.has(i)) return
+    this.preloaded.add(i)
+    const img = new Image()
+    img.src = entry.url
+  }
+
+  // Pre-fetch the images on either side of the current one so left/right
+  // navigation is instant.
+  preloadNeighbors(set) {
+    const pos = set.indexOf(this.index)
+    if (pos === -1) return
+    this.warm(set[(pos + 1) % set.length])
+    this.warm(set[(pos - 1 + set.length) % set.length])
+  }
+
   keydown(event) {
     if (event.key === "ArrowRight") {
       event.preventDefault()
@@ -94,5 +114,7 @@ export default class extends Controller {
     const current = String(set.indexOf(this.index) + 1).padStart(2, "0")
     const total = String(set.length).padStart(2, "0")
     this.counterTarget.textContent = `${current} / ${total}`
+
+    this.preloadNeighbors(set)
   }
 }
