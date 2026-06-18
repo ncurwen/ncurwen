@@ -4,6 +4,7 @@ class ContactMailer < ApplicationMailer
     @email = email
     @subject = subject.presence || "(no subject)"
     @message = message
+    @received_at = Time.current
 
     mail(
       to: "the.only.nick.curwen@gmail.com",
