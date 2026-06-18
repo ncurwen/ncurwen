@@ -7,6 +7,19 @@ export default class extends Controller {
   connect() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
     if (!this.phrasesValue?.length) return
+
+    // Before Turbo caches this page, restore the first phrase so the snapshot
+    // (and the preview Turbo paints from it on the next visit) shows a clean
+    // starting frame instead of a frozen mid-animation one.
+    this.resetForCache = () => { this.textTarget.textContent = this.phrasesValue[0] }
+    document.addEventListener("turbo:before-cache", this.resetForCache)
+
+    // While Turbo is showing the cached preview it sets data-turbo-preview on
+    // <html>. That DOM is torn down a moment later when the fresh response
+    // renders, so animating now would visibly reset on the remount. Wait for
+    // the real (non-preview) render to start.
+    if (document.documentElement.hasAttribute("data-turbo-preview")) return
+
     this.index = 0
     this.stopped = false
     this.cycle()
@@ -15,6 +28,7 @@ export default class extends Controller {
   disconnect() {
     this.stopped = true
     clearTimeout(this.timer)
+    document.removeEventListener("turbo:before-cache", this.resetForCache)
   }
 
   async cycle() {

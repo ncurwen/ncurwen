@@ -117,6 +117,46 @@
     }
   }
 
+  /* Active nav link. Driven off aria-current (set by nav_controller.js) so the
+     desktop and mobile menus share one source of truth. The active link turns
+     primary; the horizontal menu gets the underline echo of the TOC's primary
+     edge-bar, while the vertical dropdown reuses the TOC's left-bar form
+     directly (an underline reads poorly in a stacked list). */
+  #primary-nav .menu a[aria-current="page"] {
+    color: var(--color-primary);
+  }
+
+  #primary-nav .menu-horizontal a[aria-current="page"] {
+    position: relative;
+  }
+
+  #primary-nav .menu-horizontal a[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0.15rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-primary);
+  }
+
+  #primary-nav .dropdown-content a[aria-current="page"] {
+    box-shadow: inset 3px 0 0 0 var(--color-primary);
+    background-color: color-mix(in oklch, var(--color-primary) 7%, transparent);
+  }
+
+  /* Hover affordance: nav links preview the active color before you arrive. */
+  #primary-nav .menu a:hover {
+    color: var(--color-primary);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    #primary-nav .menu a {
+      transition: color 150ms ease;
+    }
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     /* Blinking cursor for the garden hero's tailed-log eyebrow. */
     .gallery-cursor {
@@ -126,6 +166,16 @@
     /* The garden hero reveals on load. */
     .gallery-hero {
       animation: gallery-reveal 600ms ease-out both;
+    }
+
+    /* While Turbo paints its short-lived cached preview, pin the hero at the
+       reveal's start frame instead of letting it animate. The fresh render that
+       follows then plays the reveal through exactly once — without this, the
+       animation runs during the preview and again on the fresh render, which
+       reads as a flash on repeat visits. */
+    [data-turbo-preview] .gallery-hero {
+      animation: none;
+      opacity: 0;
     }
 
     /* Homepage terminal: each line fades in as the boot sequence reveals it. */

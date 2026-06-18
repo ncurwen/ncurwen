@@ -7,6 +7,9 @@ import { application } from "./application"
 import CopyController from "./copy_controller"
 application.register("copy", CopyController)
 
+import NavController from "./nav_controller"
+application.register("nav", NavController)
+
 import ThemeController from "./theme_controller"
 application.register("theme", ThemeController)
 
