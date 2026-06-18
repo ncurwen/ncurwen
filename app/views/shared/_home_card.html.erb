@@ -1,0 +1,10 @@
+<%# locals: (path:, icon:, title:, body:) %>
+<%= link_to path,
+            class: "card group bg-base-200 border border-base-300 hover:bg-base-300 hover:border-primary/50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+            data: { turbo_action: "advance" } do %>
+  <div class="card-body">
+    <div class="text-3xl inline-block origin-left transition-transform duration-200 group-hover:scale-110"><%= icon %></div>
+    <h2 class="card-title font-mono transition-colors group-hover:text-primary"><%= title %></h2>
+    <p class="text-base-content/70"><%= body %></p>
+  </div>
+<% end %>

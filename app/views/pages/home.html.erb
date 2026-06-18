@@ -32,7 +32,7 @@
                     class: "btn btn-primary font-mono",
                     data: { turbo_action: "advance" } %>
         <%= link_to "say hello", contact_path,
-                    class: "btn btn-outline font-mono transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 motion-reduce:transform-none",
+                    class: "btn btn-outline font-mono",
                     data: { turbo_action: "advance" } %>
       </div>
     </div>
@@ -41,34 +41,12 @@
 
 <section class="max-w-5xl mx-auto px-4 pb-20">
   <div class="grid gap-6 md:grid-cols-3">
-    <%= link_to experience_path,
-                class: "card group bg-base-200 border border-base-300 hover:bg-base-300 hover:border-primary/50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
-                data: { turbo_action: "advance" } do %>
-      <div class="card-body">
-        <div class="text-3xl inline-block origin-left transition-transform duration-200 group-hover:scale-110">💻</div>
-        <h2 class="card-title font-mono transition-colors group-hover:text-primary">experience</h2>
-        <p class="text-base-content/70">Over a decade of full-stack Rails, AWS and data processing.</p>
-      </div>
-    <% end %>
-
-    <%= link_to garden_path,
-                class: "card group bg-base-200 border border-base-300 hover:bg-base-300 hover:border-primary/50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
-                data: { turbo_action: "advance" } do %>
-      <div class="card-body">
-        <div class="text-3xl inline-block origin-left transition-transform duration-200 group-hover:scale-110">🌱</div>
-        <h2 class="card-title font-mono transition-colors group-hover:text-primary">garden</h2>
-        <p class="text-base-content/70">Notes from the veg patch. Seasonal, honest, occasionally muddy.</p>
-      </div>
-    <% end %>
-
-    <%= link_to contact_path,
-                class: "card group bg-base-200 border border-base-300 hover:bg-base-300 hover:border-primary/50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
-                data: { turbo_action: "advance" } do %>
-      <div class="card-body">
-        <div class="text-3xl inline-block origin-left transition-transform duration-200 group-hover:scale-110">✉️</div>
-        <h2 class="card-title font-mono transition-colors group-hover:text-primary">contact</h2>
-        <p class="text-base-content/70">Hiring, collaborating, or just curious — I'd like to hear from you.</p>
-      </div>
+    <% [
+         { path: experience_path, icon: "💻", title: "experience", body: "Over a decade of full-stack Rails, AWS and data processing." },
+         { path: garden_path,     icon: "🌱", title: "garden",     body: "Notes from the veg patch. Seasonal, honest, occasionally muddy." },
+         { path: contact_path,    icon: "✉️", title: "contact",    body: "Hiring, collaborating, or just curious — I'd like to hear from you." }
+       ].each do |card| %>
+      <%= render "shared/home_card", **card %>
     <% end %>
   </div>
 </section>

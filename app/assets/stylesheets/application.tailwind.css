@@ -133,14 +133,12 @@
   }
 
   /* Active nav link. Driven off aria-current (set by nav_controller.js) so the
-     desktop and mobile menus share one source of truth. The active link turns
-     primary; the horizontal menu gets the underline echo of the TOC's primary
-     edge-bar, while the vertical dropdown reuses the TOC's left-bar form
-     directly (an underline reads poorly in a stacked list). */
-  #primary-nav .menu a[aria-current="page"] {
-    color: var(--color-primary);
-  }
-
+     desktop and mobile menus share one source of truth. The active colour and
+     hover preview live on the links themselves as utilities (aria-[current=page]:
+     and hover:, see _nav.html.erb); only the shape cues stay here, because they
+     need pseudo-elements: the horizontal menu gets the underline echo of the
+     TOC's primary edge-bar, while the vertical dropdown reuses the TOC's
+     left-bar form directly (an underline reads poorly in a stacked list). */
   #primary-nav .menu-horizontal a[aria-current="page"] {
     position: relative;
   }
@@ -161,11 +159,6 @@
     background-color: color-mix(in oklch, var(--color-primary) 7%, transparent);
   }
 
-  /* Hover affordance: nav links preview the active color before you arrive. */
-  #primary-nav .menu a:hover {
-    color: var(--color-primary);
-  }
-
   /* Primary button hover. daisyUI's default only darkens the fill a few
      percent, which is easy to miss on this green. Deepen the colour shift and
      add a small lift + shadow so the affordance clearly registers. */
@@ -176,23 +169,20 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .btn-primary {
+    .btn-primary,
+    .btn-outline {
       transition: background-color 150ms ease, border-color 150ms ease,
         box-shadow 150ms ease, transform 150ms ease;
     }
 
-    .btn-primary:not(:disabled):not(.btn-disabled):hover {
+    .btn-primary:not(:disabled):not(.btn-disabled):hover,
+    .btn-outline:not(:disabled):not(.btn-disabled):hover {
       transform: translateY(-1px);
     }
 
-    .btn-primary:not(:disabled):not(.btn-disabled):active {
+    .btn-primary:not(:disabled):not(.btn-disabled):active,
+    .btn-outline:not(:disabled):not(.btn-disabled):active {
       transform: translateY(0);
-    }
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    #primary-nav .menu a {
-      transition: color 150ms ease;
     }
   }
 
