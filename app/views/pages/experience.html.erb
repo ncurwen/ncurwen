@@ -21,11 +21,12 @@
     <%= cli_prompt_tag("cat resume.txt", classes: "mb-1") %>
     <h1 class="text-4xl md:text-5xl font-bold">Experience</h1>
     <p class="mt-3 text-base-content/70 max-w-2xl">
-      Twelve years building software — full-stack Rails, data pipelines and AWS
-      infrastructure — for an enterprise R&amp;D shop and a handful of smaller teams.
+      <%= pluralize(years_experience, "year") %> building software — full-stack Rails,
+      data pipelines and AWS infrastructure — for an enterprise R&amp;D shop and a
+      handful of smaller teams.
     </p>
     <p class="mt-4 font-mono text-sm text-base-content/60 flex flex-wrap items-center gap-x-2 gap-y-1">
-      <span class="text-primary">12 yrs</span>
+      <span class="text-primary"><%= years_experience %> yrs</span>
       <span aria-hidden="true" class="text-base-content/30">·</span>
       <span>full-stack Rails</span>
       <span aria-hidden="true" class="text-base-content/30">·</span>

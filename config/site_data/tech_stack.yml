@@ -1,18 +1,18 @@
 groups:
-  - heading: Favorite Languages
+  - heading: Main Languages
     items:
       - Ruby
       - JavaScript
       - SQL
       - Bash
       - Python
-  - heading: Favorite Frameworks
+  - heading: Frameworks & Tools
     items:
       - Rails
-      - Hotwire (Turbo + Stimulus)
-      - Tailwind / daisyUI
+      - Hotwire (Turbo, Stimulus)
+      - Tailwind
+      - DaisyUI
       - Vue
-      - Sidekiq
   - heading: Data & Infra
     items:
       - PostgreSQL
@@ -21,9 +21,12 @@ groups:
       - Docker
       - GitHub Actions
       - AWS
+      - API Gateway
   - heading: Garden tools
     items:
       - Trowel
       - Compost
-      - Patience
-      - A very large watering can
+      - Pruners
+      - Gloves
+      - Seeds
+      - Lots of Patience
