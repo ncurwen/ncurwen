@@ -1,5 +1,4 @@
 <% content_for :title, "Experience — Nick Curwen" %>
-<% featured  = SiteData.portfolio[:featured] %>
 <% groups    = SiteData.tech_stack[:groups] %>
 <% positions = SiteData.work_history[:positions] %>
 <% schools   = SiteData.education[:schools] %>
@@ -23,14 +22,59 @@
     <p class="mt-2 text-base-content/70 max-w-2xl">
       Twelve years of building software — full-stack Rails, data pipelines and AWS
       infrastructure — for an enterprise R&amp;D shop and a handful of smaller teams.
-      Side project: <a href="https://agilepanda.dev" target="_blank" rel="noopener" class="link link-primary font-mono">agilepanda.dev</a>.
-      Source on <a href="https://github.com/ncurwen" target="_blank" rel="noopener" class="link link-primary font-mono">GitHub</a>.
     </p>
   </header>
 
   <section id="featured" class="scroll-mt-24">
     <%= section_heading_tag(command: "ls projects/", title: "Featured project", title_class: "mb-4") %>
-    <%= render "shared/project_card", project: featured, featured: true %>
+
+    <article class="card card-lg bg-base-200 border border-primary/40 shadow-sm hover:shadow-md transition-shadow">
+      <div class="card-body">
+        <div class="flex items-start justify-between gap-3">
+          <h3 class="card-title font-mono items-center">
+            <%= image_tag "agile-panda.svg", alt: "AgilePanda logo", class: "mb-5 mr-5 w-10 h-10 shrink-0", loading: "lazy" %>
+            AgilePanda
+          </h3>
+          <span class="badge badge-primary badge-sm">featured</span>
+        </div>
+
+        <p class="text-base-content/80">
+          Lightweight agile tooling for small product teams who want flow without ceremony.
+        </p>
+
+        <ul class="mt-2 space-y-2">
+          <% {
+               "plan"  => "Planning poker — estimate together, reveal at once.",
+               "retro" => "Retrospectives — surface what worked and what's next.",
+               "pick"  => "Pick lists — decide at random or by quick vote."
+             }.each do |command, description| %>
+            <li class="flex items-start gap-2 sm:gap-3">
+              <span aria-hidden="true" class="text-primary font-mono select-none mt-0.5">▸</span>
+              <span class="font-mono text-primary shrink-0 w-12"><%= command %></span>
+              <span class="text-base-content/80"><%= description %></span>
+            </li>
+          <% end %>
+        </ul>
+
+        <p class="mt-1 border-l-2 border-primary/40 pl-3 text-sm text-base-content/70">
+          <span aria-hidden="true" class="font-mono text-primary">⟲</span>
+          Syncs with Jira — pulls stories from your sprint and writes estimates back. No copy-paste.
+        </p>
+
+        <div class="flex flex-wrap gap-1 pt-2">
+          <% %w[Rails Hotwire Tailwind DaisyUI].each do |tech| %>
+            <span class="badge badge-soft badge-sm font-mono"><%= tech %></span>
+          <% end %>
+        </div>
+
+        <div class="card-actions justify-end pt-2">
+          <a href="https://agilepanda.dev" target="_blank" rel="noopener"
+             class="btn btn-sm btn-primary font-mono">
+            visit&nbsp;→
+          </a>
+        </div>
+      </div>
+    </article>
   </section>
 
   <section id="skills" class="scroll-mt-24">

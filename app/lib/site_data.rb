@@ -1,7 +1,6 @@
 module SiteData
   module_function
 
-  def portfolio = load(:portfolio)
   def tech_stack = load(:tech_stack)
   def garden_notes = load(:garden_notes)
   def work_history = load(:work_history)
