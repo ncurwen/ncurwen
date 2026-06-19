@@ -61,6 +61,13 @@ class PhotoGalleryComponent < ViewComponent::Base
            .sort_by { |year, _| -year.to_i }
   end
 
+  # Section list for the reusable TableOfContentsComponent, newest year first.
+  # Ids match the `garden-<year>` anchors on the chapter containers.
+  def year_sections
+    [ { id: "garden-filters", label: "filter" } ] +
+      chapters.map { |year, _imgs| { id: "garden-#{year}", label: year } }
+  end
+
   # The subset the Stimulus controller reads, by array position.
   def gallery_data
     entries.map { |e| e.slice(:url, :date, :basename, :year, :season) }

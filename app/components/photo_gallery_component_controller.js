@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["dialog", "image", "caption", "counter", "dot", "chip", "chapter"]
+  static targets = ["dialog", "image", "caption", "counter", "dot", "chip", "chapter", "toc"]
   static values  = { images: Array }
 
   connect() {
@@ -24,6 +24,11 @@ export default class extends Controller {
       chip.setAttribute("aria-pressed", pressed)
       chip.classList.toggle("btn-primary", pressed)
     })
+
+    // The jump-to sidebar only helps when every chapter is on screen.
+    if (this.hasTocTarget) {
+      this.tocTarget.hidden = this.activeYear !== "all"
+    }
 
     this.refreshActiveIndices()
   }
