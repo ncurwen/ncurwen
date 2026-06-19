@@ -6,8 +6,11 @@ import { application } from "../javascript/controllers/application"
 import CopyComponentController from "./copy_component_controller"
 application.register("copy-component", CopyComponentController)
 
-import PhotoGalleryComponentController from "./photo_gallery_component_controller"
-application.register("photo-gallery-component", PhotoGalleryComponentController)
+import PhotoGalleryFilterComponentController from "./photo_gallery_filter_component_controller"
+application.register("photo-gallery-filter-component", PhotoGalleryFilterComponentController)
+
+import PhotoGalleryLightboxComponentController from "./photo_gallery_lightbox_component_controller"
+application.register("photo-gallery-lightbox-component", PhotoGalleryLightboxComponentController)
 
 import TableOfContentsComponentController from "./table_of_contents_component_controller"
 application.register("table-of-contents-component", TableOfContentsComponentController)

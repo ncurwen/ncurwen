@@ -1,5 +1,13 @@
 import { Controller } from "@hotwired/stimulus"
 
+// A section counts as "active" once its top sits within this many pixels of the
+// scroller's top edge.
+const ACTIVE_THRESHOLD = 120
+// Slack (px) for treating the scroller as bottomed-out, absorbing sub-pixel rounding.
+const BOTTOM_SLOP = 4
+// Keys that scroll the page — pressing any of them releases a pinned (clicked) entry.
+const SCROLL_KEYS = ["PageDown", "PageUp", "ArrowDown", "ArrowUp", "End", "Home", " "]
+
 export default class extends Controller {
   static targets = ["link"]
 
@@ -31,7 +39,7 @@ export default class extends Controller {
       this.clearHighlight()
     }
     this.onKeydown = (e) => {
-      if (["PageDown","PageUp","ArrowDown","ArrowUp","End","Home"," "].includes(e.key)) {
+      if (SCROLL_KEYS.includes(e.key)) {
         this.clearPin()
       }
     }
@@ -62,6 +70,15 @@ export default class extends Controller {
     this.clearHighlight()
   }
 
+  // Hide/show a section's entry (e.g. "garden-2024") when the page hides that
+  // section. The link appears twice (desktop aside + mobile dropdown), so toggle
+  // each one's <li> wrapper.
+  setSectionHidden(id, hidden) {
+    this.linkTargets.forEach((link) => {
+      if (link.dataset.section === id) link.closest("li").hidden = hidden
+    })
+  }
+
   highlightSection(id) {
     this.clearHighlight()
     const el = document.getElementById(id)
@@ -89,12 +106,11 @@ export default class extends Controller {
     const scrolled  = metrics.scrollTop
     const viewport  = metrics.clientHeight
     const docHeight = metrics.scrollHeight
-    const atBottom  = scrolled + viewport >= docHeight - 4
-    const threshold = 120
+    const atBottom  = scrolled + viewport >= docHeight - BOTTOM_SLOP
 
     let activeId
     for (const section of this.sections) {
-      if (section.getBoundingClientRect().top <= threshold) {
+      if (section.getBoundingClientRect().top <= ACTIVE_THRESHOLD) {
         activeId = section.id
       } else {
         break
@@ -109,7 +125,7 @@ export default class extends Controller {
       if (active && active.getBoundingClientRect().top < 0) {
         for (const s of this.sections) {
           const top = s.getBoundingClientRect().top
-          if (top > threshold && top <= viewport) {
+          if (top > ACTIVE_THRESHOLD && top <= viewport) {
             activeId = s.id
             break
           }

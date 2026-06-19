@@ -38,6 +38,7 @@ class PhotoGalleryComponent < ApplicationComponent
   # index shared with the JSON in `gallery_data`.
   def entries
     @entries ||= images.each_with_index.map do |img, i|
+      # :date is a "YYYY-MM-DD…" string, so chars 5–6 are the month (nil when absent).
       month = img[:date]&.slice(5, 2)&.to_i
       img.merge(
         idx: i,

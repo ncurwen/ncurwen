@@ -6,8 +6,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    assert_select "section[data-controller='photo-gallery-component']"
-    assert_select "section[data-controller='photo-gallery-component'][data-photo-gallery-component-images-value]"
+    assert_select "section[data-controller~='photo-gallery-filter-component']"
+    assert_select "section[data-controller~='photo-gallery-filter-component'][data-photo-gallery-filter-component-images-value]"
 
     assert_includes @response.body, "$ tail -f garden.log"
   end
