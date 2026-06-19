@@ -41,6 +41,7 @@ gem "image_processing", "~> 1.2"
 
 gem "rollbar", "~> 3.8"
 gem "view_component", "~> 4.12"
+gem "lucide-rails", "~> 0.7"
 
 # Cloudflare Turnstile (spam protection) for the contact form
 gem "rails_cloudflare_turnstile"

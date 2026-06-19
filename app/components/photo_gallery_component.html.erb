@@ -45,20 +45,22 @@
                 data-photo-gallery-filter-component-year-param="all"
                 aria-pressed="true"
                 class="gallery-chip btn btn-xs btn-primary font-mono">
-          all <span class="opacity-50" data-chip-count><%= images.length %></span>
+          all <%= frame_count(images.length) %>
         </button>
         <% chapters.each do |year, imgs| %>
-          <button type="button"
-                  data-photo-gallery-filter-component-target="chip"
-                  data-action="click->photo-gallery-filter-component#filter"
-                  data-photo-gallery-filter-component-year-param="<%= year %>"
-                  aria-pressed="false"
-                  class="gallery-chip btn btn-xs font-mono">
-            <% from, to = season_range(imgs) %>
-            <span class="season-bar inline-block w-1.5 h-1.5 rounded-full mr-1.5 align-middle"
-                  data-from="<%= from %>" data-to="<%= to %>"></span>
-            <%= year %> <span class="opacity-50" data-chip-count><%= imgs.length %></span>
-          </button>
+          <div class="tooltip tooltip-top" data-tip="<%= months_label(imgs) %>">
+            <button type="button"
+                    data-photo-gallery-filter-component-target="chip"
+                    data-action="click->photo-gallery-filter-component#filter"
+                    data-photo-gallery-filter-component-year-param="<%= year %>"
+                    aria-pressed="false"
+                    class="gallery-chip btn btn-xs font-mono">
+              <% from, to = season_range(imgs) %>
+              <span class="season-bar inline-block w-1.5 h-1.5 rounded-full mr-1.5 align-middle"
+                    data-from="<%= from %>" data-to="<%= to %>"></span>
+              <%= year %> <%= frame_count(imgs.length) %>
+            </button>
+          </div>
         <% end %>
       </div>
 
@@ -70,19 +72,21 @@
                 data-photo-gallery-filter-component-month-param="all"
                 aria-pressed="true"
                 class="gallery-chip btn btn-xs btn-primary font-mono">
-          all <span class="opacity-50" data-chip-count><%= images.length %></span>
+          all <%= frame_count(images.length) %>
         </button>
         <% months_present.each do |m| %>
-          <button type="button"
-                  data-photo-gallery-filter-component-target="chip"
-                  data-action="click->photo-gallery-filter-component#toggleMonth"
-                  data-photo-gallery-filter-component-month-param="<%= m %>"
-                  aria-pressed="false"
-                  class="gallery-chip btn btn-xs font-mono">
-            <span class="season-dot inline-block w-1.5 h-1.5 rounded-full mr-1.5 align-middle"
-                  data-season="<%= season(m) %>"></span>
-            <%= MONTHS[m] %> <span class="opacity-50" data-chip-count><%= entries_by_month[m].length %></span>
-          </button>
+          <div class="tooltip tooltip-bottom" data-tip="<%= years_for_month(m) %>">
+            <button type="button"
+                    data-photo-gallery-filter-component-target="chip"
+                    data-action="click->photo-gallery-filter-component#toggleMonth"
+                    data-photo-gallery-filter-component-month-param="<%= m %>"
+                    aria-pressed="false"
+                    class="gallery-chip btn btn-xs font-mono">
+              <span class="season-dot inline-block w-1.5 h-1.5 rounded-full mr-1.5 align-middle"
+                    data-season="<%= season(m) %>"></span>
+              <%= MONTHS[m] %> <%= frame_count(entries_by_month[m].length) %>
+            </button>
+          </div>
         <% end %>
       </div>
     </div>

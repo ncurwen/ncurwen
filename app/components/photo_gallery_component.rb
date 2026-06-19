@@ -69,10 +69,22 @@ class PhotoGalleryComponent < ApplicationComponent
     entries_by_month.keys.sort
   end
 
+  # Tooltip for a month chip: every year that has a photo in this month, across
+  # the whole (unfiltered) dataset, newest first.
+  def years_for_month(m)
+    "Years: " + entries_by_month[m].map { |e| e[:year] }.compact.uniq.sort.reverse.join(", ")
+  end
+
+  # Tooltip for a year chip: every month present in that year, in calendar order,
+  # by name. (Distinct from month_range, which collapses to a Jan–Jul span.)
+  def months_label(imgs)
+    "Months: " + imgs.map { |e| e[:month] }.compact.uniq.sort.map { |n| MONTHS[n] }.join(", ")
+  end
+
   # Section list for the reusable TableOfContentsComponent, newest year first.
   # Ids match the `garden-<year>` anchors on the chapter containers.
   def year_sections
-    [ { id: "garden-filters", label: "filter" } ] +
+    [ { id: "garden-filters", label: "filters" } ] +
       chapters.map { |year, _imgs| { id: "garden-#{year}", label: year } }
   end
 
@@ -84,6 +96,21 @@ class PhotoGalleryComponent < ApplicationComponent
   def span_label
     years = images.map { |i| i[:year] }.compact.uniq
     years.length > 1 ? "#{years.min}–#{years.max}" : years.first
+  end
+
+  # A filter chip's photo count, shown as a small image glyph + the number, so
+  # the figure reads as "N frames" (the page's unit) instead of a bare digit
+  # mashed against the year/month label. The number lives alone in the
+  # [data-chip-count] span so the Stimulus controller can rewrite it on every
+  # re-count; the glyph and the sr-only "frames" are siblings it leaves intact.
+  def frame_count(n)
+    tag.span(class: "inline-flex items-center gap-1 opacity-60") do
+      safe_join([
+        lucide_icon("image", class: "w-3 h-3"),
+        tag.span(n, data: { chip_count: true }),
+        tag.span(" frames", class: "sr-only")
+      ])
+    end
   end
 
   def season(month)

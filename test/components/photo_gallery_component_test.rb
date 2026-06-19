@@ -65,6 +65,37 @@ class PhotoGalleryComponentTest < ViewComponent::TestCase
     assert_selector "#garden-2024 [data-chapter-count]", text: "2"
   end
 
+  test "labels each chip count with a frame glyph and unit" do
+    images = [ image(path: REAL_PATH_A, date: "2024-06-15 09:30", basename: "a", year: "2024") ]
+
+    render_inline(PhotoGalleryComponent.new(images: images))
+
+    chip = "[data-photo-gallery-filter-component-year-param='2024']"
+    # The number reads as a count of frames: a decorative glyph + an sr-only unit
+    # sit beside the controller's [data-chip-count] hook, which stays number-only.
+    assert_selector "#{chip} svg[aria-hidden='true']"
+    assert_selector "#{chip} [data-chip-count]", text: "1"
+    assert_selector "#{chip} .sr-only", text: "frames"
+  end
+
+  test "tooltips list the unfiltered years per month and months per year" do
+    images = [
+      image(path: REAL_PATH_A, date: "2024-07-02 14:08", basename: "a", year: "2024"),
+      image(path: REAL_PATH_B, date: "2024-06-15 09:30", basename: "b", year: "2024"),
+      image(path: REAL_PATH_A, date: "2022-06-03 14:08", basename: "c", year: "2022")
+    ]
+
+    render_inline(PhotoGalleryComponent.new(images: images))
+
+    # Month chip's tooltip lists every year that has a photo in that month, newest first.
+    assert_selector ".tooltip[data-tip='Years: 2024, 2022'] [data-photo-gallery-filter-component-month-param='6']"
+    assert_selector ".tooltip[data-tip='Years: 2024'] [data-photo-gallery-filter-component-month-param='7']"
+
+    # Year chip's tooltip lists every month present in that year, in calendar order.
+    assert_selector ".tooltip[data-tip='Months: Jun, Jul'] [data-photo-gallery-filter-component-year-param='2024']"
+    assert_selector ".tooltip[data-tip='Months: Jun'] [data-photo-gallery-filter-component-year-param='2022']"
+  end
+
   test "renders a clickable open button for the hero and each grid image" do
     images = [
       image(path: REAL_PATH_A, basename: "a", year: "2022"),

@@ -56,8 +56,11 @@ export default class extends Controller {
       tile.hidden = !this.monthActive(tile.dataset.month)
     })
 
-    // …then each chapter: visible iff its year matches AND it still has a tile; its
-    // frame count and TOC entry follow that visible subset.
+    // …then each chapter: visible iff its year matches AND it still has a tile. Its
+    // frame count stays the server-rendered year total (it doesn't track the month
+    // filter, matching the month-range text beside it); only its TOC entry follows
+    // the visible subset.
+    let visibleYears = 0
     this.chapterTargets.forEach((chapter) => {
       const yearOk = this.activeYear === ALL || chapter.dataset.year === this.activeYear
       const visibleTiles = chapter.querySelectorAll(
@@ -65,9 +68,7 @@ export default class extends Controller {
       ).length
       const visible = yearOk && visibleTiles > 0
       chapter.hidden = !visible
-
-      const countEl = chapter.querySelector("[data-chapter-count]")
-      if (countEl) countEl.textContent = visibleTiles
+      if (visible) visibleYears++
 
       if (this.hasTableOfContentsComponentOutlet) {
         this.tableOfContentsComponentOutlet.setSectionHidden(`garden-${chapter.dataset.year}`, !visible)
@@ -76,9 +77,9 @@ export default class extends Controller {
 
     this.syncChips(monthN, yearN)
 
-    // Single-year collapses the whole sidebar; month filtering keeps it (entries
-    // self-hide above).
-    if (this.hasTocTarget) this.tocTarget.hidden = this.activeYear !== ALL
+    // Hide the year-jump sidebar whenever the filters leave a single year on
+    // screen — whether that came from a year chip or from month selection.
+    if (this.hasTocTarget) this.tocTarget.hidden = visibleYears <= 1
 
     this.refreshActiveIndices()
   }
@@ -126,7 +127,7 @@ export default class extends Controller {
           this.setCount(chip, yearTotal)
         } else {
           const n = yearN[y] || 0
-          chip.hidden = n === 0 && y !== this.activeYear   // never hide the active year
+          this.setChipHidden(chip, n === 0 && y !== this.activeYear)   // never hide the active year
           this.setCount(chip, n)
           this.press(chip, y === this.activeYear)
         }
@@ -138,11 +139,17 @@ export default class extends Controller {
         this.setCount(chip, monthTotal)
       } else {
         const n = monthN[mo] || 0
-        chip.hidden = n === 0
+        this.setChipHidden(chip, n === 0)
         this.setCount(chip, n)
         this.press(chip, this.activeMonths.has(mo))
       }
     })
+  }
+
+  // Chips may be wrapped in a daisyUI .tooltip div; hide that wrapper so a hidden
+  // chip leaves no empty gap in the flex row. Unwrapped chips fall back to self.
+  setChipHidden(chip, hidden) {
+    (chip.closest(".tooltip") || chip).hidden = hidden
   }
 
   press(chip, on) {
