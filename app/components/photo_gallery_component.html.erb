@@ -51,8 +51,9 @@
                 data-photo-gallery-component-year-param="<%= year %>"
                 aria-pressed="false"
                 class="gallery-chip btn btn-xs font-mono">
-          <span class="inline-block w-1.5 h-1.5 rounded-full mr-1.5 align-middle"
-                style="background: <%= season_gradient(imgs) %>"></span>
+          <% from, to = season_range(imgs) %>
+          <span class="season-bar inline-block w-1.5 h-1.5 rounded-full mr-1.5 align-middle"
+                data-from="<%= from %>" data-to="<%= to %>"></span>
           <%= year %> <span class="opacity-50"><%= imgs.length %></span>
         </button>
       <% end %>
@@ -76,7 +77,9 @@
           <%= imgs.length %> frames<% if month_range(imgs) %> · <%= month_range(imgs) %><% end %>
         </p>
       </div>
-      <div class="h-px w-full rounded-full mb-4" style="background: <%= season_gradient(imgs) %>"></div>
+      <% from, to = season_range(imgs) %>
+      <div class="season-bar h-px w-full rounded-full mb-4"
+           data-from="<%= from %>" data-to="<%= to %>"></div>
 
       <%# ── Optional log: what happened this year ──────────────────────────────── %>
       <% year_notes = notes_for(year) %>
@@ -122,8 +125,8 @@
                            px-1.5 py-0.5 rounded bg-base-100/85 text-base-content font-mono text-[10px] tracking-tight
                            opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100
                            transition-opacity duration-200">
-                <span class="inline-block w-1.5 h-1.5 rounded-full"
-                      style="background: <%= img[:season] %>"></span>
+                <span class="season-dot inline-block w-1.5 h-1.5 rounded-full"
+                      data-season="<%= img[:season] %>"></span>
                 <%= img[:date] %>
               </span>
             <% end %>
@@ -176,7 +179,7 @@
 
       <div class="flex items-center justify-between px-5 py-3 border-t border-base-300 font-mono text-xs">
         <span class="inline-flex items-center gap-2 text-base-content/70">
-          <span data-photo-gallery-component-target="dot" class="inline-block w-2 h-2 rounded-full"></span>
+          <span data-photo-gallery-component-target="dot" class="season-dot inline-block w-2 h-2 rounded-full"></span>
           <span data-photo-gallery-component-target="caption"></span>
         </span>
         <span class="text-base-content/40 hidden sm:inline">← → to navigate · esc to close</span>

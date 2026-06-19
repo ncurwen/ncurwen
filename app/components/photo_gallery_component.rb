@@ -1,13 +1,10 @@
 class PhotoGalleryComponent < ViewComponent::Base
   # The one expressive system on this page: a growing year read through its
   # seasons. Each timestamp gets a season dot; each year a season-gradient rule.
-  SEASON_COLOR = {
-    spring: "oklch(72% 0.15 145)", # fresh sprout green
-    summer: "oklch(80% 0.15 85)",  # high-summer gold
-    autumn: "oklch(68% 0.15 55)",  # late amber
-    winter: "oklch(72% 0.07 230)"  # cool dormancy
-  }.freeze
-
+  # The component speaks in season *keys* (e.g. "spring"); the colours live in
+  # CSS (--season-* plus .season-dot/.season-bar in application.tailwind.css), so
+  # the view paints via classes/data-attributes — never inline styles, which CSP
+  # forbids and a nonce can't authorise.
   MONTHS = %w[· Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec].freeze
 
   LOG_ICON = "🌱".freeze
@@ -46,7 +43,7 @@ class PhotoGalleryComponent < ViewComponent::Base
         idx: i,
         url: helpers.asset_path(img[:path]),
         month: month,
-        season: season_color(month)
+        season: season(month)
       )
     end
   end
@@ -87,10 +84,6 @@ class PhotoGalleryComponent < ViewComponent::Base
     end
   end
 
-  def season_color(month)
-    SEASON_COLOR[season(month)]
-  end
-
   def month_range(imgs)
     months = imgs.map { |i| i[:month] }.compact
     return nil if months.empty?
@@ -99,11 +92,12 @@ class PhotoGalleryComponent < ViewComponent::Base
     lo == hi ? MONTHS[lo] : "#{MONTHS[lo]}–#{MONTHS[hi]}"
   end
 
-  # A hairline that travels from the year's first season to its last.
-  def season_gradient(imgs)
+  # Endpoint season keys for a year's hairline (.season-bar), travelling from the
+  # first season pictured to the last. Empty falls back to spring/spring.
+  def season_range(imgs)
     months = imgs.map { |i| i[:month] }.compact
-    return SEASON_COLOR[:spring] if months.empty?
+    return [ :spring, :spring ] if months.empty?
 
-    "linear-gradient(to right, #{season_color(months.min)}, #{season_color(months.max)})"
+    [ season(months.min), season(months.max) ]
   end
 end

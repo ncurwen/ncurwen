@@ -113,7 +113,7 @@ export default class extends Controller {
     this.imageTarget.src = entry.url
     this.imageTarget.alt = entry.basename
     this.captionTarget.textContent = entry.date || entry.basename
-    this.dotTarget.style.background = entry.season
+    this.dotTarget.dataset.season = entry.season
 
     const set = this.currentSet()
     const current = String(set.indexOf(this.index) + 1).padStart(2, "0")

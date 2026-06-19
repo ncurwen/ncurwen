@@ -6,8 +6,8 @@
 
 <section class="max-w-3xl mx-auto px-4 py-12">
   <header class="mb-10">
-    <p class="font-mono text-primary text-sm mb-1">$ mail nick</p>
-    <h1 class="text-3xl md:text-4xl font-bold">Get in touch</h1>
+    <%= cli_prompt_tag("mail nick", classes: "mb-1", caret: true) %>
+    <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Get in touch</h1>
     <p class="mt-2 text-base-content/70">
       Hiring, collaborating, swapping seedlings — all welcome. Drop me a line with the
       form below, or reach me by email or GitHub.
@@ -16,48 +16,46 @@
 
   <div class="grid gap-8 md:grid-cols-5">
     <aside class="md:col-span-2 space-y-4">
-      <div class="card bg-base-200">
-        <div class="card-body p-5" data-controller="copy">
-          <h2 class="card-title text-base font-mono">email</h2>
-          <div class="flex items-center gap-2">
+      <div class="relative" data-controller="copy">
+        <button type="button"
+                data-action="copy#copy"
+                aria-label="Copy email address"
+                class="card group w-full bg-base-200 border border-base-300 text-left hover:bg-base-300 hover:border-primary/50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+          <span class="card-body p-5 gap-2">
+            <span class="flex items-center justify-between">
+              <span class="card-title text-sm font-mono text-base-content/60 transition-colors group-hover:text-primary">email</span>
+              <span aria-hidden="true"
+                    class="font-mono text-xs text-base-content/40 transition-colors group-hover:text-primary">copy</span>
+            </span>
             <code class="text-sm break-all" data-copy-target="source">contact@ncurwen.dev</code>
-            <button type="button"
-                    class="btn btn-xs btn-ghost"
-                    data-action="copy#copy"
-                    aria-label="Copy email">
-              copy
-            </button>
+          </span>
+        </button>
+        <div class="absolute inset-x-2 top-2 z-10 hidden" data-copy-target="toast">
+          <div role="alert" class="alert alert-success justify-center py-1 text-xs font-mono">
+            <span>copied: contact@ncurwen.dev!</span>
           </div>
-          <div class="toast toast-end hidden" data-copy-target="toast">
-            <div role="alert" class="alert alert-success">
-              <span>copied!</span>
+        </div>
+      </div>
+
+      <% [
+           { label: "github",   url: "https://github.com/ncurwen",                text: "github.com/ncurwen" },
+           { label: "linkedin", url: "https://www.linkedin.com/in/nick-curwen/", text: "linkedin.com/in/nick-curwen" }
+         ].each do |link| %>
+        <a href="<%= link[:url] %>" target="_blank" rel="noopener"
+           class="card group bg-base-200 border border-base-300 hover:bg-base-300 hover:border-primary/50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+          <div class="card-body p-5 gap-2">
+            <div class="flex items-center justify-between">
+              <h2 class="card-title text-sm font-mono text-base-content/60 transition-colors group-hover:text-primary"><%= link[:label] %></h2>
+              <span aria-hidden="true"
+                    class="font-mono text-base-content/40 transition-all duration-200 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
             </div>
+            <span class="text-sm break-all link link-hover font-mono"><%= link[:text] %></span>
           </div>
-        </div>
-      </div>
-
-      <div class="card bg-base-200">
-        <div class="card-body p-5">
-          <h2 class="card-title text-base font-mono">github</h2>
-          <a href="https://github.com/ncurwen" target="_blank" rel="noopener"
-             class="link link-primary font-mono break-all">
-            github.com/ncurwen
-          </a>
-        </div>
-      </div>
-
-      <div class="card bg-base-200">
-        <div class="card-body p-5">
-          <h2 class="card-title text-base font-mono">linkedin</h2>
-          <a href="https://www.linkedin.com/in/nick-curwen/" target="_blank" rel="noopener"
-             class="link link-primary font-mono break-all">
-            linkedin.com/in/nick-curwen
-          </a>
-        </div>
-      </div>
+        </a>
+      <% end %>
     </aside>
 
-    <%= form_with model: @contact_form, url: contact_path, method: :post, class: "md:col-span-3 card bg-base-200" do |f| %>
+    <%= form_with model: @contact_form, url: contact_path, method: :post, class: "md:col-span-3 card bg-base-200 border border-base-300" do |f| %>
       <fieldset class="fieldset card-body gap-3">
         <legend class="fieldset-legend font-mono">send a message</legend>
 
@@ -95,7 +93,8 @@
           <%= cloudflare_turnstile %>
         </div>
 
-        <div class="card-actions justify-end pt-2">
+        <div class="card-actions items-center justify-between pt-2">
+          <p class="text-xs text-base-content/50 font-mono">replies in a day or two</p>
           <%= f.submit "send →", class: "btn btn-primary font-mono" %>
         </div>
       </fieldset>

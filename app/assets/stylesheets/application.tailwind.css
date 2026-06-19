@@ -86,6 +86,15 @@
 
 @theme {
   --font-sans: "Ubuntu";
+
+  /* Garden season palette. The one expressive system on the gallery page: a
+     year read through its seasons. Lives here (not in Ruby) so the gallery can
+     paint its dots and gradients via classes/data-attributes — no inline
+     styles, which CSP forbids and can't authorise with a nonce. */
+  --season-spring: oklch(72% 0.15 145); /* fresh sprout green */
+  --season-summer: oklch(80% 0.15 85);  /* high-summer gold */
+  --season-autumn: oklch(68% 0.15 55);  /* late amber */
+  --season-winter: oklch(72% 0.07 230); /* cool dormancy */
 }
 
 /* Page content scrolls inside #page-body (see application.html.erb), keeping
@@ -98,10 +107,50 @@
 }
 
 @layer components {
+  /* Garden season cues, CSP-safe: a solid dot for one season, and a hairline
+     that travels from a year's first season to its last. Colours are keyed by
+     data-attributes so the gallery needs no inline styles. Per-endpoint custom
+     properties (4 + 4 rules) compose into one gradient rule, covering all 16
+     from/to combinations. */
+  .season-dot[data-season="spring"] { background: var(--season-spring); }
+  .season-dot[data-season="summer"] { background: var(--season-summer); }
+  .season-dot[data-season="autumn"] { background: var(--season-autumn); }
+  .season-dot[data-season="winter"] { background: var(--season-winter); }
+
+  [data-from="spring"] { --grad-from: var(--season-spring); }
+  [data-from="summer"] { --grad-from: var(--season-summer); }
+  [data-from="autumn"] { --grad-from: var(--season-autumn); }
+  [data-from="winter"] { --grad-from: var(--season-winter); }
+  [data-to="spring"]   { --grad-to: var(--season-spring); }
+  [data-to="summer"]   { --grad-to: var(--season-summer); }
+  [data-to="autumn"]   { --grad-to: var(--season-autumn); }
+  [data-to="winter"]   { --grad-to: var(--season-winter); }
+
+  .season-bar {
+    background: linear-gradient(to right, var(--grad-from), var(--grad-to));
+  }
+
   .typewriter-caret::after {
     content: "_";
     display: inline-block;
     animation: caret-blink 1s steps(1) infinite;
+  }
+
+  /* A solid block cursor that sits after a prompt and blinks, as if the terminal
+     is open and waiting for input. Used on the contact page's eyebrow. */
+  .terminal-caret {
+    display: inline-block;
+    width: 0.5ch;
+    height: 1em;
+    margin-left: 0.15rem;
+    vertical-align: text-bottom;
+    background: currentColor;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .terminal-caret {
+      animation: caret-blink 1s steps(1) infinite;
+    }
   }
 
   /* Jumped-to section. Drawn as a backdrop pseudo-element with negative insets

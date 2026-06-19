@@ -4,8 +4,13 @@ module ApplicationHelper
     ((as_of - CAREER_START).to_i / 365.25).floor
   end
 
-  def cli_prompt_tag(text, classes: "")
-    tag.p("$ #{text}", class: "font-mono text-primary text-sm #{classes}".strip)
+  def cli_prompt_tag(text, classes: "", caret: false)
+    tag.p(class: "font-mono text-primary text-sm #{classes}".strip) do
+      safe_join([
+        "$ #{text}",
+        (tag.span("", class: "terminal-caret", "aria-hidden": true) if caret)
+      ].compact)
+    end
   end
 
   def section_heading_tag(command:, title:, title_class: "mb-6")
