@@ -258,6 +258,19 @@
       opacity: 0;
     }
 
+    /* Gallery tiles ease in on first paint instead of snapping over the
+       skeleton. Keyed to the element's first render via @starting-style — no JS
+       load event — so a Turbo re-render/morph can never leave a loaded tile
+       stuck hidden (opacity defaults to 1; only the entry origin is 0). The
+       fade itself rides the tile's existing `transition duration-500` utility,
+       which already covers opacity. Chiefly smooths cached/above-fold tiles,
+       which decode too fast to otherwise register as a deliberate reveal. */
+    .gallery-tile {
+      @starting-style {
+        opacity: 0;
+      }
+    }
+
     /* Homepage terminal: each line fades in as the boot sequence reveals it. */
     .terminal-line {
       transition: opacity 220ms ease, transform 220ms ease;
