@@ -13,6 +13,10 @@ module ApplicationHelper
     end
   end
 
+  def tooltip_tag(text, position: "top", &block)
+    tag.div(class: "tooltip tooltip-#{position}", data: { tip: text }, &block)
+  end
+
   def section_heading_tag(command:, title:, title_class: "mb-6")
     safe_join([
       cli_prompt_tag(command, classes: "mb-1"),

@@ -5,9 +5,11 @@
     <span>echo "Copyright &copy; 1994 - <%= Date.current.year %> Nick Curwen"</span>
   </aside>
   <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-    <a href="https://agilepanda.dev" target="_blank" rel="noopener" class="flex link link-hover">
-      <%= image_tag "agile-panda.svg", alt: "AgilePanda logo", class: "mr-2 pb-1 w-5 h-5 shrink-0", loading: "lazy" %>
-      AgilePanda
-    </a>
+    <%= tooltip_tag("My passion project plug ;)", position: 'left') do %>
+      <a href="https://agilepanda.dev" target="_blank" rel="noopener" class="flex link link-hover">
+        <%= image_tag "agile-panda.svg", alt: "AgilePanda logo", class: "mr-2 pb-1 w-5 h-5 shrink-0", loading: "lazy" %>
+        AgilePanda
+      </a>
+    <% end %>
   </nav>
 </footer>

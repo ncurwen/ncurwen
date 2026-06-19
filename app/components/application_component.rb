@@ -3,5 +3,5 @@ class ApplicationComponent < ViewComponent::Base
   # `helpers` proxy. Delegate the specific ones our templates/classes call so they
   # read like a regular view (`image_tag`, `asset_path`, `table_of_contents_tag`,
   # `lucide_icon`).
-  delegate :image_tag, :asset_path, :table_of_contents_tag, :lucide_icon, to: :helpers
+  delegate :image_tag, :asset_path, :table_of_contents_tag, :lucide_icon, :tooltip_tag, to: :helpers
 end
