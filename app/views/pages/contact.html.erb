@@ -16,26 +16,7 @@
 
   <div class="grid gap-8 md:grid-cols-5">
     <aside class="md:col-span-2 space-y-4">
-      <div class="relative" data-controller="copy">
-        <button type="button"
-                data-action="copy#copy"
-                aria-label="Copy email address"
-                class="card group w-full bg-base-200 border border-base-300 text-left hover:bg-base-300 hover:border-primary/50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-          <span class="card-body p-5 gap-2">
-            <span class="flex items-center justify-between">
-              <span class="card-title text-sm font-mono text-base-content/60 transition-colors group-hover:text-primary">email</span>
-              <span aria-hidden="true"
-                    class="font-mono text-xs text-base-content/40 transition-colors group-hover:text-primary">copy</span>
-            </span>
-            <code class="text-sm break-all" data-copy-target="source">contact@ncurwen.dev</code>
-          </span>
-        </button>
-        <div class="absolute inset-x-2 top-2 z-10 hidden" data-copy-target="toast">
-          <div role="alert" class="alert alert-success justify-center py-1 text-xs font-mono">
-            <span>copied: contact@ncurwen.dev!</span>
-          </div>
-        </div>
-      </div>
+      <%= copy_tag(label: "email", value: "contact@ncurwen.dev") %>
 
       <% [
            { label: "github",   url: "https://github.com/ncurwen",                text: "github.com/ncurwen" },

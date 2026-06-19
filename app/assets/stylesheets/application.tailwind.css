@@ -138,19 +138,20 @@
     animation: caret-blink 1s steps(1) infinite;
   }
 
-  /* A solid block cursor that sits after a prompt and blinks, as if the terminal
-     is open and waiting for input. Used on the contact page's eyebrow. */
+  /* An underscore cursor that sits after a prompt and blinks, as if the terminal
+     is open and waiting for input. Matches the gallery/typewriter caret rather
+     than a solid block. Used on the contact page's eyebrow. */
   .terminal-caret {
     display: inline-block;
-    width: 0.5ch;
-    height: 1em;
     margin-left: 0.15rem;
-    vertical-align: text-bottom;
-    background: currentColor;
+  }
+
+  .terminal-caret::after {
+    content: "_";
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .terminal-caret {
+    .terminal-caret::after {
       animation: caret-blink 1s steps(1) infinite;
     }
   }

@@ -1,4 +1,4 @@
-class TableOfContentsComponent < ViewComponent::Base
+class TableOfContentsComponent < ApplicationComponent
   def initialize(sections:)
     @sections = sections
   end

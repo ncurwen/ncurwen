@@ -62,7 +62,7 @@
 
   <%# ── Jump-to-year sidebar (reused TOC; only under the "all" filter) ────────── %>
   <div data-photo-gallery-component-target="toc">
-    <%= render TableOfContentsComponent.new(sections: year_sections) %>
+    <%= table_of_contents_tag(sections: year_sections) %>
   </div>
 
   <%# ── Year chapters ────────────────────────────────────────────────────────── %>

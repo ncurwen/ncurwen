@@ -1,4 +1,4 @@
-class PhotoGalleryComponent < ViewComponent::Base
+class PhotoGalleryComponent < ApplicationComponent
   # The one expressive system on this page: a growing year read through its
   # seasons. Each timestamp gets a season dot; each year a season-gradient rule.
   # The component speaks in season *keys* (e.g. "spring"); the colours live in
@@ -41,7 +41,7 @@ class PhotoGalleryComponent < ViewComponent::Base
       month = img[:date]&.slice(5, 2)&.to_i
       img.merge(
         idx: i,
-        url: helpers.asset_path(img[:path]),
+        url: asset_path(img[:path]),
         month: month,
         season: season(month)
       )

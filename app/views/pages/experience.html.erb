@@ -7,7 +7,7 @@
      { id: WorkHistoryComponent.anchor(p[:company]), label: p[:company] }
    } %>
 
-<%= render TableOfContentsComponent.new(
+<%= table_of_contents_tag(
             sections: [
               { id: "experience",       label: "Experience" },
               { id: "featured",  label: "Featured project" },
@@ -99,12 +99,12 @@
 
   <section id="work" class="scroll-mt-24">
     <%= section_heading_tag(command: "history --work", title: "Work experience") %>
-    <%= render WorkHistoryComponent.new(positions: positions) %>
+    <%= work_history_tag(positions: positions) %>
   </section>
 
   <section id="education" class="scroll-mt-24">
     <%= section_heading_tag(command: "cat education.txt", title: "Education") %>
-    <%= render EducationComponent.new(schools: schools) %>
+    <%= education_tag(schools: schools) %>
   </section>
 
   <div class="pt-4">

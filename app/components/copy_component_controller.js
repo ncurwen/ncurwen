@@ -1,14 +1,14 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["source", "toast"]
+  static targets = ["toast", "message"]
+  static values  = { text: String }
 
   timer = null
 
   async copy() {
-    const text = this.sourceTarget.textContent.trim()
     try {
-      await navigator.clipboard.writeText(text)
+      await navigator.clipboard.writeText(this.textValue)
       this.#flash()
     } catch (err) {
       console.error("copy failed", err)
@@ -21,6 +21,7 @@ export default class extends Controller {
 
   #flash() {
     if (!this.hasToastTarget) return
+    if (this.hasMessageTarget) this.messageTarget.textContent = `copied: ${this.textValue}!`
     this.toastTarget.classList.remove("hidden")
     clearTimeout(this.timer)
     this.timer = setTimeout(() => {

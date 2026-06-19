@@ -1,4 +1,4 @@
-class EducationComponent < ViewComponent::Base
+class EducationComponent < ApplicationComponent
   def initialize(schools:)
     @schools = schools
   end

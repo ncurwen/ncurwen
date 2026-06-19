@@ -3,8 +3,14 @@
 
 import { application } from "../javascript/controllers/application"
 
+import CopyComponentController from "./copy_component_controller"
+application.register("copy-component", CopyComponentController)
+
 import PhotoGalleryComponentController from "./photo_gallery_component_controller"
 application.register("photo-gallery-component", PhotoGalleryComponentController)
 
 import TableOfContentsComponentController from "./table_of_contents_component_controller"
 application.register("table-of-contents-component", TableOfContentsComponentController)
+
+import ThemeToggleComponentController from "./theme_toggle_component_controller"
+application.register("theme-toggle-component", ThemeToggleComponentController)

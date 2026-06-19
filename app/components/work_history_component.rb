@@ -1,4 +1,4 @@
-class WorkHistoryComponent < ViewComponent::Base
+class WorkHistoryComponent < ApplicationComponent
   def self.anchor(company)
     "work-#{company.parameterize}"
   end
