@@ -1,11 +1,9 @@
 <% content_for :title, "Experience — Nick Curwen" %>
-<% groups    = SiteData.fetch(:tech_stack) %>
-<% positions = SiteData.fetch(:work_history) %>
-<% schools   = SiteData.fetch(:education) %>
 
-<% work_children = positions.map { |p|
-     { id: WorkHistoryComponent.anchor(p[:company]), label: p[:company] }
-   } %>
+<% positions = SiteData.fetch(:work_history) %>
+<% work_children = positions.map do |p|
+    { id: WorkHistoryComponent.anchor(p[:company]), label: p[:company] }
+  end %>
 
 <%= table_of_contents_tag(
             sections: [
@@ -91,8 +89,8 @@
   <section id="skills" class="scroll-mt-24">
     <%= section_heading_tag(command: "cat tools.txt", title: "Skills") %>
     <div class="grid gap-6 md:grid-cols-2">
-      <% groups.each do |group| %>
-        <%= render "shared/badge_group", group: group %>
+      <% SiteData.fetch(:tech_stack).each do |tech| %>
+        <%= render "shared/badge_group", group: tech %>
       <% end %>
     </div>
   </section>
@@ -104,7 +102,7 @@
 
   <section id="education" class="scroll-mt-24">
     <%= section_heading_tag(command: "cat education.txt", title: "Education") %>
-    <%= education_tag(schools: schools) %>
+    <%= education_tag(schools: SiteData.fetch(:education)) %>
   </section>
 
   <div class="pt-4">
