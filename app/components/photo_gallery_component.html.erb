@@ -33,30 +33,56 @@
       </button>
     <% end %>
 
-    <%# Filter bar: isolate a single growing year %>
-    <div class="mt-8 mb-8 flex flex-wrap items-center gap-2" role="group" aria-label="Filter photos by year">
-      <span class="font-mono text-xs text-base-content/50 mr-1">filter:</span>
-      <button type="button"
-              data-photo-gallery-component-target="chip"
-              data-action="click->photo-gallery-component#filter"
-              data-photo-gallery-component-year-param="all"
-              aria-pressed="true"
-              class="gallery-chip btn btn-xs btn-primary font-mono">
-        all <span class="opacity-50"><%= images.length %></span>
-      </button>
-      <% chapters.each do |year, imgs| %>
+    <%# Filter bar: a single growing year (single-select) × any months (multi-select) %>
+    <div class="mt-8 mb-8 space-y-2">
+      <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Filter photos by year">
+        <span class="font-mono text-xs text-base-content/50 mr-1">year:</span>
         <button type="button"
                 data-photo-gallery-component-target="chip"
                 data-action="click->photo-gallery-component#filter"
-                data-photo-gallery-component-year-param="<%= year %>"
-                aria-pressed="false"
-                class="gallery-chip btn btn-xs font-mono">
-          <% from, to = season_range(imgs) %>
-          <span class="season-bar inline-block w-1.5 h-1.5 rounded-full mr-1.5 align-middle"
-                data-from="<%= from %>" data-to="<%= to %>"></span>
-          <%= year %> <span class="opacity-50"><%= imgs.length %></span>
+                data-photo-gallery-component-year-param="all"
+                aria-pressed="true"
+                class="gallery-chip btn btn-xs btn-primary font-mono">
+          all <span class="opacity-50"><%= images.length %></span>
         </button>
-      <% end %>
+        <% chapters.each do |year, imgs| %>
+          <button type="button"
+                  data-photo-gallery-component-target="chip"
+                  data-action="click->photo-gallery-component#filter"
+                  data-photo-gallery-component-year-param="<%= year %>"
+                  aria-pressed="false"
+                  class="gallery-chip btn btn-xs font-mono">
+            <% from, to = season_range(imgs) %>
+            <span class="season-bar inline-block w-1.5 h-1.5 rounded-full mr-1.5 align-middle"
+                  data-from="<%= from %>" data-to="<%= to %>"></span>
+            <%= year %> <span class="opacity-50"><%= imgs.length %></span>
+          </button>
+        <% end %>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Filter photos by month">
+        <span class="font-mono text-xs text-base-content/50 mr-1">month:</span>
+        <button type="button"
+                data-photo-gallery-component-target="chip"
+                data-action="click->photo-gallery-component#toggleMonth"
+                data-photo-gallery-component-month-param="all"
+                aria-pressed="true"
+                class="gallery-chip btn btn-xs btn-primary font-mono">
+          all <span class="opacity-50"><%= images.length %></span>
+        </button>
+        <% months_present.each do |m| %>
+          <button type="button"
+                  data-photo-gallery-component-target="chip"
+                  data-action="click->photo-gallery-component#toggleMonth"
+                  data-photo-gallery-component-month-param="<%= m %>"
+                  aria-pressed="false"
+                  class="gallery-chip btn btn-xs font-mono">
+            <span class="season-dot inline-block w-1.5 h-1.5 rounded-full mr-1.5 align-middle"
+                  data-season="<%= season(m) %>"></span>
+            <%= MONTHS[m] %> <span class="opacity-50"><%= entries_by_month[m].length %></span>
+          </button>
+        <% end %>
+      </div>
     </div>
   </div>
 
@@ -108,7 +134,9 @@
           <% above_fold = chapter_index.zero? && img_index < 4 %>
           <button type="button"
                   data-action="click->photo-gallery-component#open"
+                  data-photo-gallery-component-target="tile"
                   data-photo-gallery-component-index-param="<%= img[:idx] %>"
+                  data-month="<%= img[:month] %>"
                   class="skeleton relative block overflow-hidden rounded-box bg-base-200 group cursor-zoom-in
                          focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                   aria-label="Open photo<%= " from #{img[:date]}" if img[:date] %>">

@@ -58,6 +58,16 @@ class PhotoGalleryComponent < ApplicationComponent
            .sort_by { |year, _| -year.to_i }
   end
 
+  # Frames grouped by month number (1–12), for presence and chip counts.
+  def entries_by_month
+    @entries_by_month ||= entries.select { |e| e[:month] }.group_by { |e| e[:month] }
+  end
+
+  # Months that actually have photos, in calendar order (Jan→Dec).
+  def months_present
+    entries_by_month.keys.sort
+  end
+
   # Section list for the reusable TableOfContentsComponent, newest year first.
   # Ids match the `garden-<year>` anchors on the chapter containers.
   def year_sections
@@ -67,7 +77,7 @@ class PhotoGalleryComponent < ApplicationComponent
 
   # The subset the Stimulus controller reads, by array position.
   def gallery_data
-    entries.map { |e| e.slice(:url, :date, :basename, :year, :season) }
+    entries.map { |e| e.slice(:url, :date, :basename, :year, :season, :month) }
   end
 
   def span_label

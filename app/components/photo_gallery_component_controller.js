@@ -1,31 +1,69 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["dialog", "image", "caption", "counter", "dot", "chip", "chapter", "toc"]
+  static targets = ["dialog", "image", "caption", "counter", "dot", "chip", "chapter", "tile", "toc"]
   static values  = { images: Array }
 
   connect() {
     this.index = 0
     this.activeYear = "all"
+    this.activeMonths = new Set()   // empty = all months
     this.preloaded = new Set()
-    this.refreshActiveIndices()
+    this.applyFilters()
   }
 
   // ── Filtering ──────────────────────────────────────────────────────────────
+  // Year row: single select.
   filter({ params: { year } }) {
     this.activeYear = String(year)
+    this.applyFilters()
+  }
 
-    this.chapterTargets.forEach((chapter) => {
-      chapter.hidden = this.activeYear !== "all" && chapter.dataset.year !== this.activeYear
+  // Month row: multi select. "all" clears the set back to every month.
+  toggleMonth({ params: { month } }) {
+    if (month === "all") {
+      this.activeMonths.clear()
+    } else {
+      const m = String(month)
+      this.activeMonths.has(m) ? this.activeMonths.delete(m) : this.activeMonths.add(m)
+    }
+    this.applyFilters()
+  }
+
+  monthActive(m) {
+    return this.activeMonths.size === 0 || this.activeMonths.has(String(m))
+  }
+
+  applyFilters() {
+    // Month hides individual tiles…
+    this.tileTargets.forEach((tile) => {
+      tile.hidden = !this.monthActive(tile.dataset.month)
     })
 
+    // …then a chapter shows only if its year matches AND it still has a visible tile.
+    this.chapterTargets.forEach((chapter) => {
+      const yearOk = this.activeYear === "all" || chapter.dataset.year === this.activeYear
+      const hasVisible = chapter.querySelectorAll(
+        "[data-photo-gallery-component-target~='tile']:not([hidden])"
+      ).length > 0
+      chapter.hidden = !(yearOk && hasVisible)
+    })
+
+    // Pressed state for both rows.
+    const monthAll = this.activeMonths.size === 0
     this.chipTargets.forEach((chip) => {
-      const pressed = chip.dataset.photoGalleryComponentYearParam === this.activeYear
+      const y  = chip.dataset.photoGalleryComponentYearParam
+      const mo = chip.dataset.photoGalleryComponentMonthParam
+      let pressed
+      if (y  !== undefined)  pressed = y === this.activeYear
+      else if (mo === "all") pressed = monthAll
+      else                   pressed = this.activeMonths.has(String(mo))
       chip.setAttribute("aria-pressed", pressed)
       chip.classList.toggle("btn-primary", pressed)
     })
 
-    // The jump-to sidebar only helps when every chapter is on screen.
+    // The jump-to sidebar still helps while filtering by month (all years on
+    // screen); only a single-year filter collapses it to one chapter.
     if (this.hasTocTarget) {
       this.tocTarget.hidden = this.activeYear !== "all"
     }
@@ -36,7 +74,8 @@ export default class extends Controller {
   // Global indices currently visible, in display order.
   refreshActiveIndices() {
     this.activeIndices = this.imagesValue.reduce((acc, img, i) => {
-      if (this.activeYear === "all" || img.year === this.activeYear) acc.push(i)
+      const yearOk = this.activeYear === "all" || img.year === this.activeYear
+      if (yearOk && this.monthActive(img.month)) acc.push(i)
       return acc
     }, [])
   }

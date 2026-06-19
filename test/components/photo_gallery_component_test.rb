@@ -28,10 +28,23 @@ class PhotoGalleryComponentTest < ViewComponent::TestCase
     parsed = JSON.parse(raw)
 
     assert_equal 2, parsed.length
-    assert_equal %w[url date basename year season], parsed.first.keys
+    assert_equal %w[url date basename year season month], parsed.first.keys
     assert_match %r{IMG_20220714_165114}, parsed.first["url"]
     assert_equal "2024-06-15 09:30", parsed.first["date"]
     assert_nil parsed.last["date"]
+  end
+
+  test "renders a month chip only for months that have photos" do
+    images = [
+      image(path: REAL_PATH_A, date: "2024-06-15 09:30", basename: "a", year: "2024"),
+      image(path: REAL_PATH_B, date: "2024-07-02 14:08", basename: "b", year: "2024")
+    ]
+
+    render_inline(PhotoGalleryComponent.new(images: images))
+
+    assert_selector "[data-photo-gallery-component-month-param='6']", text: "Jun"
+    assert_selector "[data-photo-gallery-component-month-param='7']", text: "Jul"
+    assert_no_selector "[data-photo-gallery-component-month-param='1']"
   end
 
   test "renders a clickable open button for the hero and each grid image" do
