@@ -2,68 +2,74 @@ rows:
   - company: Info-Tech Research Group
     location: London, Ontario, Canada
     period: Jan 2014 — Present
-    summary: Eight years across co-op, full-time, and senior IC roles in the same R&D organisation — Ruby on Rails web apps for an enterprise research advisory.
+    summary: Over ten years of full-stack Rails development, from intern to a senior software developer role. Designed and implemented solutions to complex and evolving feature requirements; strong focus on modernization, optimization, and componentization.
     roles:
       - title: Senior Software Developer
         period: Aug 2022 — Present
         bullets:
-          - Lead full-stack delivery on Ruby on Rails web apps for an enterprise research advisory
+          - Led Rails modernization to Turbo 8, implementing Stimulus controllers and morphs across the application; reduced frontend complexity and improved page responsiveness
+          - Drove adoption of component-driven architecture, establishing a reusable component library that reduced feature development time and improved consistency
+          - Partnered with architecture team to help three diagnostic delivery teams align their project solutions and maintain architecture intent alignment
+          - Mentored developers on modern Rails and Hotwire patterns
+
       - title: Software Developer
         period: May 2018 — Jul 2022
         bullets:
-          - Drive solution design from loose requirements and review work through GitHub pull requests
-          - Owned features end to end — from design through delivery and ongoing support
-      - title: Software Developer
+          - Architected and built the first external partner API with AWS API Gateway; enabled secure data sharing and integrations with our partners.
+          - Designed and implemented HRIS SFTP sync automation; reduced manual data processes for our users
+          - Provided technical direction and hands-on support during HRIS client onboarding; ensured smooth integrations and reduced deployment friction
+          - Owned features end-to-end — from requirement clarification through design, delivery, and ongoing support
+          - Optimized ETL pipeline and bulk processing practices; shifted bottlenecks and enabled larger clients to process higher data volumes concurrently
+          - Led solution design from loose requirements; conducted code reviews and mentored team through GitHub PRs
+
+      - title: Junior Software Developer
         period: Jan 2016 — Jan 2017
         bullets:
-          - MVC web application development across the full stack — Ruby on Rails, jQuery, CoffeeScript, MySQL, HTML, SCSS, Bootstrap
-          - Solutions design and stakeholder communication
-          - Application maintenance, support, and code review via GitHub pull requests
-          - Day-to-day Agile delivery
-      - title: Cooperative Education Student — Software Developer
-        period: Jan 2014 — Aug 2015 (three co-op terms)
+          - Designed and implemented solutions to complex feature requirements with minimal specification
+          - Conducted code reviews and application maintenance via GitHub; supported day-to-day Agile delivery
+          - Took over contractor-built policy management proof-of-concept; restructured codebase and architecture to production standards, enabling stable releases
+
+      - title: Software Developer (Internship)
+        period: Jan 2014 — Aug 2015 (three semesters)
         bullets:
-          - Collaborated with the Data Driven Research team using Ruby on Rails, MySQL, JavaScript, HTML and CSS
-          - Set up VMWare-based Linux dev environments
-          - Practised GitHub-driven collaboration, scrum and Agile early in my career
+          - Built diagnostic management platform for Data Driven Research team using Ruby on Rails, MySQL, and JavaScript
+          - Set up VMWare-based Linux development environments for team onboarding
+          - Collaborated on GitHub-driven workflows; adopted Scrum and Agile practices, delivering features alongside full-time team members
 
   - company: Buffone IT Inc.
     location: Contract, part-time
     period: Sep 2020 — Jun 2021
-    summary: Two concurrent part-time mandates — a Data Developer role for one client and an AWS Specialist role for another.
+    summary: Concurrent part-time contracts — Data Developer and AWS Specialist roles across two enterprise clients.
     roles:
       - title: Data Developer & AWS Specialist
         bullets:
-          - "Data: provisioned and managed artifact repositories"
-          - "Data: designed and built custom ETLs from varied sources on Talend Cloud"
-          - "Data: built data pipelines on Snowflake for high-volume processing"
-          - "AWS: automated CI and deployments across environments with CodePipeline and Lambda"
-          - "AWS: extended infrastructure-as-code with CloudFormation, including diagnosing and fixing existing stacks"
-          - "AWS: used the VPC Reachability Analyzer and similar techniques to harden network security"
+          - "Data: Designed and built custom Talend Cloud ETLs from varied sources; streamlined data integration across client systems"
+          - "Data: Built Snowflake data pipelines optimized for high-volume processing; enabled scalable ingestion workflows"
+          - "Data: Provisioned and managed artifact repositories, enabling CI/CD automation and release workflows"
+          - "AWS: Automated CI/CD across environments using CodePipeline and Lambda; streamlined deployment processes across environments"
+          - "AWS: Extended infrastructure-as-code with CloudFormation; audited and fixed legacy stacks to improve maintainability"
+          - "AWS: Hardened network security using VPC Reachability Analyzer and security group optimization"
 
   - company: FranchiseGrade.com
     location: Byron, Ontario, Canada
     period: Jan 2017 — Dec 2017
-    summary: Small, fast-moving product team building data infrastructure around franchise disclosure documents.
+    summary: Franchise disclosure analytics startup — built data pipeline and web infrastructure for document processing and analysis.
     roles:
       - title: Software Developer
         bullets:
-          - Built micro-services using Docker, API services and AWS Lambdas
-          - Ruby on Rails web application development with RSpec for unit and integration tests
-          - Wrote Python spiders to scrape documents and metadata from the web
-          - Automated PDF extraction and storage with chained AWS Lambdas (Node.js and Python)
-          - Designed solutions to complex problems from loose specifications
-          - Leveraged AWS (SNS, SQS, Lambda, CloudFormation, ECS) for scalability
-          - Full Agile delivery — scrum, kanban, planning and retros
+          - Architected and built microservices using Docker, API services, and AWS Lambdas
+          - Built Rails web application with RSpec test coverage; designed solutions for data storage and analysis
+          - Wrote Python web scrapers to extract documents and metadata
+          - Automated PDF extraction and storage using chained AWS Lambdas (Node.js and Python); turned manual input process into a review and edit process
+          - Designed event-driven architecture using AWS services (SNS, SQS, Lambda, CloudFormation, ECS); enabled asynchronous document processing and scale
 
   - company: Freelance Web Developer
     location: London, Ontario, Canada
     period: Mar 2012 — Mar 2014
-    summary: Webmaster and IT support for small businesses while studying.
+    summary: Web development and IT support for small businesses while completing studies.
     roles:
       - title: Webmaster & IT Support
         bullets:
-          - Built affordable WordPress CMS websites for small-business clients
-          - Provided IT support across nearly anything tech-related
-          - Designed digital presences spanning website, social media and email
-          - Configured and maintained home servers to client requirements
+          - Built and deployed 3 WordPress and custom-coded websites for small business clients
+          - Established hosting infrastructure, email systems, and social media presence across client portfolios
+          - Provided IT support and infrastructure management for client networks and home servers
