@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../fonts/ubuntu.css";
+@import "../fonts/ubuntu-mono.css";
 
 @plugin "daisyui" {
   themes: ;
@@ -86,6 +87,7 @@
 
 @theme {
   --font-sans: "Ubuntu";
+  --font-mono: "Ubuntu Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Garden season palette. The one expressive system on the gallery page: a
      year read through its seasons. Lives here (not in Ruby) so the gallery can

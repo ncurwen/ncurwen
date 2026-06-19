@@ -1,0 +1,39 @@
+/* @source: https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap */
+
+/* Ubuntu Mono renders optically smaller than Ubuntu at the same font-size, so
+   it looks shrunken next to the sans text. size-adjust scales every glyph up so
+   it matches at a shared font-size — one knob, applied wherever font-mono is
+   used, instead of bumping the size class on each element. Tune the % to taste. */
+
+@font-face {
+  font-family: 'Ubuntu Mono';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  size-adjust: 110%;
+  src: url(ubuntu-mono/KFOhCneDtsqEr0keqCMhbCc_CsE.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Ubuntu Mono';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  size-adjust: 110%;
+  src: url(ubuntu-mono/KFO8CneDtsqEr0keqCMhbCc_Mn33tYg.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Ubuntu Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  size-adjust: 110%;
+  src: url(ubuntu-mono/KFOjCneDtsqEr0keqCMhbBc9.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Ubuntu Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  size-adjust: 110%;
+  src: url(ubuntu-mono/KFO-CneDtsqEr0keqCMhbC-BL-Hy.ttf) format('truetype');
+}
