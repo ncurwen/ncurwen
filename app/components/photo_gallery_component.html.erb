@@ -28,7 +28,7 @@
           </p>
           <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-base-content">The garden log</h1>
           <p class="mt-3 font-mono text-xs text-base-content/70">
-            <%= images.length %> frames · <%= span_label %>
+            <span class="text-secondary"><%= images.length %></span> frames · <%= span_label %>
             <% if latest[:date] %><span class="text-base-content/50"> · last entry <%= latest[:date] %></span><% end %>
           </p>
         </div>
@@ -103,7 +103,7 @@
          data-photo-gallery-filter-component-target="chapter" data-year="<%= year %>" class="mb-12">
       <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 mb-1">
         <h2 class="font-mono text-base text-base-content">
-          <span class="text-base-content/40">~/garden/</span><span class="text-primary font-semibold"><%= year %></span>
+          <span class="text-base-content/40">~/garden/</span><span class="text-secondary font-semibold"><%= year %></span>
         </h2>
         <p class="font-mono text-xs text-base-content/60">
           <span data-chapter-count><%= imgs.length %></span> frames<% if month_range(imgs) %> · <%= month_range(imgs) %><% end %>
@@ -126,7 +126,7 @@
               </p>
               <p class="pl-6 mt-1 text-xs leading-relaxed text-base-content/70">
                 <%= note[:body] %>
-                <% if note[:tag].present? %><span class="text-primary">#<%= note[:tag] %></span><% end %>
+                <% if note[:tag].present? %><span class="text-secondary">#<%= note[:tag] %></span><% end %>
               </p>
             </div>
           <% end %>
@@ -180,31 +180,29 @@
              class="block w-full max-h-[80vh] object-contain bg-black/5"
              alt="" />
 
-        <%# Prev / next / close share button + SVG chrome — only the action, label,
-            position and icon path differ, so render them from one list. %>
+        <%# Prev / next / close share button + icon chrome — only the action, label,
+            position and icon differ, so render them from one list. %>
         <% [
-             { action: "prev",  label: "Previous photo", position: "left-3 top-1/2 -translate-y-1/2",  path: "M15 19l-7-7 7-7" },
-             { action: "next",  label: "Next photo",     position: "right-3 top-1/2 -translate-y-1/2", path: "M9 5l7 7-7 7" },
-             { action: "close", label: "Close gallery",  position: "top-3 right-3",                    path: "M6 18L18 6M6 6l12 12" }
+             { action: "prev",  label: "Previous photo", position: "left-3 top-1/2 -translate-y-1/2",  icon: "chevron-left" },
+             { action: "next",  label: "Next photo",     position: "right-3 top-1/2 -translate-y-1/2", icon: "chevron-right" },
+             { action: "close", label: "Close gallery",  position: "top-3 right-3",                    icon: "x" }
            ].each do |btn| %>
           <button type="button"
                   data-action="click->photo-gallery-lightbox-component#<%= btn[:action] %>"
                   aria-label="<%= btn[:label] %>"
                   class="btn btn-circle btn-ghost bg-base-100/80 hover:bg-base-100 absolute <%= btn[:position] %>">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="<%= btn[:path] %>" />
-            </svg>
+            <%= lucide_icon btn[:icon], class: "w-5 h-5" %>
           </button>
         <% end %>
       </div>
 
       <div class="flex items-center justify-between px-5 py-3 border-t border-base-300 font-mono text-xs">
         <span class="inline-flex items-center gap-2 text-base-content/70">
-          <span data-photo-gallery-lightbox-component-target="dot" class="season-dot inline-block w-2 h-2 rounded-full"></span>
+          <span data-photo-gallery-lightbox-component-target="dot" class="season-dot tooltip inline-block w-2 h-2 rounded-full"></span>
           <span data-photo-gallery-lightbox-component-target="caption"></span>
         </span>
         <span class="text-base-content/40 hidden sm:inline">← → to navigate · esc to close</span>
-        <span data-photo-gallery-lightbox-component-target="counter" class="text-primary"></span>
+        <span data-photo-gallery-lightbox-component-target="counter" class="text-secondary"></span>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop">

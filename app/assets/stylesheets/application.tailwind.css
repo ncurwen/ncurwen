@@ -18,8 +18,8 @@
   --color-base-content: oklch(28% 0.04 145);
   --color-primary: oklch(55% 0.13 145);
   --color-primary-content: oklch(98% 0.015 145);
-  --color-secondary: oklch(62% 0.11 165);
-  --color-secondary-content: oklch(98% 0.015 165);
+  --color-secondary: oklch(60% 0.13 195);
+  --color-secondary-content: oklch(98% 0.015 195);
   --color-accent: oklch(65% 0.17 45);
   --color-accent-content: oklch(98% 0.015 45);
   --color-neutral: oklch(35% 0.04 145);
@@ -57,8 +57,8 @@
   --color-base-content: oklch(92% 0.05 145);
   --color-primary: oklch(78% 0.22 145);
   --color-primary-content: oklch(14% 0.04 145);
-  --color-secondary: oklch(70% 0.14 175);
-  --color-secondary-content: oklch(14% 0.04 175);
+  --color-secondary: oklch(72% 0.15 195);
+  --color-secondary-content: oklch(14% 0.04 195);
   --color-accent: oklch(75% 0.18 55);
   --color-accent-content: oklch(15% 0.04 55);
   --color-neutral: oklch(30% 0.03 150);
@@ -211,6 +211,25 @@
     background-color: color-mix(in oklch, var(--color-primary) 7%, transparent);
   }
 
+  /* Mobile table-of-contents dropdown: echo the nav hamburger menu's hover and
+     active treatment. Hover tints the text primary (daisyUI supplies the row
+     background); the active entry — the TOC controller toggles text-primary +
+     font-bold onto it, see table_of_contents_component_controller.js #setActive
+     — gets the same primary left-bar and faint wash as an active nav link. */
+  .toc-menu a {
+    transition: color 150ms ease, box-shadow 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .toc-menu a:hover {
+    color: var(--color-primary);
+  }
+
+  .toc-menu a.font-bold {
+    box-shadow: inset 3px 0 0 0 var(--color-primary);
+    background-color: color-mix(in oklch, var(--color-primary) 7%, transparent);
+  }
+
   /* Primary button hover. daisyUI's default only darkens the fill a few
      percent, which is easy to miss on this green. Deepen the colour shift and
      add a small lift + shadow so the affordance clearly registers. */
@@ -335,9 +354,10 @@
   .timeline-node--bloom {
     width: 14px;
     height: 14px;
+    background: var(--color-accent);
     box-shadow:
       0 0 0 4px var(--color-base-100),
-      0 0 10px 1px color-mix(in oklch, var(--color-primary) 40%, transparent);
+      0 0 10px 1px color-mix(in oklch, var(--color-accent) 40%, transparent);
   }
 
   .timeline-node--bloom::before,
@@ -346,7 +366,7 @@
     position: absolute;
     width: 14px;
     height: 14px;
-    background: var(--color-primary);
+    background: var(--color-accent);
     border-radius: 0 100% 0 100%;
   }
 
@@ -437,4 +457,19 @@
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 220ms;
+}
+
+/* Keep the active item's indicator intact on hover/focus, in both the nav
+   hamburger dropdown and the table-of-contents dropdown. daisyUI's menu
+   :hover/:focus rules sit in a later cascade layer (daisyui.*) and would
+   otherwise replace the active left-bar's box-shadow (and primary wash) with
+   their neutral hover styling. These rules are deliberately unlayered, which
+   outranks every @layer — so the active treatment survives the hover. */
+#primary-nav .dropdown-content a[aria-current="page"]:hover,
+#primary-nav .dropdown-content a[aria-current="page"]:focus-visible,
+.toc-menu a.font-bold:hover,
+.toc-menu a.font-bold:focus-visible {
+  box-shadow: inset 3px 0 0 0 var(--color-primary);
+  background-color: color-mix(in oklch, var(--color-primary) 7%, transparent);
+  color: var(--color-primary);
 }

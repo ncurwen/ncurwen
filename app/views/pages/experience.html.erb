@@ -10,7 +10,7 @@
               { id: "experience",       label: "Experience" },
               { id: "featured",  label: "Featured project" },
               { id: "skills",    label: "Skills" },
-              { id: "work",      label: "Work experience", children: work_children },
+              { id: "work",      label: "Work history", children: work_children },
               { id: "education", label: "Education" }
             ]) %>
 
@@ -20,11 +20,12 @@
     <h1 class="text-4xl md:text-5xl font-bold">Experience</h1>
     <p class="mt-3 text-base-content/70 max-w-2xl">
       <%= pluralize(years_experience, "year") %> building software — full-stack Rails,
-      data pipelines and AWS infrastructure — for an enterprise R&amp;D shop and a
-      handful of smaller teams.
+      data pipelines, and AWS infrastructure — for an enterprise R&amp;D shop and a
+      handful of smaller teams. These days I also design and run <%= link_to "AgilePanda", "https://agilepanda.dev", class: "link link-hover" %>, my own
+      agile-tools SaaS.
     </p>
     <p class="mt-4 font-mono text-sm text-base-content/60 flex flex-wrap items-center gap-x-2 gap-y-1">
-      <span class="text-primary"><%= years_experience %> yrs</span>
+      <span class="text-secondary"><%= years_experience %> yrs</span>
       <span aria-hidden="true" class="text-base-content/30">·</span>
       <span>full-stack Rails</span>
       <span aria-hidden="true" class="text-base-content/30">·</span>
@@ -35,7 +36,7 @@
   </header>
 
   <section id="featured" class="scroll-mt-24">
-    <%= section_heading_tag(command: "ls projects/", title: "Featured project", title_class: "mb-4") %>
+    <%= section_heading_tag(command: "cd projects/agilepanda", title: "Featured project", title_class: "mb-4") %>
 
     <article class="card card-lg bg-base-200 border border-primary/40 shadow-sm hover:shadow-md transition-shadow">
       <div class="card-body">
@@ -44,7 +45,7 @@
             <%= image_tag "agile-panda.svg", alt: "AgilePanda logo", class: "mb-5 mr-5 w-10 h-10 shrink-0", loading: "lazy" %>
             AgilePanda
           </h3>
-          <span class="badge badge-primary badge-sm">featured</span>
+          <span class="badge badge-accent badge-sm">featured</span>
         </div>
 
         <p class="text-base-content/80">
@@ -58,7 +59,7 @@
                "pick"  => "Pick lists — decide at random or by quick vote."
              }.each do |command, description| %>
             <li class="flex items-start gap-2 sm:gap-3">
-              <span aria-hidden="true" class="text-primary font-mono select-none mt-0.5">▸</span>
+              <%= lucide_icon "chevron-right", class: "text-primary w-4 h-4 shrink-0 mt-0.5", "aria-hidden": true %>
               <span class="font-mono text-primary shrink-0 w-12"><%= command %></span>
               <span class="text-base-content/80"><%= description %></span>
             </li>
@@ -66,7 +67,7 @@
         </ul>
 
         <p class="mt-1 border-l-2 border-primary/40 pl-3 text-sm text-base-content/70">
-          <span aria-hidden="true" class="font-mono text-primary">⟲</span>
+          <%= lucide_icon "refresh-cw", class: "text-secondary w-3.5 h-3.5 inline-block align-text-bottom mr-1", "aria-hidden": true %>
           Syncs with Jira — pulls stories from your sprint and writes estimates back. No copy-paste.
         </p>
 
@@ -87,7 +88,7 @@
   </section>
 
   <section id="skills" class="scroll-mt-24">
-    <%= section_heading_tag(command: "cat tools.txt", title: "Skills") %>
+    <%= section_heading_tag(command: "which ruby rails aws", title: "Skills") %>
     <div class="grid gap-6 md:grid-cols-2">
       <% SiteData.fetch(:tech_stack).each do |tech| %>
         <%= render "shared/badge_group", group: tech %>
@@ -96,17 +97,17 @@
   </section>
 
   <section id="work" class="scroll-mt-24">
-    <%= section_heading_tag(command: "history --work", title: "Work experience") %>
+    <%= section_heading_tag(command: "last", title: "Work history") %>
     <%= work_history_tag(positions: positions) %>
   </section>
 
   <section id="education" class="scroll-mt-24">
-    <%= section_heading_tag(command: "cat education.txt", title: "Education") %>
+    <%= section_heading_tag(command: "grep -i degree transcript.txt", title: "Education") %>
     <%= education_tag(schools: SiteData.fetch(:education)) %>
   </section>
 
   <div class="pt-4">
-    <%= cli_prompt_tag("echo \"Hello, Nick!\"", classes: "mb-3") %>
+    <%= cli_prompt_tag("ping nick", classes: "mb-3") %>
     <p class="text-base-content/70 max-w-2xl mb-4">
       Hiring, collaborating, or just comparing tomato varieties — I'd like to hear from you.
     </p>

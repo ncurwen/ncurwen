@@ -1,14 +1,14 @@
 <footer id="site-footer"
-        class="footer footer-horizontal items-center p-6 bg-base-200 border-t border-base-300 text-sm font-mono">
-  <aside class="grid-flow-col items-center gap-2">
+        class="footer footer-horizontal items-center p-4 sm:p-6 bg-base-200 border-t border-base-300 text-[clamp(0.7rem,2.8vw,0.875rem)] font-mono">
+  <aside class="grid-flow-col items-center gap-2 min-w-0">
     <span class="text-primary">$</span>
-    <span>echo "Copyright &copy; 1994 - <%= Date.current.year %> Nick Curwen"</span>
+    <span class="whitespace-nowrap">echo "Copyright &copy; 1994&ndash;<%= Date.current.year %> Nick Curwen"</span>
   </aside>
-  <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+  <nav class="grid-flow-col gap-4 justify-self-end">
     <%= tooltip_tag("My passion project plug ;)", position: 'left') do %>
       <a href="https://agilepanda.dev" target="_blank" rel="noopener" class="flex link link-hover">
-        <%= image_tag "agile-panda.svg", alt: "AgilePanda logo", class: "mr-2 pb-1 w-5 h-5 shrink-0", loading: "lazy" %>
-        AgilePanda
+        <%= image_tag "agile-panda.svg", alt: "AgilePanda logo", class: "mr-2 max-[560px]:mr-0 pb-1.5 w-6 h-6 shrink-0", loading: "lazy" %>
+        <span class="max-[560px]:hidden">AgilePanda</span>
       </a>
     <% end %>
   </nav>

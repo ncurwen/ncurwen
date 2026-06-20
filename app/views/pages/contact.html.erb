@@ -27,8 +27,7 @@
           <div class="card-body p-5 gap-2">
             <div class="flex items-center justify-between">
               <h2 class="card-title text-sm font-mono text-base-content/60 transition-colors group-hover:text-primary"><%= link[:label] %></h2>
-              <span aria-hidden="true"
-                    class="font-mono text-base-content/40 transition-all duration-200 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+              <%= lucide_icon "arrow-up-right", class: "w-4 h-4 text-base-content/40 transition-all duration-200 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5", "aria-hidden": true %>
             </div>
             <span class="text-sm break-all link link-hover font-mono"><%= link[:text] %></span>
           </div>

@@ -3,6 +3,9 @@ import { Controller } from "@hotwired/stimulus"
 // Sentinel year/month value meaning "no filter" (every year / every month).
 const ALL = "all"
 
+// Tooltip shown on a selected chip, whose click now clears its filter.
+const CLEAR_TIP = "Clear filter"
+
 // Owns the gallery's filtering: the year/month chips, their live counts, and the
 // visibility of tiles and year chapters. It also keeps `activeIndices` — the
 // global image indices currently on screen, in display order — which the sibling
@@ -25,9 +28,11 @@ export default class extends Controller {
   }
 
   // ── Filtering ──────────────────────────────────────────────────────────────
-  // Year row: single select.
+  // Year row: single select, toggle to clear. Re-clicking the active year (or the
+  // "all" chip) resets to ALL; any other year selects it. Mirrors toggleMonth.
   filter({ params: { year } }) {
-    this.activeYear = String(year)
+    const y = String(year)
+    this.activeYear = (y === ALL || y === this.activeYear) ? ALL : y
     this.applyFilters()
   }
 
@@ -155,6 +160,16 @@ export default class extends Controller {
   press(chip, on) {
     chip.setAttribute("aria-pressed", String(on))
     chip.classList.toggle("btn-primary", on)
+    this.setTip(chip, on)
+  }
+
+  // Selected chip → its click clears the filter, so its tooltip says so.
+  // Unselected chip → restore the server-rendered contents list ("Months:…"/"Years:…").
+  setTip(chip, on) {
+    const tip = chip.closest(".tooltip")
+    if (!tip) return                                    // "all" chips have no tooltip wrapper
+    if (tip.dataset.tipDefault === undefined) tip.dataset.tipDefault = tip.dataset.tip ?? ""
+    tip.dataset.tip = on ? CLEAR_TIP : tip.dataset.tipDefault
   }
 
   setCount(chip, n) {

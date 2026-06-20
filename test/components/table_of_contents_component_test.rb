@@ -2,7 +2,7 @@ require "test_helper"
 require "view_component/test_helpers"
 
 class TableOfContentsComponentTest < ViewComponent::TestCase
-  def section(id: "work", label: "Work experience", children: nil)
+  def section(id: "work", label: "Work history", children: nil)
     s = { id: id, label: label }
     s[:children] = children if children
     s

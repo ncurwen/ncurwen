@@ -1,5 +1,5 @@
 <div data-controller="table-of-contents-component" aria-label="Page sections">
-  <aside class="hidden xl:block fixed right-8 top-1/2 -translate-y-1/2 z-20 w-56">
+  <aside class="hidden 2xl:block fixed right-8 top-1/2 -translate-y-1/2 z-20 w-56">
     <p class="font-mono text-xs uppercase tracking-wider text-base-content/50 mb-3">
       <span class="text-primary">$</span> jump-to
     </p>
@@ -33,18 +33,16 @@
     </ul>
   </aside>
 
-  <div class="xl:hidden fixed bottom-6 right-6 z-30 dropdown dropdown-top dropdown-end">
+  <div class="2xl:hidden fixed bottom-24 right-6 z-30 dropdown dropdown-top dropdown-end">
     <label tabindex="0"
            class="btn btn-circle btn-primary shadow-lg"
            aria-label="Open table of contents">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16"/>
-      </svg>
+      <%= lucide_icon "list", class: "h-5 w-5" %>
     </label>
     <ul tabindex="0"
-        class="menu menu-sm dropdown-content mb-3 p-2 shadow bg-base-200 rounded-box w-60 font-mono max-h-[70vh] overflow-y-auto">
+        class="toc-menu menu dropdown-content mb-3 p-2 shadow bg-base-200 rounded-box w-60 font-mono max-h-[70vh] overflow-y-auto">
       <li class="menu-title text-xs">
-        <span class="text-primary">$</span> jump-to
+        <span><span class="text-primary">$</span> jump-to</span>
       </li>
       <% sections.each do |section| %>
         <li>
