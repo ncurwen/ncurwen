@@ -5,12 +5,33 @@ import { Controller } from "@hotwired/stimulus"
 // holds the image list and the active (filtered) set, which this reads through an
 // outlet so there's a single source of truth.
 export default class extends Controller {
-  static targets = ["dialog", "image", "caption", "counter", "dot"]
+  static targets = ["dialog", "image", "caption", "counter", "dot", "fitLabel", "fitToggle"]
   static outlets = ["photo-gallery-filter-component"]
 
   connect() {
     this.index = 0
     this.preloaded = new Set()
+    this.fill = false
+  }
+
+  // Tap the frame (or the footer flag) to switch between fitting the whole photo
+  // on screen and filling the screen with it — the win on a phone, where a
+  // landscape frame otherwise sits letterboxed in a thin strip. The choice is
+  // sticky across ←/→ so you can browse a year at one zoom.
+  toggleFit() {
+    this.fill = !this.fill
+    this.imageTarget.classList.toggle("object-cover", this.fill)
+    this.imageTarget.classList.toggle("object-contain", !this.fill)
+    this.fitLabelTarget.textContent = this.fill ? "fill" : "fit"
+    this.fitToggleTarget.setAttribute("aria-pressed", String(this.fill))
+  }
+
+  // The frame isn't focusable, so a mousedown on it would otherwise begin a
+  // text-selection drag on the page behind the dialog and pull focus off the
+  // nav buttons; suppressing the default keeps focus put and stops the stray
+  // selection at its source, while the click (→ toggleFit) still fires.
+  preventSelect(event) {
+    event.preventDefault()
   }
 
   // Borrowed from the filter controller (single source of truth).

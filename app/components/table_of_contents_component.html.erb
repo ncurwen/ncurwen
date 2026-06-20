@@ -1,7 +1,7 @@
 <div data-controller="table-of-contents-component" aria-label="Page sections">
   <aside class="hidden 2xl:block fixed right-8 top-1/2 -translate-y-1/2 z-20 w-56">
-    <p class="font-mono text-xs uppercase tracking-wider text-base-content/50 mb-3">
-      <span class="text-primary">$</span> jump-to
+    <p class="font-mono text-xs tracking-wider text-base-content/50 mb-3">
+      <span class="text-primary">$</span> <span class="text-base-content/80">go</span><span class="text-base-content/40">to</span>
     </p>
     <ul class="space-y-2 font-mono text-sm border-l border-base-300 pl-3">
       <% sections.each do |section| %>
@@ -42,7 +42,7 @@
     <ul tabindex="0"
         class="toc-menu menu dropdown-content mb-3 p-2 shadow bg-base-200 rounded-box w-60 font-mono max-h-[70vh] overflow-y-auto">
       <li class="menu-title text-xs">
-        <span><span class="text-primary">$</span> jump-to</span>
+        <span><span class="text-primary">$</span> <span class="text-base-content/80">go</span><span class="text-base-content/40">to</span></span>
       </li>
       <% sections.each do |section| %>
         <li>

@@ -37,7 +37,7 @@
 
     <%# Filter bar: a single growing year (single-select) × any months (multi-select) %>
     <div class="mt-8 mb-8 space-y-2">
-      <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Filter photos by year">
+      <div class="gallery-filter-row flex items-center gap-2 sm:flex-wrap" role="group" aria-label="Filter photos by year">
         <span class="font-mono text-xs text-base-content/50 mr-1">year:</span>
         <button type="button"
                 data-photo-gallery-filter-component-target="chip"
@@ -64,7 +64,7 @@
         <% end %>
       </div>
 
-      <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Filter photos by month">
+      <div class="gallery-filter-row flex items-center gap-2 sm:flex-wrap" role="group" aria-label="Filter photos by month">
         <span class="font-mono text-xs text-base-content/50 mr-1">month:</span>
         <button type="button"
                 data-photo-gallery-filter-component-target="chip"
@@ -174,10 +174,14 @@
   <dialog data-photo-gallery-lightbox-component-target="dialog"
           data-action="keydown->photo-gallery-lightbox-component#keydown"
           class="modal">
-    <div class="modal-box max-w-6xl w-full p-0 bg-base-100 overflow-hidden">
-      <div class="relative bg-base-300/40">
+    <div class="modal-box flex flex-col w-full p-0 bg-base-100 overflow-hidden select-none
+                max-w-none h-[100dvh] max-h-[100dvh] rounded-none
+                sm:max-w-6xl sm:h-auto sm:max-h-[calc(100dvh-5em)] sm:rounded-box">
+      <div class="relative flex-1 min-h-0 sm:flex-none bg-base-300/40">
         <img data-photo-gallery-lightbox-component-target="image"
-             class="block w-full max-h-[80vh] object-contain bg-black/5"
+             data-action="mousedown->photo-gallery-lightbox-component#preventSelect click->photo-gallery-lightbox-component#toggleFit"
+             class="block w-full h-full sm:h-auto max-h-[100dvh] sm:max-h-[80vh]
+                    object-contain object-center bg-black/5 cursor-pointer select-none"
              alt="" />
 
         <%# Prev / next / close share button + icon chrome — only the action, label,
@@ -196,13 +200,23 @@
         <% end %>
       </div>
 
-      <div class="flex items-center justify-between px-5 py-3 border-t border-base-300 font-mono text-xs">
-        <span class="inline-flex items-center gap-2 text-base-content/70">
-          <span data-photo-gallery-lightbox-component-target="dot" class="season-dot tooltip inline-block w-2 h-2 rounded-full"></span>
-          <span data-photo-gallery-lightbox-component-target="caption"></span>
+      <div class="flex items-center justify-between gap-3 px-5 py-3 border-t border-base-300 font-mono text-xs">
+        <span class="inline-flex items-center gap-2 min-w-0 text-base-content/70">
+          <span data-photo-gallery-lightbox-component-target="dot" class="season-dot tooltip tooltip-right inline-block w-2 h-2 rounded-full shrink-0"></span>
+          <span data-photo-gallery-lightbox-component-target="caption" class="truncate"></span>
         </span>
         <span class="text-base-content/40 hidden sm:inline">← → to navigate · esc to close</span>
-        <span data-photo-gallery-lightbox-component-target="counter" class="text-secondary"></span>
+        <span class="inline-flex shrink-0 items-center gap-3">
+          <button type="button"
+                  data-action="click->photo-gallery-lightbox-component#toggleFit"
+                  data-photo-gallery-lightbox-component-target="fitToggle"
+                  aria-pressed="false"
+                  aria-label="Fill the screen with this photo"
+                  class="text-base-content/40 transition-colors hover:text-primary focus-visible:text-primary focus:outline-none">
+            <span class="text-base-content/25">--</span><span data-photo-gallery-lightbox-component-target="fitLabel">fit</span>
+          </button>
+          <span data-photo-gallery-lightbox-component-target="counter" class="text-secondary"></span>
+        </span>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop">
