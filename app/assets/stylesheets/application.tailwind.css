@@ -202,11 +202,19 @@
     border-radius: var(--radius-box);
     background-color: color-mix(in oklch, var(--color-primary) 7%, transparent);
     box-shadow: inset 3px 0 0 0 var(--color-primary);
-    transition: background-color 250ms ease, box-shadow 250ms ease;
+    opacity: 1;
+  }
+
+  /* Release the pin: fade the backdrop out before JS strips the class entirely.
+     The transition lives here (not on the base) so the highlight appears instantly
+     on click and only animates on the way out. */
+  .toc-active-section--fading::after {
+    opacity: 0;
+    transition: opacity 600ms ease;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .toc-active-section::after {
+    .toc-active-section--fading::after {
       transition: none;
     }
   }
@@ -316,6 +324,18 @@
       @starting-style {
         opacity: 0;
       }
+    }
+
+    /* Mirror the hero (above): on a Turbo Drive visit to a cached page, Turbo
+       paints the cached snapshot as a preview before swapping in the fresh
+       render — firing @starting-style on both, so the tiles fade in twice.
+       Hold tiles hidden at the reveal's start frame during the preview so only
+       the fresh render plays the fade, exactly once. Scoped to
+       [data-turbo-preview], which Turbo strips after the fresh render — so a
+       tile can never be left stuck hidden. */
+    [data-turbo-preview] .gallery-tile {
+      opacity: 0;
+      transition: none;
     }
 
     /* Homepage terminal: each line fades in as the boot sequence reveals it. */

@@ -29,6 +29,12 @@ class TableOfContentsComponentTest < ViewComponent::TestCase
     assert_selector "aside a[data-table-of-contents-component-target='link'][data-section='b'][href='#b']", text: "B"
   end
 
+  test "wires each link's click to the controller via a stimulus action" do
+    render_inline(TableOfContentsComponent.new(sections: [ section(id: "a", label: "A") ]))
+
+    assert_selector "a[data-section='a'][data-action='click->table-of-contents-component#onLinkClick']"
+  end
+
   test "renders nested children when present" do
     sections = [ section(children: [ { id: "work-acme", label: "Acme" } ]) ]
     render_inline(TableOfContentsComponent.new(sections: sections))

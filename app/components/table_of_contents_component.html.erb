@@ -9,7 +9,7 @@
           <a href="#<%= section[:id] %>"
              data-table-of-contents-component-target="link"
              data-section="<%= section[:id] %>"
-             data-turbo="false"
+             data-action="click->table-of-contents-component#onLinkClick"
              class="link link-hover text-base-content/60 transition-colors">
             <%= section[:label] %>
           </a>
@@ -20,7 +20,7 @@
                   <a href="#<%= child[:id] %>"
                      data-table-of-contents-component-target="link"
                      data-section="<%= child[:id] %>"
-                     data-turbo="false"
+                     data-action="click->table-of-contents-component#onLinkClick"
                      class="link link-hover text-base-content/60 text-xs transition-colors">
                     <%= child[:label] %>
                   </a>
@@ -49,7 +49,7 @@
           <a href="#<%= section[:id] %>"
              data-table-of-contents-component-target="link"
              data-section="<%= section[:id] %>"
-             data-turbo="false"><%= section[:label] %></a>
+             data-action="click->table-of-contents-component#onLinkClick"><%= section[:label] %></a>
           <% if section[:children].present? %>
             <ul>
               <% section[:children].each do |child| %>
@@ -57,7 +57,7 @@
                   <a href="#<%= child[:id] %>"
                      data-table-of-contents-component-target="link"
                      data-section="<%= child[:id] %>"
-                     data-turbo="false"
+                     data-action="click->table-of-contents-component#onLinkClick"
                      class="text-xs"><%= child[:label] %></a>
                 </li>
               <% end %>
