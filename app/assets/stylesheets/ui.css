@@ -1,0 +1,64 @@
+@layer components {
+  .typewriter-caret::after {
+    content: "_";
+    display: inline-block;
+    animation: caret-blink 1s steps(1) infinite;
+  }
+
+  /* An underscore cursor that sits after a prompt and blinks, as if the terminal
+     is open and waiting for input. Matches the gallery/typewriter caret rather
+     than a solid block. Used on the contact page's eyebrow. */
+  .terminal-caret {
+    display: inline-block;
+    margin-left: 0.15rem;
+  }
+
+  .terminal-caret::after {
+    content: "_";
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .terminal-caret::after {
+      animation: caret-blink 1s steps(1) infinite;
+    }
+  }
+
+  /* Primary button hover. daisyUI's default only darkens the fill a few
+     percent, which is easy to miss on this green. Deepen the colour shift and
+     add a small lift + shadow so the affordance clearly registers. */
+  .btn-primary:not(:disabled):not(.btn-disabled):hover {
+    background-color: color-mix(in oklch, var(--color-primary) 82%, black);
+    border-color: color-mix(in oklch, var(--color-primary) 82%, black);
+    box-shadow: 0 4px 12px -2px color-mix(in oklch, var(--color-primary) 45%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .btn-primary,
+    .btn-outline {
+      transition: background-color 150ms ease, border-color 150ms ease,
+        box-shadow 150ms ease, transform 150ms ease;
+    }
+
+    .btn-primary:not(:disabled):not(.btn-disabled):hover,
+    .btn-outline:not(:disabled):not(.btn-disabled):hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:not(:disabled):not(.btn-disabled):active,
+    .btn-outline:not(:disabled):not(.btn-disabled):active {
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Homepage terminal: each line fades in as the boot sequence reveals it. */
+    .terminal-line {
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .terminal-line.is-hidden {
+      opacity: 0;
+      transform: translateY(0.35rem);
+    }
+  }
+}

@@ -2,6 +2,14 @@
 @import "../fonts/ubuntu.css";
 @import "../fonts/ubuntu-mono.css";
 
+/* Component partials. These hold @layer components rules only; theme config,
+   tokens, keyframes, and the cascade-layer overrides stay inline below so the
+   plugin/layer ordering the cascade depends on is visible in one place. */
+@import "./gallery.css";
+@import "./timeline.css";
+@import "./navigation.css";
+@import "./ui.css";
+
 @plugin "daisyui" {
   themes: ;
 }
@@ -99,6 +107,15 @@
   --season-winter: oklch(72% 0.07 230); /* cool dormancy */
 }
 
+/* Shared "active indicator" tokens: a primary left edge-bar and a faint primary
+   wash, the active-state pair used by the TOC backdrop, the active nav links,
+   and the hover-override below. Kept in :root rather than @theme so Tailwind
+   doesn't mint stray bg-/shadow- utilities from them — they're internal. */
+:root {
+  --active-bar: inset 3px 0 0 0 var(--color-primary);
+  --primary-wash: color-mix(in oklch, var(--color-primary) 7%, transparent);
+}
+
 /* Page content scrolls inside #page-body (see application.html.erb), keeping
    the header and footer outside the scrollbar's reach. Reserve the scrollbar
    gutter here so the inner content width — and anything centered in it — stays
@@ -106,385 +123,6 @@
    base-100 content, so it's invisible. */
 #page-body {
   scrollbar-gutter: stable;
-}
-
-@layer components {
-  /* Garden season cues, CSP-safe: a solid dot for one season, and a hairline
-     that travels from a year's first season to its last. Colours are keyed by
-     data-attributes so the gallery needs no inline styles. Per-endpoint custom
-     properties (4 + 4 rules) compose into one gradient rule, covering all 16
-     from/to combinations. */
-  .season-dot[data-season="spring"] { background: var(--season-spring); }
-  .season-dot[data-season="summer"] { background: var(--season-summer); }
-  .season-dot[data-season="autumn"] { background: var(--season-autumn); }
-  .season-dot[data-season="winter"] { background: var(--season-winter); }
-
-  [data-from="spring"] { --grad-from: var(--season-spring); }
-  [data-from="summer"] { --grad-from: var(--season-summer); }
-  [data-from="autumn"] { --grad-from: var(--season-autumn); }
-  [data-from="winter"] { --grad-from: var(--season-winter); }
-  [data-to="spring"]   { --grad-to: var(--season-spring); }
-  [data-to="summer"]   { --grad-to: var(--season-summer); }
-  [data-to="autumn"]   { --grad-to: var(--season-autumn); }
-  [data-to="winter"]   { --grad-to: var(--season-winter); }
-
-  .season-bar {
-    background: linear-gradient(to right, var(--grad-from), var(--grad-to));
-  }
-
-  /* Filter chip rows. Above sm the year/month chips wrap freely; on a phone that
-     wrapping stacks into several lines and shoves the gallery down, so below sm
-     each row collapses to a single horizontally-scrollable strip that bleeds to
-     the screen edges. A right-edge mask hints there's more to swipe, and the
-     scrollbar is hidden to keep the terminal-clean line. (Tooltips are hover-only,
-     so nothing is lost by clipping them to the scroll area on touch.) */
-  .gallery-filter-row {
-    scrollbar-width: none;
-  }
-  .gallery-filter-row::-webkit-scrollbar { display: none; }
-
-  @media (width < 40rem) {
-    .gallery-filter-row {
-      overflow-x: auto;
-      scroll-snap-type: x proximity;
-      margin-inline: -1rem;
-      padding-inline: 1rem;
-      -webkit-overflow-scrolling: touch;
-      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1.75rem), transparent);
-      mask-image: linear-gradient(to right, #000 calc(100% - 1.75rem), transparent);
-    }
-    .gallery-filter-row > * {
-      flex: none;
-      scroll-snap-align: start;
-    }
-  }
-
-  .typewriter-caret::after {
-    content: "_";
-    display: inline-block;
-    animation: caret-blink 1s steps(1) infinite;
-  }
-
-  /* An underscore cursor that sits after a prompt and blinks, as if the terminal
-     is open and waiting for input. Matches the gallery/typewriter caret rather
-     than a solid block. Used on the contact page's eyebrow. */
-  .terminal-caret {
-    display: inline-block;
-    margin-left: 0.15rem;
-  }
-
-  .terminal-caret::after {
-    content: "_";
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .terminal-caret::after {
-      animation: caret-blink 1s steps(1) infinite;
-    }
-  }
-
-  /* Jumped-to section. Drawn as a backdrop pseudo-element with negative insets
-     so the highlight keeps its breathing room without shifting the block — a
-     margin/padding offset on the block itself pulls the timeline nodes and
-     leaves off the stem. */
-  .toc-active-section {
-    position: relative;
-  }
-
-  .toc-active-section::after {
-    content: "";
-    position: absolute;
-    top: -0.75rem;
-    bottom: -0.75rem;
-    left: -1rem;
-    right: 0;
-    pointer-events: none;
-    border-radius: var(--radius-box);
-    background-color: color-mix(in oklch, var(--color-primary) 7%, transparent);
-    box-shadow: inset 3px 0 0 0 var(--color-primary);
-    opacity: 1;
-  }
-
-  /* Release the pin: fade the backdrop out before JS strips the class entirely.
-     The transition lives here (not on the base) so the highlight appears instantly
-     on click and only animates on the way out. */
-  .toc-active-section--fading::after {
-    opacity: 0;
-    transition: opacity 600ms ease;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .toc-active-section--fading::after {
-      transition: none;
-    }
-  }
-
-  /* Active nav link. Driven off aria-current (set by nav_controller.js) so the
-     desktop and mobile menus share one source of truth. The active colour and
-     hover preview live on the links themselves as utilities (aria-[current=page]:
-     and hover:, see _nav.html.erb); only the shape cues stay here, because they
-     need pseudo-elements: the horizontal menu gets the underline echo of the
-     TOC's primary edge-bar, while the vertical dropdown reuses the TOC's
-     left-bar form directly (an underline reads poorly in a stacked list). */
-  #primary-nav .menu-horizontal a[aria-current="page"] {
-    position: relative;
-  }
-
-  #primary-nav .menu-horizontal a[aria-current="page"]::after {
-    content: "";
-    position: absolute;
-    left: 0.5rem;
-    right: 0.5rem;
-    bottom: 0.15rem;
-    height: 2px;
-    border-radius: 2px;
-    background: var(--color-primary);
-  }
-
-  #primary-nav .dropdown-content a[aria-current="page"] {
-    box-shadow: inset 3px 0 0 0 var(--color-primary);
-    background-color: color-mix(in oklch, var(--color-primary) 7%, transparent);
-  }
-
-  /* Mobile table-of-contents dropdown: echo the nav hamburger menu's hover and
-     active treatment. Hover tints the text primary (daisyUI supplies the row
-     background); the active entry — the TOC controller toggles text-primary +
-     font-bold onto it, see table_of_contents_component_controller.js #setActive
-     — gets the same primary left-bar and faint wash as an active nav link. */
-  .toc-menu a {
-    transition: color 150ms ease, box-shadow 150ms ease,
-      background-color 150ms ease;
-  }
-
-  .toc-menu a:hover {
-    color: var(--color-primary);
-  }
-
-  .toc-menu a.font-bold {
-    box-shadow: inset 3px 0 0 0 var(--color-primary);
-    background-color: color-mix(in oklch, var(--color-primary) 7%, transparent);
-  }
-
-  /* Primary button hover. daisyUI's default only darkens the fill a few
-     percent, which is easy to miss on this green. Deepen the colour shift and
-     add a small lift + shadow so the affordance clearly registers. */
-  .btn-primary:not(:disabled):not(.btn-disabled):hover {
-    background-color: color-mix(in oklch, var(--color-primary) 82%, black);
-    border-color: color-mix(in oklch, var(--color-primary) 82%, black);
-    box-shadow: 0 4px 12px -2px color-mix(in oklch, var(--color-primary) 45%, transparent);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .btn-primary,
-    .btn-outline {
-      transition: background-color 150ms ease, border-color 150ms ease,
-        box-shadow 150ms ease, transform 150ms ease;
-    }
-
-    .btn-primary:not(:disabled):not(.btn-disabled):hover,
-    .btn-outline:not(:disabled):not(.btn-disabled):hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary:not(:disabled):not(.btn-disabled):active,
-    .btn-outline:not(:disabled):not(.btn-disabled):active {
-      transform: translateY(0);
-    }
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    /* Blinking cursor for the garden hero's tailed-log eyebrow. */
-    .gallery-cursor {
-      animation: caret-blink 1s steps(1) infinite;
-    }
-
-    /* The garden hero reveals on load. */
-    .gallery-hero {
-      animation: gallery-reveal 600ms ease-out both;
-    }
-
-    /* While Turbo paints its short-lived cached preview, pin the hero at the
-       reveal's start frame instead of letting it animate. The fresh render that
-       follows then plays the reveal through exactly once — without this, the
-       animation runs during the preview and again on the fresh render, which
-       reads as a flash on repeat visits. */
-    [data-turbo-preview] .gallery-hero {
-      animation: none;
-      opacity: 0;
-    }
-
-    /* Gallery tiles ease in on first paint instead of snapping over the
-       skeleton. Keyed to the element's first render via @starting-style — no JS
-       load event — so a Turbo re-render/morph can never leave a loaded tile
-       stuck hidden (opacity defaults to 1; only the entry origin is 0). The
-       fade itself rides the tile's existing `transition duration-500` utility,
-       which already covers opacity. Chiefly smooths cached/above-fold tiles,
-       which decode too fast to otherwise register as a deliberate reveal. */
-    .gallery-tile {
-      @starting-style {
-        opacity: 0;
-      }
-    }
-
-    /* Mirror the hero (above): on a Turbo Drive visit to a cached page, Turbo
-       paints the cached snapshot as a preview before swapping in the fresh
-       render — firing @starting-style on both, so the tiles fade in twice.
-       Hold tiles hidden at the reveal's start frame during the preview so only
-       the fresh render plays the fade, exactly once. Scoped to
-       [data-turbo-preview], which Turbo strips after the fresh render — so a
-       tile can never be left stuck hidden. */
-    [data-turbo-preview] .gallery-tile {
-      opacity: 0;
-      transition: none;
-    }
-
-    /* Homepage terminal: each line fades in as the boot sequence reveals it. */
-    .terminal-line {
-      transition: opacity 220ms ease, transform 220ms ease;
-    }
-
-    .terminal-line.is-hidden {
-      opacity: 0;
-      transform: translateY(0.35rem);
-    }
-  }
-
-  /* ----------------------------------------------------------------------
-     Experience: work history as a "growth-stem" timeline.
-     A continuous stem runs down the left, most-recent role at the top.
-     The stem fades as it descends (career grows upward over time); the top
-     node blooms, the earliest node is a seed. Garden tie-in, no emoji.
-     ---------------------------------------------------------------------- */
-  .timeline-track {
-    position: relative;
-  }
-
-  /* The stem: a vertical gradient line, strong at the top, fading at the base. */
-  .timeline-track::before {
-    content: "";
-    position: absolute;
-    left: 6px;
-    top: 0.4rem;
-    bottom: 0.4rem;
-    width: 2px;
-    border-radius: 2px;
-    background: linear-gradient(
-      to bottom,
-      var(--color-primary),
-      color-mix(in oklch, var(--color-primary) 20%, transparent)
-    );
-  }
-
-  .timeline-entry {
-    position: relative;
-    padding-left: 2rem;
-  }
-
-  .timeline-entry:not(:last-child) {
-    padding-bottom: 2.25rem;
-  }
-
-  /* A company node sitting on the stem. The base-100 halo masks the stem
-     behind it so the marker reads cleanly. */
-  .timeline-node {
-    position: absolute;
-    left: 0;
-    top: 0.45rem;
-    width: 14px;
-    height: 14px;
-    border-radius: 9999px;
-    background: var(--color-primary);
-    box-shadow: 0 0 0 4px var(--color-base-100);
-  }
-
-  /* Current role: the growing tip — two leaves sprouting up, with a soft glow. */
-  .timeline-node--bloom {
-    width: 14px;
-    height: 14px;
-    background: var(--color-accent);
-    box-shadow:
-      0 0 0 4px var(--color-base-100),
-      0 0 10px 1px color-mix(in oklch, var(--color-accent) 40%, transparent);
-  }
-
-  .timeline-node--bloom::before,
-  .timeline-node--bloom::after {
-    content: "";
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    background: var(--color-accent);
-    border-radius: 0 100% 0 100%;
-  }
-
-  /* Right-leaning leaf. */
-  .timeline-node--bloom::before {
-    left: 6px;
-    top: -13px;
-    transform: rotate(15deg);
-  }
-
-  /* Left-leaning leaf, a touch behind. */
-  .timeline-node--bloom::after {
-    left: -6px;
-    top: -11px;
-    transform: rotate(-85deg);
-    opacity: 0.85;
-  }
-
-  /* Earliest role: a smaller, muted "seed". */
-  .timeline-node--seed {
-    width: 9px;
-    height: 9px;
-    top: 0.55rem;
-    left: 2px;
-    background: color-mix(in oklch, var(--color-primary) 45%, var(--color-base-300));
-  }
-
-  /* Roles climb on a lighter branch; each role sprouts a leaf, so the branch
-     reads as foliage. At Info-Tech this also shows the promotion arc. */
-  .timeline-roles {
-    border-left: 1px solid color-mix(in oklch, var(--color-primary) 30%, transparent);
-    margin-left: 0.125rem;
-  }
-
-  .timeline-role {
-    position: relative;
-    padding-left: 1.35rem;
-  }
-
-  .timeline-role::before {
-    content: "";
-    position: absolute;
-    left: -6px;
-    top: 0.3rem;
-    width: 12px;
-    height: 12px;
-    background: var(--color-primary);
-    border-radius: 0 100% 0 100%;
-    opacity: 0.8;
-  }
-
-  /* Alternate the leaf angle so the foliage looks grown, not stamped. */
-  .timeline-role:nth-child(odd)::before {
-    transform: rotate(-60deg);
-  }
-
-  .timeline-role:nth-child(even)::before {
-    transform: rotate(-18deg);
-  }
-
-  /* One orchestrated moment: entries rise into view on scroll. Where
-     scroll-driven animations aren't supported, content simply shows. */
-  @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: view()) {
-      .timeline-entry {
-        animation: timeline-reveal linear both;
-        animation-timeline: view();
-        animation-range: entry 0% entry 35%;
-      }
-    }
-  }
 }
 
 @keyframes caret-blink {
@@ -510,13 +148,16 @@
    hamburger dropdown and the table-of-contents dropdown. daisyUI's menu
    :hover/:focus rules sit in a later cascade layer (daisyui.*) and would
    otherwise replace the active left-bar's box-shadow (and primary wash) with
-   their neutral hover styling. These rules are deliberately unlayered, which
-   outranks every @layer — so the active treatment survives the hover. */
-#primary-nav .dropdown-content a[aria-current="page"]:hover,
-#primary-nav .dropdown-content a[aria-current="page"]:focus-visible,
-.toc-menu a.font-bold:hover,
-.toc-menu a.font-bold:focus-visible {
-  box-shadow: inset 3px 0 0 0 var(--color-primary);
-  background-color: color-mix(in oklch, var(--color-primary) 7%, transparent);
-  color: var(--color-primary);
+   their neutral hover styling. This `overrides` layer is declared last in the
+   source — after the daisyUI plugin registers its layers — so it sorts after
+   daisyui.* (and utilities) and wins, without resorting to unlayered rules. */
+@layer overrides {
+  #primary-nav .dropdown-content a[aria-current="page"]:hover,
+  #primary-nav .dropdown-content a[aria-current="page"]:focus-visible,
+  .toc-menu a.font-bold:hover,
+  .toc-menu a.font-bold:focus-visible {
+    box-shadow: var(--active-bar);
+    background-color: var(--primary-wash);
+    color: var(--color-primary);
+  }
 }

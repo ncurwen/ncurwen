@@ -1,0 +1,98 @@
+@layer components {
+  /* Garden season cues, CSP-safe: a solid dot for one season, and a hairline
+     that travels from a year's first season to its last. Colours are keyed by
+     data-attributes so the gallery needs no inline styles. Per-endpoint custom
+     properties (4 + 4 rules) compose into one gradient rule, covering all 16
+     from/to combinations. */
+  .season-dot[data-season="spring"] { background: var(--season-spring); }
+  .season-dot[data-season="summer"] { background: var(--season-summer); }
+  .season-dot[data-season="autumn"] { background: var(--season-autumn); }
+  .season-dot[data-season="winter"] { background: var(--season-winter); }
+
+  [data-from="spring"] { --grad-from: var(--season-spring); }
+  [data-from="summer"] { --grad-from: var(--season-summer); }
+  [data-from="autumn"] { --grad-from: var(--season-autumn); }
+  [data-from="winter"] { --grad-from: var(--season-winter); }
+  [data-to="spring"]   { --grad-to: var(--season-spring); }
+  [data-to="summer"]   { --grad-to: var(--season-summer); }
+  [data-to="autumn"]   { --grad-to: var(--season-autumn); }
+  [data-to="winter"]   { --grad-to: var(--season-winter); }
+
+  .season-bar {
+    background: linear-gradient(to right, var(--grad-from), var(--grad-to));
+  }
+
+  /* Filter chip rows. Above sm the year/month chips wrap freely; on a phone that
+     wrapping stacks into several lines and shoves the gallery down, so below sm
+     each row collapses to a single horizontally-scrollable strip that bleeds to
+     the screen edges. A right-edge mask hints there's more to swipe, and the
+     scrollbar is hidden to keep the terminal-clean line. (Tooltips are hover-only,
+     so nothing is lost by clipping them to the scroll area on touch.) */
+  .gallery-filter-row {
+    scrollbar-width: none;
+  }
+  .gallery-filter-row::-webkit-scrollbar { display: none; }
+
+  @media (width < 40rem) {
+    .gallery-filter-row {
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      margin-inline: -1rem;
+      padding-inline: 1rem;
+      -webkit-overflow-scrolling: touch;
+      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1.75rem), transparent);
+      mask-image: linear-gradient(to right, #000 calc(100% - 1.75rem), transparent);
+    }
+    .gallery-filter-row > * {
+      flex: none;
+      scroll-snap-align: start;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Blinking cursor for the garden hero's tailed-log eyebrow. */
+    .gallery-cursor {
+      animation: caret-blink 1s steps(1) infinite;
+    }
+
+    /* The garden hero reveals on load. */
+    .gallery-hero {
+      animation: gallery-reveal 600ms ease-out both;
+    }
+
+    /* While Turbo paints its short-lived cached preview, pin the hero at the
+       reveal's start frame instead of letting it animate. The fresh render that
+       follows then plays the reveal through exactly once — without this, the
+       animation runs during the preview and again on the fresh render, which
+       reads as a flash on repeat visits. */
+    [data-turbo-preview] .gallery-hero {
+      animation: none;
+      opacity: 0;
+    }
+
+    /* Gallery tiles ease in on first paint instead of snapping over the
+       skeleton. Keyed to the element's first render via @starting-style — no JS
+       load event — so a Turbo re-render/morph can never leave a loaded tile
+       stuck hidden (opacity defaults to 1; only the entry origin is 0). The
+       fade itself rides the tile's existing `transition duration-500` utility,
+       which already covers opacity. Chiefly smooths cached/above-fold tiles,
+       which decode too fast to otherwise register as a deliberate reveal. */
+    .gallery-tile {
+      @starting-style {
+        opacity: 0;
+      }
+    }
+
+    /* Mirror the hero (above): on a Turbo Drive visit to a cached page, Turbo
+       paints the cached snapshot as a preview before swapping in the fresh
+       render — firing @starting-style on both, so the tiles fade in twice.
+       Hold tiles hidden at the reveal's start frame during the preview so only
+       the fresh render plays the fade, exactly once. Scoped to
+       [data-turbo-preview], which Turbo strips after the fresh render — so a
+       tile can never be left stuck hidden. */
+    [data-turbo-preview] .gallery-tile {
+      opacity: 0;
+      transition: none;
+    }
+  }
+}

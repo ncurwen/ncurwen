@@ -1,0 +1,83 @@
+@layer components {
+  /* Jumped-to section. Drawn as a backdrop pseudo-element with negative insets
+     so the highlight keeps its breathing room without shifting the block — a
+     margin/padding offset on the block itself pulls the timeline nodes and
+     leaves off the stem. */
+  .toc-active-section {
+    position: relative;
+  }
+
+  .toc-active-section::after {
+    content: "";
+    position: absolute;
+    top: -0.75rem;
+    bottom: -0.75rem;
+    left: -1rem;
+    right: 0;
+    pointer-events: none;
+    border-radius: var(--radius-box);
+    background-color: var(--primary-wash);
+    box-shadow: var(--active-bar);
+    opacity: 1;
+  }
+
+  /* Release the pin: fade the backdrop out before JS strips the class entirely.
+     The transition lives here (not on the base) so the highlight appears instantly
+     on click and only animates on the way out. */
+  .toc-active-section--fading::after {
+    opacity: 0;
+    transition: opacity 600ms ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .toc-active-section--fading::after {
+      transition: none;
+    }
+  }
+
+  /* Active nav link. Driven off aria-current (set by nav_controller.js) so the
+     desktop and mobile menus share one source of truth. The active colour and
+     hover preview live on the links themselves as utilities (aria-[current=page]:
+     and hover:, see _nav.html.erb); only the shape cues stay here, because they
+     need pseudo-elements: the horizontal menu gets the underline echo of the
+     TOC's primary edge-bar, while the vertical dropdown reuses the TOC's
+     left-bar form directly (an underline reads poorly in a stacked list). */
+  #primary-nav .menu-horizontal a[aria-current="page"] {
+    position: relative;
+  }
+
+  #primary-nav .menu-horizontal a[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0.15rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-primary);
+  }
+
+  #primary-nav .dropdown-content a[aria-current="page"] {
+    box-shadow: var(--active-bar);
+    background-color: var(--primary-wash);
+  }
+
+  /* Mobile table-of-contents dropdown: echo the nav hamburger menu's hover and
+     active treatment. Hover tints the text primary (daisyUI supplies the row
+     background); the active entry — the TOC controller toggles text-primary +
+     font-bold onto it, see table_of_contents_component_controller.js #setActive
+     — gets the same primary left-bar and faint wash as an active nav link. */
+  .toc-menu a {
+    transition: color 150ms ease, box-shadow 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .toc-menu a:hover {
+    color: var(--color-primary);
+  }
+
+  .toc-menu a.font-bold {
+    box-shadow: var(--active-bar);
+    background-color: var(--primary-wash);
+  }
+}

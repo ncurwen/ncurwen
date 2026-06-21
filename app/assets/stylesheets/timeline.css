@@ -1,0 +1,138 @@
+@layer components {
+  /* ----------------------------------------------------------------------
+     Experience: work history as a "growth-stem" timeline.
+     A continuous stem runs down the left, most-recent role at the top.
+     The stem fades as it descends (career grows upward over time); the top
+     node blooms, the earliest node is a seed. Garden tie-in, no emoji.
+     ---------------------------------------------------------------------- */
+  .timeline-track {
+    position: relative;
+  }
+
+  /* The stem: a vertical gradient line, strong at the top, fading at the base. */
+  .timeline-track::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 0.4rem;
+    bottom: 0.4rem;
+    width: 2px;
+    border-radius: 2px;
+    background: linear-gradient(
+      to bottom,
+      var(--color-primary),
+      color-mix(in oklch, var(--color-primary) 20%, transparent)
+    );
+  }
+
+  .timeline-entry {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline-entry:not(:last-child) {
+    padding-bottom: 2.25rem;
+  }
+
+  /* A company node sitting on the stem. The base-100 halo masks the stem
+     behind it so the marker reads cleanly. */
+  .timeline-node {
+    position: absolute;
+    left: 0;
+    top: 0.45rem;
+    width: 14px;
+    height: 14px;
+    border-radius: 9999px;
+    background: var(--color-primary);
+    box-shadow: 0 0 0 4px var(--color-base-100);
+  }
+
+  /* Current role: the growing tip — two leaves sprouting up, with a soft glow. */
+  .timeline-node--bloom {
+    width: 14px;
+    height: 14px;
+    background: var(--color-accent);
+    box-shadow:
+      0 0 0 4px var(--color-base-100),
+      0 0 10px 1px color-mix(in oklch, var(--color-accent) 40%, transparent);
+  }
+
+  .timeline-node--bloom::before,
+  .timeline-node--bloom::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: var(--color-accent);
+    border-radius: 0 100% 0 100%;
+  }
+
+  /* Right-leaning leaf. */
+  .timeline-node--bloom::before {
+    left: 6px;
+    top: -13px;
+    transform: rotate(15deg);
+  }
+
+  /* Left-leaning leaf, a touch behind. */
+  .timeline-node--bloom::after {
+    left: -6px;
+    top: -11px;
+    transform: rotate(-85deg);
+    opacity: 0.85;
+  }
+
+  /* Earliest role: a smaller, muted "seed". */
+  .timeline-node--seed {
+    width: 9px;
+    height: 9px;
+    top: 0.55rem;
+    left: 2px;
+    background: color-mix(in oklch, var(--color-primary) 45%, var(--color-base-300));
+  }
+
+  /* Roles climb on a lighter branch; each role sprouts a leaf, so the branch
+     reads as foliage. At Info-Tech this also shows the promotion arc. */
+  .timeline-roles {
+    border-left: 1px solid color-mix(in oklch, var(--color-primary) 30%, transparent);
+    margin-left: 0.125rem;
+  }
+
+  .timeline-role {
+    position: relative;
+    padding-left: 1.35rem;
+  }
+
+  .timeline-role::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 0.3rem;
+    width: 12px;
+    height: 12px;
+    background: var(--color-primary);
+    border-radius: 0 100% 0 100%;
+    opacity: 0.8;
+  }
+
+  /* Alternate the leaf angle so the foliage looks grown, not stamped. */
+  .timeline-role:nth-child(odd)::before {
+    transform: rotate(-60deg);
+  }
+
+  .timeline-role:nth-child(even)::before {
+    transform: rotate(-18deg);
+  }
+
+  /* One orchestrated moment: entries rise into view on scroll. Where
+     scroll-driven animations aren't supported, content simply shows. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .timeline-entry {
+        animation: timeline-reveal linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 35%;
+      }
+    }
+  }
+}
