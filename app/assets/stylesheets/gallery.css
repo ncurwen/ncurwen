@@ -36,9 +36,23 @@
   @media (width < 40rem) {
     .gallery-filter-row {
       overflow-x: auto;
+      /* Pin the strip to one axis: without this, overflow-x:auto promotes the
+         y-axis to auto too, so a sideways swipe also drags the row up and down.
+         touch-action:pan-x hands vertical gestures back to the page scroll, and
+         overscroll-behavior-x:contain stops the swipe chaining past the ends. */
+      overflow-y: hidden;
+      touch-action: pan-x;
+      overscroll-behavior-x: contain;
       scroll-snap-type: x proximity;
       margin-inline: -1rem;
+      padding-block: 0.25rem;
       padding-inline: 1rem;
+      /* Snap targets align to the scrollport's start edge, which otherwise sits
+         flush against the bleed (margin-inline:-1rem) and eats the leading 1rem
+         padding — pinning the "year:"/"month:" label hard to the screen edge at
+         rest. Match scroll-padding to the inset so the start snap keeps that
+         margin. */
+      scroll-padding-inline: 1rem;
       -webkit-overflow-scrolling: touch;
       -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1.75rem), transparent);
       mask-image: linear-gradient(to right, #000 calc(100% - 1.75rem), transparent);
