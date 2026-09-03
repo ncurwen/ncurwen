@@ -1,0 +1,42 @@
+<%# locals: (guest:) %>
+<section class="wedding-hero hero min-h-[70svh] px-4 py-16">
+  <div class="hero-content max-w-2xl text-center">
+    <div>
+      <figure class="mx-auto mb-8 w-32 sm:w-40">
+        <img src="https://picsum.photos/seed/couple/400/400"
+             alt="Placeholder photo of the couple"
+             class="aspect-square w-full rounded-full object-cover ring-4 ring-primary/20">
+      </figure>
+
+      <%# The personal line leads. It's the thing that proves this invitation is
+          theirs, and it used to sit five paragraphs down. %>
+      <p class="mb-6 text-xs uppercase tracking-[0.3em] text-primary">
+        Hello <%= guest.name %> — you're invited
+      </p>
+
+      <h1 class="wedding-display mb-6 text-5xl md:text-7xl">
+        Samarabandu
+        <span class="my-3 block text-3xl text-primary md:text-4xl">&amp;</span>
+        Curwen
+      </h1>
+
+      <div class="wedding-rule my-8" aria-hidden="true">
+        <%= lucide_icon "heart", class: "h-4 w-4" %>
+      </div>
+
+      <p class="text-xl md:text-2xl"><%= Wedding::STARTS_AT.strftime("%A, the #{Wedding::STARTS_AT.day.ordinalize} of %B, %Y") %></p>
+      <p class="mt-2 text-base-content/70"><%= Wedding::VENUE %> &middot; London, Ontario</p>
+      <p class="mt-3 text-sm italic text-base-content/60">We're eloping for the &ldquo;I do&rdquo; &mdash; this is just the party.</p>
+
+      <%= countdown_tag %>
+
+      <div class="mt-8 flex flex-col items-center gap-4">
+        <%= rsvp_status_chip(guest) %>
+
+        <a href="#rsvp" class="btn btn-primary gap-2">
+          <%= rsvp_cta_label(guest) %>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

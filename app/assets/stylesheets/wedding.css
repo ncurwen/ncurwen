@@ -58,11 +58,33 @@
     box-shadow: inset 3px 0 0 0 var(--color-primary);
   }
 
+  /* The ticking countdown replaces a plain sentence once JS is available; without it
+     the sentence stays put. Reserve the height either way so the hero doesn't jump
+     when the controller connects. */
+  .wedding-page .wedding-countdown {
+    min-height: 4.5rem;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
-    /* RSVP changes arrive by Turbo morph, so only the changed badge repaints.
-       A short fade makes someone else's answer noticeable without being loud. */
+    /* RSVP changes arrive by Turbo morph, so only the changed badge and the stat
+       counts repaint. A small pop makes someone else's answer noticeable — a fade
+       was too quiet to catch out of the corner of your eye, which is the only way
+       anyone will ever see it.
+
+       This is an entry animation, and a morph is not an entry: idiomorph patches the
+       class and text of the existing node, so `animation-name` never changes and this
+       never fires on its own. It does refuse to morph an element whose id changed,
+       removing the old node and inserting a fresh one instead — so every element
+       below carries a status-keyed id from GuestListComponent. Strip those ids as
+       noise and the pop silently stops happening. */
     .wedding-page .wedding-status {
-      animation: wedding-status-in 320ms ease-out;
+      animation: wedding-status-in 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* The answer you just gave. Pairs with the confetti burst, and stands in for it
+       entirely on the decline button, which gets no confetti. */
+    .wedding-page .wedding-answered {
+      animation: wedding-answered-pop 260ms ease-out;
     }
   }
 }

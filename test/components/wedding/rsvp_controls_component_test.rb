@@ -1,11 +1,11 @@
 require "test_helper"
 require "view_component/test_helpers"
 
-class RsvpControlsComponentTest < ViewComponent::TestCase
+class WeddingRsvpControlsComponentTest < ViewComponent::TestCase
   include Rails.application.routes.url_helpers
 
   def render_controls(guest)
-    render_inline(RsvpControlsComponent.new(guest: guest, token: guests(:alice).token))
+    render_inline(Wedding::RsvpControlsComponent.new(guest: guest, token: guests(:alice).token))
   end
 
   test "posts to the guest's RSVP path using the viewer's token" do
@@ -80,5 +80,30 @@ class RsvpControlsComponentTest < ViewComponent::TestCase
     assert_selector "button.btn-outline.btn-primary", text: "Joyfully accepts"
     assert_no_selector "button.btn-primary:not(.btn-outline)"
     assert_selector "button.btn-neutral[aria-pressed='true']", text: "Regretfully declines"
+  end
+
+  # The confetti hangs off the accept form's own submit event rather than the flash.
+  # Driving it from the flash would also fire it on the broadcast morph that every
+  # other open invitation receives — the whole household would get confetti for one
+  # person's answer.
+  test "only the accept form celebrates" do
+    render_controls(guests(:bob))
+
+    forms = page.all("form", visible: :all)
+    accept, decline = forms
+
+    assert_equal "wedding--rsvp-controls-component", accept["data-controller"]
+    assert_equal "turbo:submit-end->wedding--rsvp-controls-component#celebrate", accept["data-action"]
+    assert_nil decline["data-controller"]
+  end
+
+  # Pairs with the confetti, and carries the whole "that registered" signal on the
+  # decline button, which gets no burst.
+  test "marks the answer just given so it can pop" do
+    render_controls(guests(:alice))
+    assert_selector "button.wedding-answered", text: "Joyfully accepts", count: 1
+
+    render_controls(guests(:bob))
+    assert_no_selector "button.wedding-answered"
   end
 end

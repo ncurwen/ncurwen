@@ -4,11 +4,6 @@
 class InvitationsController < ApplicationController
   layout "wedding"
 
-  # Tokens are 6 characters of Base58 (~38 billion combinations), so guessing
-  # one is not realistic; this just makes a scripted sweep pointless. Mirrors
-  # the limiter on the contact form.
-  rate_limit to: 30, within: 1.minute, only: :index
-
   before_action :set_guest
 
   def index
@@ -34,6 +29,15 @@ class InvitationsController < ApplicationController
     Rollbar.error(e)
     flash[:error] = "Something went wrong saving that answer. Please try again."
     redirect_to invitations_path(token: @guest.token)
+  end
+
+  # The party as a calendar file. Behind the token like everything else here, so the
+  # venue and time don't leak to anyone without an invitation.
+  def calendar
+    send_data Wedding.to_ics,
+              type: "text/calendar; charset=utf-8",
+              filename: "party.ics",
+              disposition: "attachment"
   end
 
   private

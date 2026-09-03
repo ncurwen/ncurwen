@@ -11,9 +11,7 @@ Rails.application.routes.draw do
   get "/contact"    => "pages#contact",    as: :contact
   post "/contact"   => "contact_forms#create"
 
-  # The wedding invitation. `path:` carries the token segment, so the link stays
-  # short (/wedding/<token>) while this remains a conventional resource:
-  #   GET   /wedding/:token      invitations#index   (details + full guest list)
-  #   PATCH /wedding/:token/:id  invitations#update  (RSVP for one guest)
-  resources :invitations, path: "/wedding/:token", only: %i[index update]
+  resources :invitations, path: "/wedding/:token", only: %i[index update] do
+    get :calendar, on: :collection
+  end
 end

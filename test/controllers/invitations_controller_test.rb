@@ -171,4 +171,20 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
       end
     end
   end
+
+  test "serves the party as a downloadable calendar file" do
+    get calendar_invitations_path(token: guests(:alice).token)
+
+    assert_response :success
+    assert_match "text/calendar", response.media_type
+    assert_match(/attachment; filename="party\.ics"/, response.headers["Content-Disposition"])
+    assert_match "BEGIN:VEVENT", response.body
+  end
+
+  # The venue and time are behind the token like everything else here.
+  test "the calendar file needs a valid token" do
+    get calendar_invitations_path(token: "nobody")
+
+    assert_response :not_found
+  end
 end

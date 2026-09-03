@@ -1,0 +1,31 @@
+<%# locals: (guest:, household:) %>
+<%# The ask, as a full-width band rather than a column beside the details.
+    A sidebar has to be as tall as whatever sits next to it, and a household of
+    one left roughly three quarters of it empty. Here the width is filled by the
+    guests themselves: one card each, laid out in a centred row that wraps. A
+    lone guest gets a single centred card and nothing looks unfinished. %>
+<section id="rsvp" class="scroll-mt-8 border-y border-base-300 bg-base-200 py-16">
+  <div class="mx-auto max-w-4xl px-4 lg:max-w-6xl">
+    <h2 class="wedding-display mb-2 text-center text-3xl">Will you join us?</h2>
+    <p class="mb-8 text-center text-base-content/70">
+      <% if household.size > 1 %>
+        You can answer for everyone in <span class="font-semibold"><%= guest.group %></span>.
+      <% else %>
+        Let us know either way — you can change your mind any time.
+      <% end %>
+    </p>
+
+    <%# Fixed-width cards in a centred wrap, rather than a grid: a grid would
+        strand a single guest in its first column. %>
+    <div class="flex flex-wrap justify-center gap-4">
+      <% household.each do |member| %>
+        <article class="card w-full bg-base-100 sm:w-80">
+          <div class="card-body gap-4">
+            <h3 class="card-title text-lg"><%= member.name %></h3>
+            <%= rsvp_controls_tag(guest: member, token: guest.token) %>
+          </div>
+        </article>
+      <% end %>
+    </div>
+  </div>
+</section>

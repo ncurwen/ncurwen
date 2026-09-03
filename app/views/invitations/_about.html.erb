@@ -1,0 +1,22 @@
+<section class="py-16">
+  <h2 class="wedding-display mb-8 text-center text-3xl">A little about us</h2>
+
+  <div class="grid gap-6 sm:grid-cols-3">
+    <% [
+         { src: "https://picsum.photos/seed/couple/600/600",  alt: "Placeholder photo of the couple", caption: "How we met — placeholder." },
+         { src: "https://picsum.photos/seed/proposal/600/600", alt: "Placeholder photo of the proposal", caption: "The proposal — placeholder." },
+         { src: "https://picsum.photos/seed/jub/600/600",      alt: "Placeholder photo of Jub the cat",  caption: "Jub, who is not invited." }
+       ].each do |photo| %>
+      <figure class="card overflow-hidden bg-base-200">
+        <img src="<%= photo[:src] %>" alt="<%= photo[:alt] %>" loading="lazy"
+             class="aspect-square w-full object-cover">
+        <figcaption class="p-4 text-sm text-base-content/70"><%= photo[:caption] %></figcaption>
+      </figure>
+    <% end %>
+  </div>
+
+  <p class="mx-auto mt-6 max-w-2xl text-center text-base-content/80">
+    Placeholder paragraph about who we are and how we got here. A few sentences,
+    warm and short. Replace before sending any invitations.
+  </p>
+</section>

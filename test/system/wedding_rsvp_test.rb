@@ -97,14 +97,34 @@ class WeddingRsvpTest < ApplicationSystemTestCase
   test "an RSVP made elsewhere appears live, without a reload" do
     visit invitations_path(token: guests(:carol).token)
 
-    assert_selector ".badge-ghost", text: "Awaiting reply"
+    assert_selector ".badge-ghost", text: "Unknown"
 
     # Stand in for another guest's browser. The model broadcasts a refresh on
     # commit, which Turbo morphs into this already-open page.
     perform_enqueued_jobs { guests(:bob).update!(status: "yes") }
 
     assert_selector ".badge-success", text: "Coming", count: 2
-    assert_no_selector ".badge-ghost", text: "Awaiting reply"
+    assert_no_selector ".badge-ghost", text: "Unknown"
+  end
+
+  # The pop in wedding.css is an entry animation, so it only fires if the morph
+  # *replaces* the badge rather than patching it. Both look identical in the HTML,
+  # so probe the node itself: a JS property survives a morph and dies with a
+  # replacement. This is the test that actually guards the animation.
+  test "a changed badge is replaced on morph rather than patched, so the pop fires" do
+    visit invitations_path(token: guests(:carol).token)
+
+    before = "#guest-#{guests(:bob).id}-status-unknown"
+    after  = "#guest-#{guests(:bob).id}-status-yes"
+
+    assert_selector before
+    page.execute_script("document.querySelector('#{before}').morphProbe = true")
+
+    perform_enqueued_jobs { guests(:bob).update!(status: "yes") }
+
+    assert_selector after
+    assert_equal false, page.evaluate_script("document.querySelector('#{after}').morphProbe === true"),
+                 "the badge was morphed in place instead of replaced, so its entry animation never runs"
   end
 
   private

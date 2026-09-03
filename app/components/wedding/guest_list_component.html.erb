@@ -1,0 +1,66 @@
+<div class="space-y-6">
+  <%# The headline number of the whole page. It used to be a grey sentence; the party
+      filling up is the thing guests actually come back to look at. %>
+  <div class="stats stats-vertical w-full bg-base-200 sm:stats-horizontal">
+    <div class="stat">
+      <div class="stat-figure text-success"><%= lucide_icon "party-popper", class: "h-7 w-7" %></div>
+      <div class="stat-title">Coming</div>
+      <div id="wedding-stat-coming-<%= attending_count %>" class="stat-value wedding-status text-success"><%= attending_count %></div>
+      <div class="stat-desc">of <%= guests.size %> invited</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-figure text-base-content/40"><%= lucide_icon "circle-dashed", class: "h-7 w-7" %></div>
+      <div class="stat-title">Yet to reply</div>
+      <div id="wedding-stat-awaiting-<%= awaiting_count %>" class="stat-value wedding-status"><%= awaiting_count %></div>
+      <div class="stat-desc"><%= declined_count %> can&rsquo;t make it</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-figure text-primary"><%= lucide_icon "house", class: "h-7 w-7" %></div>
+      <div class="stat-title">Households</div>
+      <div class="stat-value"><%= household_count %></div>
+      <div class="stat-desc">on the guest list</div>
+    </div>
+  </div>
+
+  <div class="space-y-2">
+    <progress class="progress progress-primary w-full"
+              value="<%= replied_count %>" max="<%= guests.size %>"
+              aria-label="Replies received"></progress>
+    <p class="text-sm text-base-content/70">
+      <%= reply_progress_label %> This list updates live as people reply.
+    </p>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <% households.each do |group, members| %>
+      <section class="card bg-base-200 <%= "wedding-own-household" if own_household?(group) %>">
+        <div class="card-body gap-3">
+          <header class="flex items-baseline justify-between gap-2">
+            <h3 class="card-title text-base"><%= group %></h3>
+            <% if own_household?(group) %>
+              <span class="badge badge-primary badge-soft badge-sm shrink-0">You</span>
+            <% end %>
+          </header>
+
+          <%# Not daisyUI's list-row here: it lays out as a fixed grid, and in the
+              four-across desktop cards the name and its status badge collide.
+              A wrapping flex row lets the badge drop below the name when the
+              column is narrow, and keeps them on one line when there's room. %>
+          <ul class="divide-y divide-base-300/60">
+            <% members.each do |member| %>
+              <li class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 py-2">
+                <span><%= member.name %></span>
+                <span id="<%= status_dom_id(member) %>" class="<%= status_badge_class(member) %> wedding-status whitespace-nowrap">
+                  <%= lucide_icon status_icon(member), class: "h-3 w-3" %>
+                  <%= status_label(member) %>
+                </span>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </section>
+    <% end %>
+  </div>
+</div>

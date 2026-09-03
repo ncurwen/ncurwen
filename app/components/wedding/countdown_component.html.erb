@@ -1,0 +1,32 @@
+<div class="wedding-countdown mt-6"
+     data-controller="wedding--countdown-component"
+     data-wedding--countdown-component-starts-at-value="<%= starts_at.iso8601 %>"
+     data-wedding--countdown-component-max-days-value="<%= max_countdown_days %>">
+
+  <%# Always rendered, and always the accessible answer. Without JS this is the whole
+      component; with it, the controller adds `sr-only` and the ticking grid below
+      takes over visually. %>
+  <p data-wedding--countdown-component-target="sentence"
+     class="text-sm uppercase tracking-[0.25em] text-base-content/60"><%= sentence %></p>
+
+  <% if enhanceable? %>
+    <%# aria-hidden on purpose: a seconds counter in a live region is unusable. The
+        sentence above carries this information for assistive tech. %>
+    <div data-wedding--countdown-component-target="live"
+         class="hidden grid-flow-col justify-center gap-4 text-center sm:gap-8"
+         aria-hidden="true">
+      <% units.each do |unit| %>
+        <div class="flex flex-col items-center">
+          <%# Sans, not the page's serif: daisyUI's countdown clips each digit to a 1em
+              window to slide it, and the serif stack renders old-style figures whose
+              descenders (2, 7, 9) get sheared off. Ubuntu's lining figures sit on the
+              baseline, and read more like a clock besides. %>
+          <span class="countdown font-sans text-4xl tabular-nums text-primary sm:text-5xl <%= "[--digits:2]" unless unit == "days" %>">
+            <span data-wedding--countdown-component-target="<%= unit %>"></span>
+          </span>
+          <span class="mt-1 text-[0.65rem] uppercase tracking-[0.2em] text-base-content/60"><%= unit %></span>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -4,6 +4,8 @@
                 params: { status: "yes" },
                 class: button_class("yes"),
                 form_class: "contents",
+                form: { data: { controller: "wedding--rsvp-controls-component",
+                                action: "turbo:submit-end->wedding--rsvp-controls-component#celebrate" } },
                 data: { turbo_action: "replace" },
                 aria: { pressed: guest.yes? } do %>
     <%= lucide_icon "check", class: "h-4 w-4" %>

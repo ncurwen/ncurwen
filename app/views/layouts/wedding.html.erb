@@ -59,6 +59,22 @@
       <% end %>
     </div>
 
+    <%# The confetti surface for an accepted RSVP.
+        canvas-confetti would otherwise append a canvas of its own to <body>, and the
+        morph that follows the RSVP redirect deletes anything not in the new HTML — the
+        burst would be wiped within a frame of appearing. This one is part of the
+        document and marked permanent, so the morph leaves it alone. Same
+        A *stable* id, unlike the flash toast's random uuid: Turbo pairs permanent
+        elements across renders by id, and a fresh uuid each render means nothing
+        matches, so the node is replaced and the in-flight animation dies with it.
+        The toast gets away with a uuid because its replacement isn't in the new page
+        at all; this canvas is, on every render. There's only ever one. %>
+    <canvas id="wedding-confetti"
+            data-wedding-confetti
+            data-turbo-permanent
+            aria-hidden="true"
+            class="pointer-events-none fixed inset-0 z-40 h-full w-full"></canvas>
+
     <main class="flex-1">
       <%= yield %>
     </main>

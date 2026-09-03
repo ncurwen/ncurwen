@@ -1,147 +1,26 @@
 <% content_for :title, "Alex & Nick — 00 Month 2027" %>
 
-<%# PLACEHOLDER COPY THROUGHOUT. Names, dates, venue, times, story and photos are
-    stand-ins; the structure is what's real here. %>
+<%# PLACEHOLDER COPY THROUGHOUT. Names, story and photos are stand-ins; the structure
+    is what's real here. The date, venue and address now come from app/models/wedding.rb
+    so they're replaced in one place. %>
 
-<section class="wedding-hero hero py-16 md:py-24 px-4">
-  <div class="hero-content text-center max-w-2xl">
-    <div>
-      <p class="uppercase tracking-[0.3em] text-xs text-primary mb-6">Together with our families & friends</p>
+<%= render "hero", guest: @guest %>
 
-      <h1 class="wedding-display text-5xl md:text-7xl mb-6">
-        Samarabandu
-        <span class="block text-3xl md:text-4xl my-3 text-primary">&amp;</span>
-        Curwen
-      </h1>
-
-      <div class="wedding-rule my-8" aria-hidden="true">
-        <%= lucide_icon "heart", class: "h-4 w-4" %>
-      </div>
-
-      <p class="text-xl md:text-2xl">Saturday, the 00th of Month, 2027</p>
-      <p class="text-base-content/70 mt-2">Placeholder Venue &middot; London, Ontario</p>
-      <p class="text-sm text-base-content/60 italic mt-3">We're eloping for the &ldquo;I do&rdquo; &mdash; this is just the party.</p>
-
-      <p class="mt-8 text-base-content/80">
-        Hello <span class="font-semibold text-primary"><%= @guest.name %></span> — we'd love you there.
-      </p>
-
-      <a href="#rsvp" class="btn btn-primary mt-8 gap-2 normal-case">
-        <%= lucide_icon "check", class: "h-4 w-4" %>
-        RSVP
-      </a>
-    </div>
-  </div>
-</section>
-
-<div class="max-w-4xl lg:max-w-6xl mx-auto px-4">
-  <section class="py-16">
-    <h2 class="wedding-display text-3xl text-center mb-8">A little about us</h2>
-
-    <div class="grid gap-6 sm:grid-cols-3">
-      <% [
-           { src: "https://picsum.photos/seed/couple/600/600",  alt: "Placeholder photo of the couple", caption: "How we met — placeholder." },
-           { src: "https://picsum.photos/seed/proposal/600/600", alt: "Placeholder photo of the proposal", caption: "The proposal — placeholder." },
-           { src: "https://picsum.photos/seed/jub/600/600",      alt: "Placeholder photo of Jub the cat",  caption: "Jub, who is not invited." }
-         ].each do |photo| %>
-        <figure class="card bg-base-200 overflow-hidden">
-          <img src="<%= photo[:src] %>" alt="<%= photo[:alt] %>" loading="lazy"
-               class="aspect-square w-full object-cover">
-          <figcaption class="card-body p-4 text-sm text-base-content/70"><%= photo[:caption] %></figcaption>
-        </figure>
-      <% end %>
-    </div>
-
-    <p class="mt-6 text-center text-base-content/80 max-w-2xl mx-auto">
-      Placeholder paragraph about who we are and how we got here. A few sentences,
-      warm and short. Replace before sending any invitations.
-    </p>
-  </section>
+<div class="mx-auto max-w-4xl px-4 lg:max-w-6xl">
+  <%= render "about" %>
 
   <div class="wedding-rule" aria-hidden="true"><%= lucide_icon "heart", class: "h-3 w-3" %></div>
 
   <%# Two short sections that each waste a full row on their own; paired, they
       use the width without either needing to stretch. %>
-  <div class="py-16 grid gap-12 lg:grid-cols-2 lg:items-start">
-    <section>
-      <h2 class="wedding-display text-3xl text-center mb-4">Where &amp; when</h2>
-      <p class="text-center text-base-content/70 max-w-xl mx-auto mb-8">
-        Quick heads up: the ceremony is a private, just-the-two-of-us elopement.
-        This invite is for the good part &mdash; the party.
-      </p>
-
-      <div class="grid gap-6 max-w-sm mx-auto">
-        <% [
-             { icon: "party-popper", title: "The Celebration", time: "0:00pm", place: "Placeholder Hall", address: "000 Placeholder Avenue, London, ON" }
-           ].each do |event| %>
-          <article class="card bg-base-200">
-            <div class="card-body">
-              <h3 class="card-title gap-2">
-                <%= lucide_icon event[:icon], class: "h-5 w-5 text-primary" %>
-                <%= event[:title] %>
-              </h3>
-              <p class="flex items-center gap-2 text-base-content/80">
-                <%= lucide_icon "clock", class: "h-4 w-4 shrink-0" %><%= event[:time] %>
-              </p>
-              <p class="flex items-start gap-2 text-base-content/80">
-                <%= lucide_icon "map-pin", class: "h-4 w-4 shrink-0 mt-1" %>
-                <span><%= event[:place] %><br><span class="text-sm text-base-content/60"><%= event[:address] %></span></span>
-              </p>
-            </div>
-          </article>
-        <% end %>
-      </div>
-    </section>
-
-    <section>
-      <h2 class="wedding-display text-3xl text-center mb-6">Gifts</h2>
-      <div class="card bg-base-200 max-w-2xl mx-auto">
-        <div class="card-body text-center">
-          <p class="text-lg">Your being there is the gift — please, no presents.</p>
-          <p class="text-base-content/70">
-            If you'd like to contribute to our honeymoon fund anyway, there'll be a
-            card box at the party.
-          </p>
-        </div>
-      </div>
-    </section>
+  <div class="grid gap-12 py-16 lg:grid-cols-2 lg:items-start">
+    <%= render "where_and_when", guest: @guest %>
+    <%= render "gifts" %>
   </div>
 </div>
 
-<%# The ask, as a full-width band rather than a column beside the details.
-    A sidebar has to be as tall as whatever sits next to it, and a household of
-    one left roughly three quarters of it empty. Here the width is filled by the
-    guests themselves: one card each, laid out in a centred row that wraps. A
-    lone guest gets a single centred card and nothing looks unfinished. %>
-<section id="rsvp" class="scroll-mt-8 bg-base-200 border-y border-base-300 py-16">
-  <div class="max-w-4xl lg:max-w-6xl mx-auto px-4">
-    <h2 class="wedding-display text-3xl text-center mb-2">Will you join us?</h2>
-    <p class="text-center text-base-content/70 mb-8">
-      <% if @household.size > 1 %>
-        You can answer for everyone in <span class="font-semibold"><%= @guest.group %></span>.
-      <% else %>
-        Let us know either way — you can change your mind any time.
-      <% end %>
-    </p>
+<%= render "rsvp", guest: @guest, household: @household %>
 
-    <%# Fixed-width cards in a centred wrap, rather than a grid: a grid would
-        strand a single guest in its first column. %>
-    <div class="flex flex-wrap justify-center gap-4">
-      <% @household.each do |member| %>
-        <article class="card bg-base-100 w-full sm:w-80">
-          <div class="card-body gap-4">
-            <h3 class="card-title text-lg"><%= member.name %></h3>
-            <%= rsvp_controls_tag(guest: member, token: @guest.token) %>
-          </div>
-        </article>
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<div class="max-w-4xl lg:max-w-6xl mx-auto px-4 py-16 pb-20">
-  <section>
-    <h2 class="wedding-display text-3xl text-center mb-8">Who's coming</h2>
-    <%= guest_list_tag(guests: @guests, viewer: @guest) %>
-  </section>
+<div class="mx-auto max-w-4xl px-4 py-16 pb-20 lg:max-w-6xl">
+  <%= render "attending", guests: @guests, viewer: @guest %>
 </div>

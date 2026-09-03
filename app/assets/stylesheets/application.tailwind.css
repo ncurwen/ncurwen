@@ -239,10 +239,19 @@
   50% { opacity: 0; }
 }
 
-/* The guest-list badge fade; see .wedding-status in wedding.css. */
+/* The guest-list badge and stat pop; see .wedding-status in wedding.css. A fade was
+   too quiet to notice — this is the only signal that someone else just replied. */
 @keyframes wedding-status-in {
-  from { opacity: 0; transform: translateY(-0.2rem); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(-0.25rem) scale(0.85); }
+  60%  { opacity: 1; transform: translateY(0) scale(1.12); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* The button you just pressed; see .wedding-answered in wedding.css. */
+@keyframes wedding-answered-pop {
+  from { transform: scale(1); }
+  50%  { transform: scale(1.04); }
+  to   { transform: scale(1); }
 }
 
 @keyframes gallery-reveal {
