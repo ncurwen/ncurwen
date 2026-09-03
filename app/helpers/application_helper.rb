@@ -13,6 +13,14 @@ module ApplicationHelper
     end
   end
 
+  # The invitation's theme names, and the cookie values a guest's explicit
+  # choice is stored under. Returns nil when they haven't chosen, which makes
+  # the layout render *no* data-theme — the state daisyUI's prefersdark rule
+  # (`:root:not([data-theme])`) needs in order to follow the device.
+  WEDDING_THEMES = { "light" => "wedding", "dark" => "wedding-dark" }.freeze
+
+  def wedding_theme(choice) = WEDDING_THEMES[choice]
+
   def tooltip_tag(text, position: "top", &block)
     tag.div(class: "tooltip tooltip-#{position}", data: { tip: text }, &block)
   end

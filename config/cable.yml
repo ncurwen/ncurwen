@@ -5,8 +5,13 @@
 development:
   adapter: async
 
+# `async` rather than `test` so system tests exercise a real websocket: the
+# `test` adapter only records broadcasts, so a broadcast refresh would never
+# reach the browser and the live guest list couldn't be tested end to end.
+# Tests that assert on broadcasts (ActionCable::TestHelper) swap in the test
+# adapter themselves, so they're unaffected.
 test:
-  adapter: test
+  adapter: async
 
 production:
   adapter: solid_cable

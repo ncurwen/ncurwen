@@ -10,5 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 0) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_03_041352) do
+  create_table "guests", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "group", null: false
+    t.string "name", null: false
+    t.string "status", default: "unknown", null: false
+    t.string "token", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group", "name"], name: "index_guests_on_group_and_name"
+    t.index ["token"], name: "index_guests_on_token", unique: true
+  end
 end

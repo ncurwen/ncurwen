@@ -1,0 +1,23 @@
+# Statuses are quoted deliberately: unquoted `yes`/`no` are YAML booleans, which
+# would fail the enum's inclusion validation in confusing ways.
+#
+# Tokens are spelled out here rather than generated, so tests can build
+# invitation URLs without a lookup.
+
+alice:
+  token: alice1
+  name: Alice Attending
+  group: The Attending Household
+  status: "yes"
+
+bob:
+  token: bob002
+  name: Bob Attending
+  group: The Attending Household
+  status: unknown
+
+carol:
+  token: carol3
+  name: Carol Elsewhere
+  group: The Elsewhere Household
+  status: "no"

@@ -1,0 +1,28 @@
+<div class="flex flex-col gap-2" role="group" aria-label="RSVP for <%= guest.name %>">
+  <%= button_to rsvp_path,
+                method: :patch,
+                params: { status: "yes" },
+                class: button_class("yes"),
+                form_class: "contents",
+                data: { turbo_action: "replace" },
+                aria: { pressed: guest.yes? } do %>
+    <%= lucide_icon "check", class: "h-4 w-4" %>
+    <span>Joyfully accepts</span>
+  <% end %>
+
+  <%= button_to rsvp_path,
+                method: :patch,
+                params: { status: "no" },
+                class: button_class("no"),
+                form_class: "contents",
+                data: { turbo_action: "replace" },
+                aria: { pressed: guest.no? } do %>
+    <%= lucide_icon "x", class: "h-4 w-4" %>
+    <span>Regretfully declines</span>
+  <% end %>
+
+  <p class="flex items-center gap-1.5 text-sm text-base-content/70">
+    <%= lucide_icon standing_answer_icon, class: "h-3.5 w-3.5 shrink-0" %>
+    <span><%= standing_answer %></span>
+  </p>
+</div>

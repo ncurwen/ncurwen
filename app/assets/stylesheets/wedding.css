@@ -1,0 +1,68 @@
+/* Wedding invitation styles. @layer components rules only — theme tokens, the
+   daisyUI theme block and keyframes live in application.tailwind.css, matching
+   the convention documented there.
+
+   Everything is scoped under .wedding-page (set on <body> by
+   layouts/wedding.html.erb) rather than [data-theme="wedding"], so it still
+   applies before a guest has picked a theme — the layout deliberately omits
+   data-theme until then, letting daisyUI's prefersdark rule follow the OS
+   with no flash. None of these rules read theme-specific values directly
+   (they go through var(--color-*) tokens, which cascade correctly either
+   way), so one class covers light, dark, and the OS-followed default, while
+   still keeping it out of the main site, which shares this one stylesheet. */
+@layer components {
+  /* The invitation sets its whole voice in serif; the main site is sans/mono. */
+  .wedding-page {
+    font-family: var(--font-serif);
+  }
+
+  /* Names and section headings, a touch wider and lighter than the body copy. */
+  .wedding-page .wedding-display {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+  }
+
+  /* A hairline rule with a diamond at its centre, used between sections instead
+     of a plain border. Drawn with a pseudo-element because CSP forbids inline
+     styles and this needs no markup of its own. */
+  .wedding-page .wedding-rule {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: color-mix(in oklch, var(--color-primary) 45%, transparent);
+  }
+
+  .wedding-page .wedding-rule::before,
+  .wedding-page .wedding-rule::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: currentColor;
+  }
+
+  /* Softens the seam between the hero and the page beneath it. */
+  .wedding-page .wedding-hero {
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-base-200) 0%,
+      var(--color-base-100) 100%
+    );
+  }
+
+  /* The viewer's own household in the guest list: a warm wash and an edge bar,
+     marking the rows their token can actually change. */
+  .wedding-page .wedding-own-household {
+    background-color: color-mix(in oklch, var(--color-primary) 6%, transparent);
+    box-shadow: inset 3px 0 0 0 var(--color-primary);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* RSVP changes arrive by Turbo morph, so only the changed badge repaints.
+       A short fade makes someone else's answer noticeable without being loud. */
+    .wedding-page .wedding-status {
+      animation: wedding-status-in 320ms ease-out;
+    }
+  }
+}

@@ -1,0 +1,37 @@
+<div class="space-y-6">
+  <p class="text-sm text-base-content/70">
+    <%= attending_count %> of <%= guests.size %> guests have said yes so far.
+    This list updates live as people reply.
+  </p>
+
+  <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <% households.each do |group, members| %>
+      <section class="card bg-base-200 <%= "wedding-own-household" if own_household?(group) %>">
+        <div class="card-body gap-3">
+          <header class="flex items-baseline justify-between gap-2">
+            <h3 class="card-title text-base"><%= group %></h3>
+            <% if own_household?(group) %>
+              <span class="badge badge-primary badge-soft badge-sm shrink-0">You</span>
+            <% end %>
+          </header>
+
+          <%# Not daisyUI's list-row here: it lays out as a fixed grid, and in the
+              four-across desktop cards the name and its status badge collide.
+              A wrapping flex row lets the badge drop below the name when the
+              column is narrow, and keeps them on one line when there's room. %>
+          <ul class="divide-y divide-base-300/60">
+            <% members.each do |member| %>
+              <li class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 py-2">
+                <span><%= member.name %></span>
+                <span class="<%= status_badge_class(member) %> wedding-status whitespace-nowrap">
+                  <%= lucide_icon status_icon(member), class: "h-3 w-3" %>
+                  <%= status_label(member) %>
+                </span>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </section>
+    <% end %>
+  </div>
+</div>

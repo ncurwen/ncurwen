@@ -9,6 +9,7 @@
 @import "./timeline.css";
 @import "./navigation.css";
 @import "./ui.css";
+@import "./wedding.css";
 
 @plugin "daisyui" {
   themes: ;
@@ -16,7 +17,7 @@
 
 @plugin "daisyui/theme" {
   name: "ncurwen-light";
-  default: true;
+  default: false;
   prefersdark: false;
   color-scheme: light;
 
@@ -56,7 +57,7 @@
 
 @plugin "daisyui/theme" {
   name: "ncurwen-dark";
-  prefersdark: true;
+  prefersdark: false;
   color-scheme: dark;
 
   --color-base-100: oklch(18% 0.02 150);
@@ -93,9 +94,118 @@
   --noise: 1;
 }
 
+/* The wedding invitation's themes (app/views/layouts/wedding.html.erb). Warm
+   and soft where the rest of the site is a cool green terminal — cream paper,
+   dusty rose, sage.
+
+   `default` and `prefersdark` live on this pair rather than the ncurwen ones
+   so the invitation can follow the guest's device with no JavaScript and no
+   flash: daisyUI compiles `prefersdark` to `:root:not([data-theme])`, which
+   only fires when the markup sets no theme at all. So the wedding layout
+   omits data-theme until a guest picks one explicitly, and the OS decides.
+
+   This costs the main site nothing — layouts/application.html.erb always
+   renders an explicit data-theme from the light_mode cookie, so both flags
+   were dead configuration there. The one catch: a *new* page that renders
+   without data-theme now inherits the wedding theme, not ncurwen-light. */
+@plugin "daisyui/theme" {
+  name: "wedding";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: oklch(98% 0.012 70);
+  --color-base-200: oklch(95% 0.02 65);
+  --color-base-300: oklch(90% 0.03 60);
+  --color-base-content: oklch(32% 0.035 40);
+  /* Deepened from 58%: as small text (the eyebrow, outline buttons) and as a
+     button fill, the lighter rose fell under 4.5:1 on this cream base. */
+  --color-primary: oklch(49% 0.12 25);
+  --color-primary-content: oklch(98% 0.012 25);
+  --color-secondary: oklch(62% 0.06 145);
+  --color-secondary-content: oklch(98% 0.012 145);
+  --color-accent: oklch(74% 0.11 75);
+  --color-accent-content: oklch(28% 0.05 75);
+  --color-neutral: oklch(42% 0.035 40);
+  --color-neutral-content: oklch(96% 0.012 40);
+  --color-info: oklch(70% 0.08 230);
+  --color-info-content: oklch(20% 0.03 230);
+  /* Same reason — the 12px "Coming" badge sits on this as a filled badge. */
+  --color-success: oklch(52% 0.13 150);
+  --color-success-content: oklch(98% 0.01 150);
+  --color-warning: oklch(80% 0.13 80);
+  --color-warning-content: oklch(26% 0.05 80);
+  --color-error: oklch(60% 0.16 25);
+  --color-error-content: oklch(98% 0.01 25);
+
+  --radius-selector: 2rem;
+  --radius-field: 1rem;
+  --radius-box: 2rem;
+
+  --size-selector: 0.25rem;
+  --size-field: 0.28125rem;
+
+  --border: 1px;
+
+  --depth: 1;
+  --noise: 0;
+}
+
+/* The invitation after dark. Warm rather than neutral — coffee-brown bases with
+   a red-leaning hue so it reads as candlelight, not the main site's cool green.
+   Text and primary are lifted well above the AA threshold on these bases; the
+   accent carries the gold. Selected either by the OS (prefersdark, when the
+   layout renders no data-theme) or explicitly by the toggle. */
+@plugin "daisyui/theme" {
+  name: "wedding-dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: oklch(21% 0.018 40);
+  --color-base-200: oklch(25% 0.022 40);
+  --color-base-300: oklch(31% 0.026 40);
+  --color-base-content: oklch(92% 0.02 70);
+  --color-primary: oklch(74% 0.11 25);
+  --color-primary-content: oklch(20% 0.04 25);
+  --color-secondary: oklch(72% 0.07 145);
+  --color-secondary-content: oklch(20% 0.03 145);
+  --color-accent: oklch(80% 0.11 75);
+  --color-accent-content: oklch(24% 0.05 75);
+  /* Light enough to read as *text*: badge-outline and badge-neutral paint
+     neutral as the foreground, and at 35% it was invisible on a 21% base. */
+  --color-neutral: oklch(68% 0.03 40);
+  --color-neutral-content: oklch(18% 0.02 40);
+  --color-info: oklch(76% 0.08 230);
+  --color-info-content: oklch(20% 0.03 230);
+  --color-success: oklch(74% 0.12 150);
+  --color-success-content: oklch(20% 0.04 150);
+  --color-warning: oklch(82% 0.13 80);
+  --color-warning-content: oklch(24% 0.05 80);
+  --color-error: oklch(70% 0.15 25);
+  --color-error-content: oklch(20% 0.04 25);
+
+  --radius-selector: 2rem;
+  --radius-field: 1rem;
+  --radius-box: 2rem;
+
+  --size-selector: 0.25rem;
+  --size-field: 0.28125rem;
+
+  --border: 1px;
+
+  --depth: 1;
+  --noise: 0;
+}
+
 @theme {
   --font-sans: "Ubuntu";
   --font-mono: "Ubuntu Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* The wedding page's voice. A system serif stack for now so the page ships
+     without font binaries; swapping in a self-hosted display face later is a
+     one-line change here (see ubuntu.css for how the others are hosted). */
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 
   /* Garden season palette. The one expressive system on the gallery page: a
      year read through its seasons. Lives here (not in Ruby) so the gallery can
@@ -127,6 +237,12 @@
 
 @keyframes caret-blink {
   50% { opacity: 0; }
+}
+
+/* The guest-list badge fade; see .wedding-status in wedding.css. */
+@keyframes wedding-status-in {
+  from { opacity: 0; transform: translateY(-0.2rem); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes gallery-reveal {

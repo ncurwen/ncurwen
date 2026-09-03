@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<%# The wedding invitation's own layout. Deliberately shares nothing with
+    layouts/application.html.erb — no nav, no site footer, no theme toggle, no
+    terminal styling. The theme is fixed, so there is no light/dark cookie. %>
+<%# No data-theme unless the guest has picked one: that's what lets daisyUI's
+    prefersdark rule follow their device, with no flash and no JavaScript.
+    tag.attributes drops the attribute entirely when the value is nil — an
+    empty data-theme="" would still count as present and defeat the rule. %>
+<html lang="en" <%= tag.attributes(data: { theme: wedding_theme(cookies[:wedding_theme]) }) %>>
+  <head>
+    <title><%= content_for(:title) || "Our Wedding" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%# The guest list is private. Keep it out of search results entirely; the
+        token in the URL is the only thing protecting it. %>
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <meta name="referrer" content="no-referrer">
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%# Turbo 8: replies to a broadcast refresh by morphing the DOM in place, so
+        an RSVP landing from someone else's browser updates just the badge that
+        changed and leaves the reader's scroll position alone. %>
+    <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+    <%# turbo_refreshes_with `provide`s its meta tags into :head rather than
+        returning them, so this yield is what actually emits them. Without it
+        the page silently falls back to a full replace on every broadcast. %>
+    <%= yield :head %>
+
+    <%# Every open invitation listens on the one stream the Guest model
+        broadcasts to, which is what makes the guest list live. %>
+    <%= turbo_stream_from :guest_list %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  </head>
+
+  <body class="wedding-page min-h-dvh flex flex-col bg-base-100 text-base-content">
+    <div class="fixed top-2 right-2 z-10">
+      <%= theme_toggle_tag(light: "wedding",
+                           dark: "wedding-dark",
+                           cookie: "wedding_theme",
+                           light_value: "light",
+                           dark_value: "dark",
+                           default_dark: false) %>
+    </div>
+
+    <%# Fixed to the viewport, not placed in the document: an RSVP redirect morphs
+        the page with the scroll position preserved, so a banner at the top of
+        <main> would land far above where the guest is actually looking. The
+        wrapper renders unconditionally — daisyUI's .toast is position:fixed with
+        no background, so an empty one is invisible and non-interactive. %>
+    <div class="toast toast-end toast-bottom z-50">
+      <% flash.each do |type, message| %>
+        <%= flash_tag(message: message, type: type) %>
+      <% end %>
+    </div>
+
+    <main class="flex-1">
+      <%= yield %>
+    </main>
+
+    <footer class="bg-base-200 border-t border-base-300 py-8 text-center text-sm text-base-content/70">
+      <p class="flex items-center justify-center gap-2">
+        <%= lucide_icon "heart", class: "h-4 w-4 text-primary" %>
+        <span>We can't wait to celebrate with you.</span>
+      </p>
+    </footer>
+  </body>
+</html>

@@ -6,6 +6,9 @@ import { application } from "../javascript/controllers/application"
 import CopyComponentController from "./copy_component_controller"
 application.register("copy-component", CopyComponentController)
 
+import FlashComponentController from "./flash_component_controller"
+application.register("flash-component", FlashComponentController)
+
 import PhotoGalleryFilterComponentController from "./photo_gallery_filter_component_controller"
 application.register("photo-gallery-filter-component", PhotoGalleryFilterComponentController)
 
