@@ -44,12 +44,12 @@ class FlashComponentTest < ViewComponent::TestCase
   test "good news dismisses itself, bad news waits to be read" do
     %i[success info].each do |type|
       render_inline(FlashComponent.new(message: "Hello", type: type))
-      assert_selector "progress[data-flash-component-target=progress]", visible: :all
+      assert_selector "[data-flash-component-target=timer]", visible: :all
     end
 
     %i[error warning].each do |type|
       render_inline(FlashComponent.new(message: "Hello", type: type))
-      assert_no_selector "progress", visible: :all
+      assert_no_selector "[data-flash-component-target=timer]", visible: :all
     end
   end
 
@@ -77,7 +77,7 @@ class FlashComponentTest < ViewComponent::TestCase
   test "offers a way to dismiss it by hand" do
     render_inline(FlashComponent.new(message: "Hello", type: :success))
 
-    assert_selector "button[data-action='flash-component#hide'][aria-label=Close]", visible: :all
+    assert_selector "button[data-action='flash-component#hide'][aria-label='Dismiss notification']", visible: :all
   end
 
   test "renders an action button only when one is asked for" do

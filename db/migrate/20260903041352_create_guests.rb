@@ -1,10 +1,10 @@
 class CreateGuests < ActiveRecord::Migration[8.1]
   def change
     create_table :guests do |t|
-      t.string :token,  null: false
-      t.string :name,   null: false
-      t.string :group,  null: false
-      t.string :status, null: false, default: "unknown"
+      t.string  :token,  null: false
+      t.string  :name,   null: false
+      t.integer :group,  null: false
+      t.string  :status, null: false, default: "unknown"
 
       t.timestamps
     end

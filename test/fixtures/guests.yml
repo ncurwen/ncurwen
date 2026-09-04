@@ -3,21 +3,24 @@
 #
 # Tokens are spelled out here rather than generated, so tests can build
 # invitation URLs without a lookup.
+#
+# `group` is a bare number, as it is in db/seeds.rb — alice and bob share one
+# party, carol is in another.
 
 alice:
   token: alice1
   name: Alice Attending
-  group: The Attending Household
+  group: 1
   status: "yes"
 
 bob:
   token: bob002
   name: Bob Attending
-  group: The Attending Household
+  group: 1
   status: unknown
 
 carol:
   token: carol3
   name: Carol Elsewhere
-  group: The Elsewhere Household
+  group: 2
   status: "no"

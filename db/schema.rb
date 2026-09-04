@@ -13,7 +13,7 @@
 ActiveRecord::Schema[8.1].define(version: 2026_09_03_041352) do
   create_table "guests", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "group", null: false
+    t.integer "group", null: false
     t.string "name", null: false
     t.string "status", default: "unknown", null: false
     t.string "token", null: false

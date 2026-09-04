@@ -3,9 +3,9 @@
 
   <div class="grid gap-6 sm:grid-cols-3">
     <% [
-         { src: "https://picsum.photos/seed/couple/600/600",  alt: "Placeholder photo of the couple", caption: "How we met — placeholder." },
-         { src: "https://picsum.photos/seed/proposal/600/600", alt: "Placeholder photo of the proposal", caption: "The proposal — placeholder." },
-         { src: "https://picsum.photos/seed/jub/600/600",      alt: "Placeholder photo of Jub the cat",  caption: "Jub, who is not invited." }
+         { src: image_path("wedding/us.JPEG"), alt: "Aruni and Nick", caption: "The duo" },
+         { src: image_path("wedding/proposal.JPEG"), alt: "The proposal", caption: "The proposal" },
+         { src: image_path("wedding/jub.JPEG"), alt: "Jub, our cat",  caption: "Jub who (unfortunately) is not invited." }
        ].each do |photo| %>
       <figure class="card overflow-hidden bg-base-200">
         <img src="<%= photo[:src] %>" alt="<%= photo[:alt] %>" loading="lazy"
@@ -16,7 +16,9 @@
   </div>
 
   <p class="mx-auto mt-6 max-w-2xl text-center text-base-content/80">
-    Placeholder paragraph about who we are and how we got here. A few sentences,
-    warm and short. Replace before sending any invitations.
+    We met at Info-Tech, on the Aqua team. We both did our co-ops
+    there and went to Fanshawe &mdash; I was just five years early. Jub moved
+    in two weeks before Aruni, so technically the cat has seniority. Two years and
+    seven vacations later, we can&rsquo;t wait to celebrate with all of you.
   </p>
 </section>

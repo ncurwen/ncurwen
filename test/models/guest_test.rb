@@ -6,14 +6,14 @@ class GuestTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   test "generates a token on create so none has to be assigned by hand" do
-    guest = Guest.create!(name: "New Guest", group: "New Household")
+    guest = Guest.create!(name: "New Guest", group: 99)
 
     assert_predicate guest.token, :present?
     assert_equal 6, guest.token.length
   end
 
   test "keeps the token stable across later saves so invitation links keep working" do
-    guest = Guest.create!(name: "New Guest", group: "New Household")
+    guest = Guest.create!(name: "New Guest", group: 99)
     original = guest.token
 
     guest.update!(name: "Renamed Guest")
@@ -22,13 +22,13 @@ class GuestTest < ActiveSupport::TestCase
   end
 
   test "issues a distinct token to each guest" do
-    tokens = 3.times.map { Guest.create!(name: "Guest #{_1}", group: "A Household").token }
+    tokens = 3.times.map { Guest.create!(name: "Guest #{_1}", group: 99).token }
 
     assert_equal tokens.uniq.size, tokens.size
   end
 
   test "starts every guest at unknown" do
-    assert_predicate Guest.create!(name: "New Guest", group: "New Household"), :unknown?
+    assert_predicate Guest.create!(name: "New Guest", group: 99), :unknown?
   end
 
   test "accepts only the three RSVP states" do
@@ -52,16 +52,16 @@ class GuestTest < ActiveSupport::TestCase
     assert_includes guest.errors[:group], "can't be blank"
   end
 
-  test "group_members returns everyone in the same household, including self" do
+  test "group_members returns everyone in the same group, including self" do
     assert_equal [ "Alice Attending", "Bob Attending" ],
                  guests(:alice).group_members.ordered.map(&:name)
   end
 
-  test "group_members excludes other households" do
+  test "group_members excludes other groups" do
     assert_not_includes guests(:alice).group_members, guests(:carol)
   end
 
-  test "ordered sorts by household then name" do
+  test "ordered sorts by group then name" do
     assert_equal [ "Alice Attending", "Bob Attending", "Carol Elsewhere" ],
                  Guest.ordered.map(&:name)
   end

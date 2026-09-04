@@ -1,6 +1,6 @@
 <div id="<%= "notification-#{SecureRandom.uuid}" %>"
       role="alert"
-      class="alert <%= type_class %> transition transform duration-300 hidden flex flex-col gap-0"
+      class="alert <%= type_class %> transition transform duration-300 flex flex-col gap-0"
       data-controller="flash-component"
       data-flash-component-auto-dismiss-value="<%= auto_dismiss %>"
       data-transition-enter-from="opacity-0 translate-x-6"
@@ -17,18 +17,30 @@
       </span>
     </div>
     <%# No tooltip: the toast dismisses itself, and aria-label already names the
-        button for anyone who needs it. %>
-    <button class="btn btn-xs btn-outline btn-square mt-0.5"
+        button for anyone who needs it. Ghost, not outline — a bordered square
+        reads as a second status icon sitting opposite the real one, rather than
+        as something to click. The hover/focus circle supplies the affordance. %>
+    <button class="btn btn-sm btn-circle btn-ghost -mt-1 -mr-1 opacity-70 hover:opacity-100"
             type="button"
             data-action="flash-component#hide"
             data-dismiss="alert"
-            aria-label="Close">
-      <%= lucide_icon("x", class: "w-3 h-3") %>
+            aria-label="Dismiss notification">
+      <%= lucide_icon("x", class: "w-4 h-4") %>
     </button>
   </div>
   <% if auto_dismiss %>
-    <%# max is coupled to the controller's delay value: 300 ticks x 20ms = the
-        6000ms default. Change one and the bar desyncs from the dismissal. %>
-    <progress class="progress h-0.5 mt-1.5" value="0" max="300" data-flash-component-target="progress"></progress>
+    <%# The countdown to self-dismissal. Deliberately not <progress>: daisyUI
+        transitions that element's inline-size, so writing its value from JS
+        re-ran a *layout* animation every tick, on the same main thread the
+        confetti burst that accompanies a success toast is drawing on. This is a
+        transform the compositor owns instead (see the controller), and it
+        carries nothing a screen reader needs — the alert text is the message. %>
+    <%# w-full for the same reason the row above carries it: .alert sets
+        place-items:center, which survives the flex override, so a child with
+        no intrinsic width collapses to nothing. %>
+    <div class="mt-1.5 h-0.5 w-full overflow-hidden rounded-full bg-current/20" aria-hidden="true">
+      <span class="block h-full origin-left scale-x-0 rounded-full bg-current/50"
+            data-flash-component-target="timer"></span>
+    </div>
   <% end %>
 </div>

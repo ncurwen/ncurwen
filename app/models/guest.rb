@@ -1,6 +1,7 @@
 # One invited person. The token in their invitation URL identifies them, and
-# unlocks RSVP for everyone sharing their `group` (a household or party), so a
-# single link can answer for the whole family.
+# unlocks RSVP for everyone sharing their `group`, so a single link can answer
+# for the whole party. `group` is an opaque number rather than a name: linking
+# the party is the only job it has, and it is never rendered to a guest.
 #
 # The roster is maintained in db/seeds.rb; `status` is guest-owned and is never
 # written by seeding. See lib/tasks/wedding.rake for the invitation links.

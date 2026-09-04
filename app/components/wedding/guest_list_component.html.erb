@@ -33,16 +33,22 @@
     </p>
   </div>
 
-  <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+  <%# Columns rather than a grid: grid rows stretch every card to the height of the
+      biggest party in the row, so a couple sitting next to a family of five renders
+      as a mostly-empty bubble. Multi-column lets each card stop at its own last name
+      and balances the columns, so the short parties close the gaps the tall ones leave. %>
+  <div class="columns-1 gap-4 sm:columns-2 xl:columns-4">
     <% households.each do |group, members| %>
-      <section class="card bg-base-200 <%= "wedding-own-household" if own_household?(group) %>">
+      <section class="card mb-4 break-inside-avoid bg-base-200 <%= "wedding-own-household" if own_household?(group) %>">
         <div class="card-body gap-3">
-          <header class="flex items-baseline justify-between gap-2">
-            <h3 class="card-title text-base"><%= group %></h3>
-            <% if own_household?(group) %>
+          <%# No heading: the group is a bare number, so there is nothing to title
+              the card with. The names below are the content, and the only thing
+              worth saying about the card is whether it's yours. %>
+          <% if own_household?(group) %>
+            <header class="flex justify-end">
               <span class="badge badge-primary badge-soft badge-sm shrink-0">You</span>
-            <% end %>
-          </header>
+            </header>
+          <% end %>
 
           <%# Not daisyUI's list-row here: it lays out as a fixed grid, and in the
               four-across desktop cards the name and its status badge collide.
