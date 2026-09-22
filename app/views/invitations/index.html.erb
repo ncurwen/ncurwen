@@ -1,0 +1,26 @@
+<% content_for :title, "Alex & Nick — 00 Month 2027" %>
+
+<%# PLACEHOLDER COPY THROUGHOUT. Names, story and photos are stand-ins; the structure
+    is what's real here. The date, venue and address now come from app/models/wedding.rb
+    so they're replaced in one place. %>
+
+<%= render "hero", guest: @guest %>
+
+<div class="mx-auto max-w-4xl px-4 lg:max-w-6xl">
+  <%= render "about" %>
+
+  <div class="wedding-rule" aria-hidden="true"><%= lucide_icon "heart", class: "h-3 w-3" %></div>
+
+  <%# Two short sections that each waste a full row on their own; paired, they
+      use the width without either needing to stretch. %>
+  <div class="grid gap-12 py-16 lg:grid-cols-2 lg:items-start">
+    <%= render "where_and_when", guest: @guest %>
+    <%= render "gifts" %>
+  </div>
+</div>
+
+<%= render "rsvp", guest: @guest, household: @household %>
+
+<div class="mx-auto max-w-4xl px-4 py-16 pb-20 lg:max-w-6xl">
+  <%= render "attending", guests: @guests, viewer: @guest %>
+</div>

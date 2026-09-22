@@ -1,0 +1,43 @@
+<%# locals: (guest:) %>
+<section>
+  <h2 class="wedding-display mb-4 text-center text-3xl">Where &amp; when</h2>
+  <p class="mx-auto mb-8 max-w-xl text-center text-base-content/70">
+    Quick heads up: the ceremony is a private, just-the-two-of-us elopement.
+    This invite is for the good part &mdash; the party.
+  </p>
+
+  <article class="card mx-auto max-w-sm bg-base-200">
+    <div class="card-body">
+      <h3 class="card-title gap-2">
+        <%= lucide_icon "party-popper", class: "h-5 w-5 text-primary" %>
+        The Celebration
+      </h3>
+      <p class="flex items-center gap-2 text-base-content/80">
+        <%= lucide_icon "clock", class: "h-4 w-4 shrink-0" %><%= Wedding::STARTS_AT.strftime("%-l:%M%P") %>
+      </p>
+      <p class="flex items-start gap-2 text-base-content/80">
+        <%= lucide_icon "map-pin", class: "h-4 w-4 shrink-0 mt-1" %>
+        <span>
+          <%= Wedding::VENUE %><br>
+          <a href="<%= Wedding.map_url %>" target="_blank" rel="noopener"
+             class="link link-primary text-sm"><%= Wedding::ADDRESS %></a>
+        </span>
+      </p>
+
+      <div class="card-actions mt-2 flex-col">
+        <a href="<%= Wedding.google_calendar_url %>" target="_blank" rel="noopener"
+           class="btn btn-outline btn-sm w-full gap-2">
+          <%= lucide_icon "calendar-plus", class: "h-4 w-4" %>
+          Add to Google Calendar
+        </a>
+        <%# Not target=_blank: this is a download, and a blank tab would be left
+            behind empty. %>
+        <a href="<%= calendar_invitations_path(token: guest.token) %>"
+           class="btn btn-outline btn-sm w-full gap-2">
+          <%= lucide_icon "download", class: "h-4 w-4" %>
+          Download for Apple or Outlook
+        </a>
+      </div>
+    </div>
+  </article>
+</section>

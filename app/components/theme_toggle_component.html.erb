@@ -1,10 +1,16 @@
 <%= tooltip_tag "Toggle theme", position: "left" do %>
   <label class="swap swap-rotate btn btn-ghost btn-circle" aria-label="Toggle theme">
-    <%# Hidden checkbox controls the swap state; checked = dark theme. Initial
-        state comes from the cookie so it matches the server-rendered theme. %>
+    <%# Hidden checkbox controls the swap state; checked = dark theme. The theme
+        names and cookie are passed through as values so one controller serves
+        both the main site and the invitation. %>
     <input type="checkbox"
-           <%= "checked" unless light_mode? %>
+           <%= "checked" if dark? %>
            data-controller="theme-toggle-component"
+           data-theme-toggle-component-light-value="<%= light %>"
+           data-theme-toggle-component-dark-value="<%= dark %>"
+           data-theme-toggle-component-cookie-value="<%= cookie %>"
+           data-theme-toggle-component-light-cookie-value="<%= light_value %>"
+           data-theme-toggle-component-dark-cookie-value="<%= dark_value %>"
            data-action="change->theme-toggle-component#toggle" />
 
     <%# swap-off shows in light mode, swap-on in dark mode. %>

@@ -46,6 +46,10 @@ gem "lucide-rails", "~> 0.7"
 # Cloudflare Turnstile (spam protection) for the contact form
 gem "rails_cloudflare_turnstile"
 
+# QR code generation for the wedding:qrcodes rake task
+gem "rqrcode"
+gem "chunky_png"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
