@@ -15,12 +15,22 @@
                      text-left cursor-zoom-in group
                      focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-label="Open the latest photo<%= " from #{latest[:date]}" if latest[:date] %>">
-        <%= image_tag latest[:path],
-                      loading: "eager",
-                      fetchpriority: "high",
-                      decoding: "async",
-                      alt: latest[:basename],
-                      class: "h-[52vh] min-h-[20rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" %>
+        <%# display:contents on the <picture> keeps the <img> laying out exactly
+            as it did bare — a <picture> is inline by default and generates a box,
+            which would break the percentage/stretch sizing below. %>
+        <picture class="contents">
+          <% if latest[:large_webp] %>
+            <source type="image/webp" srcset="<%= latest[:large] %>">
+          <% end %>
+          <%= image_tag latest[:original],
+                        loading: "eager",
+                        fetchpriority: "high",
+                        decoding: "async",
+                        width: latest[:width],
+                        height: latest[:height],
+                        alt: latest[:basename],
+                        class: "h-[52vh] min-h-[20rem] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" %>
+        </picture>
         <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-base-300/90 via-base-300/20 to-transparent"></div>
         <div class="absolute inset-x-0 bottom-0 p-5 sm:p-8">
           <p class="font-mono text-primary text-sm mb-2">
@@ -149,11 +159,18 @@
             <%# The image paints over the .skeleton placeholder once decoded.
                 Visibility is left to the browser (no JS opacity gating) so a
                 loaded tile can't be hidden by a later Turbo re-render/morph. %>
-            <%= image_tag img[:path],
-                          loading: above_fold ? "eager" : "lazy",
-                          decoding: "async",
-                          alt: img[:basename],
-                          class: "gallery-tile w-full h-full object-cover transition duration-500 group-hover:scale-105" %>
+            <picture class="contents">
+              <% if img[:tile_srcset] %>
+                <source type="image/webp" srcset="<%= img[:tile_srcset] %>" sizes="<%= TILE_SIZES %>">
+              <% end %>
+              <%= image_tag img[:tile_src],
+                            loading: above_fold ? "eager" : "lazy",
+                            decoding: "async",
+                            width: img[:width],
+                            height: img[:height],
+                            alt: img[:basename],
+                            class: "gallery-tile w-full h-full object-cover transition duration-500 group-hover:scale-105" %>
+            </picture>
             <% if img[:date] %>
               <span class="pointer-events-none absolute bottom-2 left-2 inline-flex items-center gap-1.5
                            px-1.5 py-0.5 rounded bg-base-100/85 text-base-content font-mono text-[10px] tracking-tight
@@ -177,12 +194,23 @@
     <div class="modal-box flex flex-col w-full p-0 bg-base-100 overflow-hidden select-none
                 max-w-none h-[100dvh] max-h-[100dvh] rounded-none
                 sm:max-w-6xl sm:h-auto sm:max-h-[calc(100dvh-5em)] sm:rounded-box">
-      <div class="relative flex-1 min-h-0 sm:flex-none bg-base-300/40">
-        <img data-photo-gallery-lightbox-component-target="image"
-             data-action="mousedown->photo-gallery-lightbox-component#preventSelect click->photo-gallery-lightbox-component#toggleFit"
-             class="block w-full h-full sm:h-auto max-h-[100dvh] sm:max-h-[80vh]
-                    object-contain object-center bg-black/5 cursor-pointer select-none"
-             alt="" />
+      <%# The controller adds daisyUI's .skeleton here while a photo decodes, so
+          the lightbox shows the same shimmer the grid tiles do instead of a
+          flat panel. The frame keeps its own size meanwhile, because the <img>
+          carries width/height from the manifest. %>
+      <div data-photo-gallery-lightbox-component-target="frame"
+           class="relative flex-1 min-h-0 sm:flex-none bg-base-300/40">
+        <%# The controller rewrites this <source>'s srcset and the <img>'s src
+            together on every frame; a single candidate with no descriptors keeps
+            the pick deterministic. Empty srcset simply falls through to the <img>. %>
+        <picture class="contents">
+          <source data-photo-gallery-lightbox-component-target="source" type="image/webp">
+          <img data-photo-gallery-lightbox-component-target="image"
+               data-action="mousedown->photo-gallery-lightbox-component#preventSelect click->photo-gallery-lightbox-component#toggleFit"
+               class="block w-full h-full sm:h-auto max-h-[100dvh] sm:max-h-[80vh]
+                      object-contain object-center bg-black/5 cursor-pointer select-none"
+               alt="" />
+        </picture>
 
         <%# Prev / next / close share button + icon chrome — only the action, label,
             position and icon differ, so render them from one list. %>

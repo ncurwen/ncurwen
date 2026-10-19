@@ -39,6 +39,10 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 
+# Resizes the garden photos at build time (lib/garden_derivatives.rb). require: false
+# keeps libvips off the boot path — nothing at runtime touches it.
+gem "ruby-vips", require: false
+
 gem "rollbar", "~> 3.8"
 gem "view_component", "~> 4.12"
 gem "lucide-rails", "~> 0.7"

@@ -7,6 +7,16 @@ class PhotoGalleryComponent < ApplicationComponent
   # forbids and a nonce can't authorise.
   MONTHS = %w[· Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec].freeze
 
+  # What a tile actually occupies, so the browser can pick 240w on a DPR-1
+  # screen instead of always pulling 480w. Derived from the real geometry:
+  # the page is max-w-5xl (1024px) with px-4, the grid has gap-3 (12px), and
+  # Tailwind's sm:/md: breakpoints are 640/768. Getting this wrong silently
+  # wastes the 240w variant.
+  TILE_SIZES = "(min-width: 1024px) 239px, " \
+               "(min-width: 768px) calc((100vw - 68px) / 4), " \
+               "(min-width: 640px) calc((100vw - 56px) / 3), " \
+               "calc((100vw - 44px) / 2)".freeze
+
   LOG_ICON = "🌱".freeze
 
   def initialize(images:, notes: [])
@@ -42,11 +52,33 @@ class PhotoGalleryComponent < ApplicationComponent
       month = img[:date]&.slice(5, 2)&.to_i
       img.merge(
         idx: i,
-        url: asset_path(img[:path]),
         month: month,
-        season: season(month)
+        season: season(month),
+        original: asset_path(img[:path]),
+        # Every derivative falls back to the original: they are generated at
+        # build time and absent on a fresh checkout, and asset_path raises
+        # rather than returning nil for anything it can't resolve.
+        tile_src: asset_path(img[:thumb_480_jpg] || img[:path]),
+        tile_srcset: tile_srcset(img),
+        large: asset_path(img[:large_webp] || img[:path])
       )
     end
+  end
+
+  # The WebP <source> for a tile, or nil when either width is missing — in
+  # which case the template emits no <source> at all and the <img> stands alone.
+  def tile_srcset(img)
+    return nil unless img[:thumb_240_webp] && img[:thumb_480_webp]
+
+    srcset([ [ img[:thumb_240_webp], "240w" ], [ img[:thumb_480_webp], "480w" ] ])
+  end
+
+  # Rails has no helper for this: image_tag digests a srcset: option, but a
+  # bare <source> doesn't go through it and picture_tag only emits
+  # single-URL sources with no width descriptors. Takes ordered pairs rather
+  # than a hash so two candidates resolving to the same file still both appear.
+  def srcset(pairs)
+    pairs.map { |path, descriptor| "#{asset_path(path)} #{descriptor}" }.join(", ")
   end
 
   def latest
@@ -90,7 +122,7 @@ class PhotoGalleryComponent < ApplicationComponent
 
   # The subset the Stimulus controller reads, by array position.
   def gallery_data
-    entries.map { |e| e.slice(:url, :date, :basename, :year, :season, :month) }
+    entries.map { |e| e.slice(:large, :original, :date, :basename, :year, :season, :month, :width, :height) }
   end
 
   def span_label

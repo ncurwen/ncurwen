@@ -55,6 +55,16 @@ RUN bundle install && \
 COPY package.json package-lock.json ./
 RUN npm ci
 
+# Generate the garden photo derivatives (thumbnails + WebP). Copied and built on
+# their own layer, ahead of the app code, so an ordinary code deploy reuses the
+# cache instead of re-encoding ~100 MB of photos; only touching a photo re-runs
+# it. Must precede assets:precompile so Propshaft fingerprints the output.
+# libvips is already installed above.
+COPY script/generate_derivatives ./script/
+COPY lib/garden_derivatives.rb ./lib/
+COPY app/assets/images/garden ./app/assets/images/garden
+RUN bundle exec ruby script/generate_derivatives
+
 # Copy application code
 COPY . .
 

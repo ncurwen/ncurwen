@@ -6,8 +6,19 @@ class PhotoGalleryComponentTest < ViewComponent::TestCase
   REAL_PATH_A = "garden/2022/IMG_20220714_165114.HEIC_compressed.JPEG"
   REAL_PATH_B = "garden/2022/IMG_20220603_140830.HEIC_compressed.JPEG"
 
-  def image(path: REAL_PATH_A, date: "2024-06-15 09:30", basename: "20240615_093045_one", year: "2024")
-    { path: path, date: date, basename: basename, year: year }
+  # The lightbox carries its own <source>, so tile assertions must be scoped.
+  TILE = "[data-photo-gallery-filter-component-target='tile']".freeze
+
+  # Derivatives are generated at build time and gitignored, so they don't exist
+  # on a fresh checkout (CI included) — and asset_path raises on anything it
+  # can't resolve. These stand in for them: what's under test is the markup the
+  # component builds from a set of logical paths, not the encoder's output.
+  def derivatives
+    { thumb_240_webp: REAL_PATH_A, thumb_480_webp: REAL_PATH_B, thumb_480_jpg: REAL_PATH_B, large_webp: REAL_PATH_B }
+  end
+
+  def image(path: REAL_PATH_A, date: "2024-06-15 09:30", basename: "20240615_093045_one", year: "2024", **extra)
+    { path: path, date: date, basename: basename, year: year }.merge(extra)
   end
 
   test "renders nothing when images are empty" do
@@ -28,8 +39,8 @@ class PhotoGalleryComponentTest < ViewComponent::TestCase
     parsed = JSON.parse(raw)
 
     assert_equal 2, parsed.length
-    assert_equal %w[url date basename year season month], parsed.first.keys
-    assert_match %r{IMG_20220714_165114}, parsed.first["url"]
+    assert_equal %w[large original date basename year season month], parsed.first.keys
+    assert_match %r{IMG_20220714_165114}, parsed.first["original"]
     assert_equal "2024-06-15 09:30", parsed.first["date"]
     assert_nil parsed.last["date"]
   end
@@ -106,5 +117,44 @@ class PhotoGalleryComponentTest < ViewComponent::TestCase
 
     # One hero button (the latest frame) plus one button per grid image.
     assert_selector "button[data-action*='click->photo-gallery-lightbox-component#open']", count: images.length + 1
+  end
+
+  test "serves each tile from a WebP source with both thumbnail widths" do
+    images = [ image(**derivatives, width: 1280, height: 1707) ]
+
+    render_inline(PhotoGalleryComponent.new(images: images))
+
+    # display:contents is load-bearing, not decoration: a <picture> is inline by
+    # default and would break the tile's w-full/h-full sizing.
+    assert_selector "picture.contents"
+
+    srcset = page.find("#{TILE} source[type='image/webp']", visible: :all)["srcset"]
+    assert_match(/\A\S+ 240w, \S+ 480w\z/, srcset, "two candidates with width descriptors")
+    srcset.split(", ").each do |candidate|
+      assert_match %r{\A/assets/.+-[0-9a-f]{8,}\.}, candidate, "each candidate is digested by Propshaft"
+    end
+
+    tile = page.find("img.gallery-tile")
+    assert_equal "1280", tile["width"]
+    assert_equal "1707", tile["height"]
+  end
+
+  test "falls back to the original when a photo has no derivatives" do
+    # The state of a fresh checkout, before the build has generated anything.
+    render_inline(PhotoGalleryComponent.new(images: [ image ]))
+
+    assert_no_selector "#{TILE} source", visible: :all
+    assert_match %r{IMG_20220714_165114}, page.find("img.gallery-tile")["src"]
+    assert_nil page.find("img.gallery-tile")["width"], "no dimensions without the manifest"
+  end
+
+  test "gives the lightbox a swappable WebP source" do
+    render_inline(PhotoGalleryComponent.new(images: [ image(**derivatives) ]))
+
+    # The controller rewrites this source's srcset and the img's src together on
+    # every frame, so it ships empty rather than pointing at any one photo.
+    source = page.find("picture source[data-photo-gallery-lightbox-component-target='source']", visible: :all)
+    assert_equal "image/webp", source["type"]
+    assert_nil source["srcset"]
   end
 end

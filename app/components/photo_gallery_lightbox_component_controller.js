@@ -4,14 +4,25 @@ import { Controller } from "@hotwired/stimulus"
 // preloading. It owns no gallery data of its own — the sibling filter controller
 // holds the image list and the active (filtered) set, which this reads through an
 // outlet so there's a single source of truth.
+
+// Held while a new photo decodes. An <img> keeps painting its previous bitmap
+// until the replacement is ready, so without hiding it, reopening the lightbox
+// on a different photo shows the last one first. The frame wears daisyUI's
+// skeleton in the meantime — the same shimmer the grid tiles use, so a photo
+// arriving reads the same way in both places.
+const PENDING = "opacity-0"
+const LOADING = "skeleton"
+
 export default class extends Controller {
-  static targets = ["dialog", "image", "caption", "counter", "dot", "fitLabel", "fitToggle"]
+  static targets = ["dialog", "frame", "source", "image", "caption", "counter", "dot", "fitLabel", "fitToggle"]
   static outlets = ["photo-gallery-filter-component"]
 
   connect() {
     this.index = 0
     this.preloaded = new Set()
     this.fill = false
+    this.renderToken = 0
+    this.imageTarget.addEventListener("load", () => this.rememberChoice(), { once: true })
   }
 
   // Tap the frame (or the footer flag) to switch between fitting the whole photo
@@ -79,19 +90,85 @@ export default class extends Controller {
     this.render()
   }
 
+  // Which of the two candidates this browser actually takes. A bare
+  // `new Image()` bypasses <picture> negotiation, so warming the WebP blindly
+  // would fetch bytes a non-WebP browser never uses — and then the 1.1 MB
+  // original on top. Read the browser's own choice off currentSrc after the
+  // first frame paints; WebP is the right guess until then.
+  get warmKey() {
+    return this.chosenKey || "large"
+  }
+
+  // Full-screen frames are served at near-source quality, so each one is a few
+  // hundred KB and warming both neighbours spends roughly triple that before
+  // the viewer has asked for either. That's a good trade on a fast connection
+  // and a bad one on a metered or slow link, so skip it when the browser says
+  // so. Only Chromium reports this; everywhere else preloading stays on, which
+  // is the old behaviour.
+  get shouldPreload() {
+    const net = navigator.connection
+    if (!net) return true
+    if (net.saveData) return false
+    return !/(^|-)2g$/.test(net.effectiveType || "")
+  }
+
+  // Hold the frame blank until the new photo is actually decodable, so the
+  // dialog never shows the previous one. decode() settles in a microtask for
+  // anything already cached — the warmed neighbours you reach with ←/→ — so
+  // stepping through a year stays instant and doesn't blink.
+  //
+  // The token guards against fast arrow presses: an in-flight decode() for a
+  // photo that has already been navigated past must not reveal the frame, and
+  // it rejects with AbortError when its src is replaced, which is not an error
+  // worth surfacing.
+  revealWhenDecoded() {
+    const token = ++this.renderToken
+    const img = this.imageTarget
+
+    img.classList.add(PENDING)
+    this.frameTarget.classList.add(LOADING)
+
+    img.decode().catch(() => {}).then(() => {
+      if (token !== this.renderToken) return
+
+      img.classList.remove(PENDING)
+      this.frameTarget.classList.remove(LOADING)
+    })
+  }
+
+  setDimensions({ width, height }) {
+    if (width && height) {
+      this.imageTarget.width = width
+      this.imageTarget.height = height
+    } else {
+      this.imageTarget.removeAttribute("width")
+      this.imageTarget.removeAttribute("height")
+    }
+  }
+
+  rememberChoice() {
+    const src = this.imageTarget.currentSrc
+    if (src) this.chosenKey = src.endsWith(".webp") ? "large" : "original"
+  }
+
   // Fetch a full image into the browser cache without inserting it. Each url
-  // is fetched at most once.
+  // is fetched at most once, at low priority so it can't compete with the
+  // frame the viewer is actually looking at.
   warm(i) {
     const entry = this.images[i]
     if (!entry || this.preloaded.has(i)) return
     this.preloaded.add(i)
     const img = new Image()
-    img.src = entry.url
+    img.fetchPriority = "low"
+    img.src = entry[this.warmKey]
   }
 
   // Pre-fetch the images on either side of the current one so left/right
-  // navigation is instant.
+  // navigation is instant — worth a few hundred KB each only when the
+  // connection can spare it.
   preloadNeighbors(set) {
+    if (!this.shouldPreload) return
+
     const pos = set.indexOf(this.index)
     if (pos === -1) return
     this.warm(set[(pos + 1) % set.length])
@@ -112,8 +189,16 @@ export default class extends Controller {
     const entry = this.images[this.index]
     if (!entry) return
 
-    this.imageTarget.src = entry.url
+    // Order matters: assigning src re-runs <picture> source selection from
+    // scratch, so it picks up the srcset set just above. Setting src alone
+    // would leave the stale <source> winning and show the previous photo.
+    this.sourceTarget.srcset = entry.large || ""
+    this.imageTarget.src = entry.original
     this.imageTarget.alt = entry.basename
+    // Dimensions are only known once the derivatives manifest has been built;
+    // assigning undefined would coerce to 0 and stamp width="0" on the frame.
+    this.setDimensions(entry)
+    this.revealWhenDecoded()
     this.captionTarget.textContent = entry.date || entry.basename
     this.dotTarget.dataset.season = entry.season
     this.dotTarget.dataset.tip = entry.season

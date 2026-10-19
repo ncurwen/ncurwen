@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+# Entry point for the Docker build, which runs this on its own layer before the
+# app code is copied in — so it must not boot Rails (no ActiveSupport here).
+# `bin/rails garden:derivatives` is the equivalent for development.
+require_relative "../lib/garden_derivatives"
+
+GardenDerivatives.call(root: File.expand_path("..", __dir__), force: !ENV["FORCE"].to_s.empty?)
