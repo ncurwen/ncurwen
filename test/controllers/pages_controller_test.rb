@@ -1,6 +1,21 @@
 require "test_helper"
 
 class PagesControllerTest < ActionDispatch::IntegrationTest
+  # The wedding theme carries `default: true` (see application.tailwind.css), which is
+  # what lets the invitation follow the guest's device with no flash. The cost is that
+  # any page rendering *without* a data-theme silently inherits cream-and-rose instead
+  # of the site's terminal green. layouts/application.html.erb always writes one — this
+  # is the tripwire for the day it doesn't.
+  test "site pages always pin their theme explicitly" do
+    [ root_path, experience_path, garden_path, contact_path ].each do |path|
+      get path
+
+      assert_includes [ ThemeToggleComponent::LIGHT_THEME_NAME, ThemeToggleComponent::DARK_THEME_NAME ],
+                      css_select("html").sole["data-theme"],
+                      "#{path} rendered without a site theme, so it inherits the wedding theme"
+    end
+  end
+
   test "GET / renders the hero and links to the main sections" do
     get root_path
 

@@ -1,0 +1,43 @@
+<% content_for :title, "Aruni & Nick — #{Wedding::STARTS_AT.strftime("%-d %B %Y")}" %>
+
+<%# The date, venue, address and hotel block all come from app/models/wedding.rb,
+    so they're changed in one place. %>
+
+<%= table_of_contents_tag(
+      variant: :plain,
+      sections: [
+        { id: "invitation",      label: "Invitation" },
+        { id: "about",           label: "How we got here" },
+        { id: "where-and-when",  label: "Where & when" },
+        { id: "gifts",           label: "Gifts" },
+        { id: "food-and-drinks", label: "Food & drinks" },
+        { id: "stay",            label: "Hotel" },
+        { id: "rsvp",            label: "RSVP" },
+        { id: "attending",       label: "Who's coming" }
+      ]) %>
+
+<%= render "hero", guest: @guest %>
+
+<div class="mx-auto max-w-4xl px-4 lg:max-w-6xl">
+  <%= render "about" %>
+
+  <div class="wedding-rule" aria-hidden="true"><%= lucide_icon "heart", class: "h-3 w-3" %></div>
+
+  <%# Two short sections that each waste a full row on their own. Paired, the
+      grid stretches both columns to the taller one, and each card fills its
+      column, so the two finish level. %>
+  <div class="grid gap-12 py-16 lg:grid-cols-2">
+    <%= render "where_and_when", guest: @guest %>
+    <%= render "gifts" %>
+  </div>
+
+  <%= render "food_and_drinks" %>
+
+  <%= render "stay" %>
+</div>
+
+<%= render "rsvp", guest: @guest, household: @household %>
+
+<div class="mx-auto max-w-4xl px-4 py-16 pb-20 lg:max-w-6xl">
+  <%= render "attending", guests: @guests, viewer: @guest %>
+</div>

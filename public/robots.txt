@@ -1,1 +1,7 @@
 # See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+
+User-agent: *
+# The wedding invitation is private, behind a token in the URL. The pages also
+# send `noindex` themselves (see layouts/wedding.html.erb) — this just keeps
+# well-behaved crawlers from requesting them at all.
+Disallow: /wedding/

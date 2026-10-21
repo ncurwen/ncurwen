@@ -6,6 +6,9 @@ import { application } from "../javascript/controllers/application"
 import CopyComponentController from "./copy_component_controller"
 application.register("copy-component", CopyComponentController)
 
+import FlashComponentController from "./flash_component_controller"
+application.register("flash-component", FlashComponentController)
+
 import PhotoGalleryFilterComponentController from "./photo_gallery_filter_component_controller"
 application.register("photo-gallery-filter-component", PhotoGalleryFilterComponentController)
 
@@ -17,3 +20,9 @@ application.register("table-of-contents-component", TableOfContentsComponentCont
 
 import ThemeToggleComponentController from "./theme_toggle_component_controller"
 application.register("theme-toggle-component", ThemeToggleComponentController)
+
+import Wedding__CountdownComponentController from "./wedding/countdown_component_controller"
+application.register("wedding--countdown-component", Wedding__CountdownComponentController)
+
+import Wedding__RsvpControlsComponentController from "./wedding/rsvp_controls_component_controller"
+application.register("wedding--rsvp-controls-component", Wedding__RsvpControlsComponentController)
