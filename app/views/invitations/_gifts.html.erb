@@ -1,15 +1,21 @@
-<section>
-  <h2 class="wedding-display mb-6 text-center text-3xl">Gifts</h2>
-  <div class="card mx-auto max-w-2xl bg-base-200">
-    <div class="card-body items-center text-center">
-      <%# Grows on desktop, where this card sits beside the much taller
-          "Where & when" column and would otherwise look stranded. %>
-      <%= lucide_icon "gift", class: "h-12 w-12 text-primary lg:h-18 lg:w-18" %>
-      <p class="text-lg">Your being there is the gift — please, no presents.</p>
-      <p class="text-base-content/70">
-        If you'd like to contribute to our honeymoon fund anyway, there'll be a
-        card box at the party.
-      </p>
+<section id="gifts" class="flex scroll-mt-8 flex-col">
+  <h2 class="wedding-display mb-4 text-center text-3xl">Gifts</h2>
+  <%# On desktop this card stretches to the height of "Where & when" beside it
+      (the grid's default stretch, plus flex-1 here) and centres its content, so
+      the pair ends level instead of Gifts stopping halfway down. The icon grows
+      for the same reason. %>
+  <div class="card mx-auto w-full max-w-2xl bg-base-200 lg:flex-1">
+    <div class="card-body items-center justify-center text-center">
+      <%# Wrapped because daisyUI's card-body sets flex-grow on bare <p> children,
+          which would spread them apart once the card is stretched. %>
+      <div class="flex flex-col items-center gap-2">
+        <%= lucide_icon "gift", class: "h-12 w-12 text-primary lg:h-18 lg:w-18" %>
+        <p class="text-lg">Your being there is the gift — please, no presents.</p>
+        <p class="text-base-content/70">
+          If you'd like to contribute to our honeymoon fund anyway, there'll be a
+          card box at the party.
+        </p>
+      </div>
     </div>
   </div>
 </section>

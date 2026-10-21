@@ -47,4 +47,23 @@ class TableOfContentsComponentTest < ViewComponent::TestCase
 
     assert_no_selector "aside li ul"
   end
+
+  test "the terminal variant is the default, with the monospace goto prompt" do
+    render_inline(TableOfContentsComponent.new(sections: [ section ]))
+
+    assert_selector "aside ul.font-mono"
+    assert_selector "aside p", text: "$ goto"
+  end
+
+  test "the plain variant drops the terminal dressing" do
+    render_inline(TableOfContentsComponent.new(sections: [ section ], variant: :plain))
+
+    assert_no_selector ".font-mono"
+    assert_selector "aside p", text: "Navigation"
+    assert_selector ".dropdown .menu-title", text: "Navigation"
+  end
+
+  test "rejects an unknown variant" do
+    assert_raises(KeyError) { TableOfContentsComponent.new(sections: [ section ], variant: :fancy) }
+  end
 end

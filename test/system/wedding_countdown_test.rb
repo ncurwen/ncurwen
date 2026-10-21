@@ -16,7 +16,7 @@ class WeddingCountdownTest < ApplicationSystemTestCase
     visit invitations_path(token: guests(:bob).token)
 
     assert_selector "[data-wedding--countdown-component-target='days']", visible: :all
-    assert_equal Wedding.days_away.to_s, countdown_value("days")
+    assert_equal ticking_days.to_s, countdown_value("days")
 
     # Hours/minutes/seconds are whatever they are; that they're set at all is what
     # proves setProperty ran and wasn't refused.
@@ -47,10 +47,15 @@ class WeddingCountdownTest < ApplicationSystemTestCase
 
     assert_selector ".badge-success", text: "Coming", minimum: 2
     assert_selector "[data-wedding--countdown-component-target='live']:not(.hidden)"
-    assert_equal Wedding.days_away.to_s, countdown_value("days")
+    assert_equal ticking_days.to_s, countdown_value("days")
   end
 
   private
+
+  # Whole 24-hour periods left, which is what the ticker shows. Not
+  # Wedding.days_away: that counts calendar days (the sentence's "278 days to
+  # go"), and the two disagree by one every evening after the party's start time.
+  def ticking_days = ((Wedding::STARTS_AT - Time.current) / 1.day).floor
 
   def countdown_value(unit)
     page.evaluate_script(

@@ -4,6 +4,11 @@
 class InvitationsController < ApplicationController
   layout "wedding"
 
+  # The token is the only lock, so make guessing it slow. Generous on purpose:
+  # every RSVP anyone makes triggers a broadcast refresh (a GET) on every open
+  # invitation, and a household often shares one IP.
+  rate_limit to: 60, within: 1.minute
+
   before_action :set_guest
 
   def index

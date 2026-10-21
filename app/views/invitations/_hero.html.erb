@@ -1,7 +1,8 @@
 <%# locals: (guest:) %>
-<section class="wedding-hero hero min-h-[70svh] px-4 py-16">
+<section id="invitation" class="wedding-hero hero min-h-[70svh] px-4 py-16">
   <div class="hero-content max-w-2xl text-center">
     <div>
+      <%# TODO: placeholder — swap in the real hero photo and give it a real alt. %>
       <figure class="mx-auto mb-8 w-32 sm:w-40">
         <img src="<%= image_path("wedding/us.JPEG") %>"
              alt="Placeholder photo of the couple"
@@ -25,8 +26,14 @@
       </div>
 
       <p class="text-xl md:text-2xl"><%= Wedding::STARTS_AT.strftime("%A, the #{Wedding::STARTS_AT.day.ordinalize} of %B, %Y") %></p>
-      <p class="mt-2 text-base-content/70"><%= Wedding::VENUE %> &middot; London, Ontario</p>
+      <p class="mt-2 text-base-content/70"><%= Wedding::VENUE %> &middot; <%= Wedding::ADDRESS %></p>
       <p class="mt-3 text-sm italic text-base-content/60">We're eloping for the &ldquo;I do&rdquo; &mdash; this is just the party.</p>
+
+      <div class="mt-5 flex flex-wrap justify-center gap-2">
+        <span class="badge badge-soft badge-primary gap-1"><%= lucide_icon "martini", class: "h-3.5 w-3.5" %>Open bar</span>
+        <span class="badge badge-soft badge-primary gap-1"><%= lucide_icon "utensils", class: "h-3.5 w-3.5" %>Buffet</span>
+        <span class="badge badge-soft badge-primary gap-1"><%= lucide_icon "moon-star", class: "h-3.5 w-3.5" %>All night</span>
+      </div>
 
       <%= countdown_tag %>
 

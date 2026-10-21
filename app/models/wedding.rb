@@ -1,9 +1,8 @@
 # The event itself, in one place.
 #
-# PLACEHOLDER VALUES — the date, venue and address are stand-ins. Everything on the
-# invitation that depends on *when* and *where* reads from here (the hero copy, the
-# countdown, the map link, the calendar file), so replacing them is a single edit to
-# this file rather than a hunt through the view.
+# Everything on the invitation that depends on *when* and *where* reads from here (the
+# hero copy, the countdown, the map link, the calendar file, the hotel block), so a
+# change is a single edit to this file rather than a hunt through the views.
 #
 # Not an ActiveRecord model; it lives in app/models because it's domain vocabulary,
 # and there is exactly one wedding.
@@ -13,14 +12,36 @@ module Wedding
   # file has to name a zone rather than pin an instant.
   ZONE = ActiveSupport::TimeZone["America/Toronto"]
 
-  STARTS_AT = ZONE.local(2027, 6, 12, 17, 0)
-  ENDS_AT   = ZONE.local(2027, 6, 12, 23, 59)
+  STARTS_AT = ZONE.local(2027, 7, 24, 17, 0)
+  ENDS_AT   = ZONE.local(2027, 7, 24, 23, 59)
 
-  VENUE   = "Placeholder Hall"
-  ADDRESS = "000 Placeholder Avenue, London, ON"
+  VENUE     = "Paradigm Spirits Co."
+  ADDRESS   = "100 Kellogg Lane, London, ON N5W 0B4"
+  VENUE_URL = "https://paradigmspirits.com"
 
-  TITLE       = "Alex & Nick's Party"
-  DESCRIPTION = "The celebration. We're eloping for the \"I do\" — this is the good part."
+  # Same 100 Kellogg Lane complex as the venue, so guests can walk back to bed.
+  HOTEL       = "Hard Rock Hotel London"
+  HOTEL_PHONE = "+1-519-451-0444"
+  # TODO: placeholders — the group block is still being negotiated. Swap in the
+  # real booking link and code when it's confirmed.
+  HOTEL_URL  = "https://hotel.hardrock.com/london-ontario/" # TODO: real group-block booking link
+  HOTEL_CODE = "CURWEN2027"                                 # TODO: real group code
+
+  TITLE       = "Aruni & Nick's Party"
+  DESCRIPTION = "Open bar and buffet at Paradigm Spirits Co. We're eloping for the \"I do\" — this is the good part."
+
+  # The two anniversaries on the "About us" tiles. Friends: same team, Aruni's
+  # first co-op; the month is all we know, so it counts from the 1st. Together:
+  # officially dating from Christmas Day.
+  FRIENDS_SINCE  = Date.new(2019, 9, 1)
+  TOGETHER_SINCE = Date.new(2023, 12, 25)
+
+  # Whole years since an anniversary as of today, so the tiles tick over on their
+  # own instead of going stale while the page is up.
+  def self.years_since(date, on: Time.current.in_time_zone(ZONE).to_date)
+    years = on.year - date.year
+    on < date.next_year(years) ? years - 1 : years
+  end
 
   # Whole days between today and the party, both read in the venue's zone so the
   # number ticks over at midnight *there*. Clamped at zero: on the day itself, and
@@ -47,7 +68,7 @@ module Wedding
     "https://calendar.google.com/calendar/render?#{params.to_query}"
   end
 
-  # `20270612T170000` — the local wall-clock form, paired with `ctz` in the Google URL
+  # `20270724T170000` — the local wall-clock form, paired with `ctz` in the Google URL
   # so the reader's own timezone doesn't shift the party.
   def self.ical_stamp(time) = time.strftime("%Y%m%dT%H%M%S")
 

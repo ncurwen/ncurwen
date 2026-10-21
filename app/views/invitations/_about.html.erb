@@ -1,11 +1,17 @@
-<section class="py-16">
-  <h2 class="wedding-display mb-8 text-center text-3xl">A little about us</h2>
+<section id="about" class="scroll-mt-8 py-16">
+  <h2 class="wedding-display mb-4 text-center text-3xl">How we got here</h2>
+  <p class="mx-auto mb-8 max-w-2xl text-center text-lg text-base-content/80">
+    Met on the same team, became friends over games and Lord of the Rings.
+    Nick taught Aruni Magic: The Gathering with zero mercy and every strategy
+    in the book &mdash; and somehow she stuck around anyway. Now we&rsquo;re
+    throwing a party.
+  </p>
 
   <div class="grid gap-6 sm:grid-cols-3">
     <% [
-         { src: image_path("wedding/us.JPEG"), alt: "Aruni and Nick", caption: "The duo" },
-         { src: image_path("wedding/proposal.JPEG"), alt: "The proposal", caption: "The proposal" },
-         { src: image_path("wedding/jub.JPEG"), alt: "Jub, our cat",  caption: "Jub who (unfortunately) is not invited." }
+         { src: image_path("wedding/us.JPEG"), alt: "Aruni and Nick", caption: "The usual suspects" },
+         { src: image_path("wedding/proposal.JPEG"), alt: "The proposal", caption: "The question. (Spoiler: yes.)" },
+         { src: image_path("wedding/jub.JPEG"), alt: "Jub, our cat",  caption: "Jub. Not invited. Has opinions about this." }
        ].each do |photo| %>
       <figure class="card overflow-hidden bg-base-200">
         <img src="<%= photo[:src] %>" alt="<%= photo[:alt] %>" loading="lazy"
@@ -15,10 +21,35 @@
     <% end %>
   </div>
 
-  <p class="mx-auto mt-6 max-w-2xl text-center text-base-content/80">
-    We met at Info-Tech, on the Aqua team. We both did our co-ops
-    there and went to Fanshawe &mdash; I was just five years early. Jub moved
-    in two weeks before Aruni, so technically the cat has seniority. Two years and
-    seven vacations later, we can&rsquo;t wait to celebrate with all of you.
-  </p>
+  <%# The details behind the one-liner, as stat tiles. Values are words as often
+      as numbers, so they're set smaller than daisyUI's default stat-value.
+
+      A plain grid rather than daisyUI's .stats wrapper, which only does one row or
+      one column; stacked, six tiles ran to a phone screen and a half. Here it's 2
+      across on phones, 3 on tablets, and one row from xl (auto-sized columns, as
+      the tiles' content varies a lot in width). Six divides evenly at every step,
+      so no tile is ever left alone on a row. The dividers are the 1px gap showing
+      the container's background through. Icons only appear once a tile has the
+      width for one beside "Aqua team" without wrapping it. %>
+  <div class="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-box bg-base-content/10 md:grid-cols-3 xl:grid-cols-[repeat(6,auto)]">
+    <% [
+         { icon: "briefcase",      title: "Met",            value: "Aqua team", desc: "Info-Tech" },
+         { icon: "handshake",      title: "Friends for",    value: pluralize(Wedding.years_since(Wedding::FRIENDS_SINCE), "year"),
+           desc: "since #{Wedding::FRIENDS_SINCE.strftime("%b %Y")}" },
+         { icon: "graduation-cap", title: "Alma mater",     value: "Fanshawe",  desc: "Nick, five years early" },
+         { icon: "heart",          title: "Together for",   value: pluralize(Wedding.years_since(Wedding::TOGETHER_SINCE), "year"),
+           desc: "since Christmas #{Wedding::TOGETHER_SINCE.year}" },
+         { icon: "cake",           title: "Older",          value: "Nick",      desc: "by a year" },
+         { icon: "cat",            title: "Seniority",      value: "Jub",       desc: "by two weeks" }
+       ].each do |stat| %>
+      <div class="stat bg-base-200 px-4 py-3 md:px-6 md:py-4 xl:px-5">
+        <div class="stat-figure hidden text-primary md:block"><%= lucide_icon stat[:icon], class: "h-6 w-6" %></div>
+        <div class="stat-title"><%= stat[:title] %></div>
+        <div class="stat-value text-xl md:text-2xl"><%= stat[:value] %></div>
+        <% if stat[:desc] %>
+          <div class="stat-desc"><%= stat[:desc] %></div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </section>

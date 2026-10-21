@@ -21,6 +21,22 @@ class WeddingTest < ActiveSupport::TestCase
     assert_equal 10, Wedding.days_away(to: from + 10.days, from: from)
   end
 
+  test "counts whole years since an anniversary, ticking over on the day" do
+    assert_equal 6, Wedding.years_since(Wedding::FRIENDS_SINCE, on: Date.new(2026, 8, 31))
+    assert_equal 7, Wedding.years_since(Wedding::FRIENDS_SINCE, on: Date.new(2026, 9, 1))
+
+    assert_equal 2, Wedding.years_since(Wedding::TOGETHER_SINCE, on: Date.new(2026, 12, 24))
+    assert_equal 3, Wedding.years_since(Wedding::TOGETHER_SINCE, on: Date.new(2026, 12, 25))
+  end
+
+  # What the tiles will say on the night itself.
+  test "by the party: seven years of friends, three together" do
+    party = Wedding::STARTS_AT.to_date
+
+    assert_equal 7, Wedding.years_since(Wedding::FRIENDS_SINCE, on: party)
+    assert_equal 3, Wedding.years_since(Wedding::TOGETHER_SINCE, on: party)
+  end
+
   test "builds a calendar file with CRLF line endings, as RFC 5545 requires" do
     ics = Wedding.to_ics
 

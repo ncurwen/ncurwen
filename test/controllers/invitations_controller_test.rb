@@ -32,6 +32,29 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     assert_select "body", text: /Alice Attending/
   end
 
+  # Read from the Wedding constants rather than spelled out, so swapping in the
+  # real group code doesn't break this.
+  test "the invitation shows the venue and the hotel group rate" do
+    get invitations_path(token: guests(:alice).token)
+
+    assert_select "body", text: /#{Regexp.escape(Wedding::VENUE)}/
+    assert_select "#food-and-drinks", text: /Powerhouse Brewing/
+    assert_select "#food-and-drinks abbr[title=Gluten-free]", minimum: 1
+    assert_select "#stay kbd", text: Wedding::HOTEL_CODE
+    assert_select "#stay a[href=?]", Wedding::HOTEL_URL
+    assert_select "a[href=?]", "#stay"
+  end
+
+  # Every entry must point at a section that exists, or the scroll-spy silently
+  # drops it.
+  test "the table of contents links to sections on the page" do
+    get invitations_path(token: guests(:alice).token)
+
+    links = css_select("aside a[data-section]").map { |a| a["data-section"] }
+    assert_not_empty links
+    links.each { |id| assert_select "##{id}", { count: 1 }, "no section for ##{id}" }
+  end
+
   test "the invitation is kept out of search results" do
     get invitations_path(token: guests(:alice).token)
 

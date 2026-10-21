@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<%# The wedding invitation's own layout. Deliberately shares nothing with
-    layouts/application.html.erb — no nav, no site footer, no theme toggle, no
-    terminal styling. The theme is fixed, so there is no light/dark cookie. %>
+<%# The wedding invitation's own layout. Deliberately shares almost nothing with
+    layouts/application.html.erb — no nav, no site footer, no terminal styling.
+    The theme toggle and flash toasts are the shared pieces, and the toggle keeps
+    its own `wedding_theme` cookie so it never touches the main site's choice. %>
 <%# No data-theme unless the guest has picked one: that's what lets daisyUI's
     prefersdark rule follow their device, with no flash and no JavaScript.
     tag.attributes drops the attribute entirely when the value is nil — an
@@ -48,22 +49,14 @@
                            default_dark: false) %>
     </div>
 
-    <%# Fixed to the viewport, not placed in the document: an RSVP redirect morphs
-        the page with the scroll position preserved, so a banner at the top of
-        <main> would land far above where the guest is actually looking. The
-        wrapper renders unconditionally — daisyUI's .toast is position:fixed with
-        no background, so an empty one is invisible and non-interactive. %>
-    <div class="toast toast-end toast-bottom z-50">
-      <% flash.each do |type, message| %>
-        <%= flash_tag(message: message, type: type) %>
-      <% end %>
-    </div>
+    <%= render "layouts/flash" %>
 
     <%# The confetti surface for an accepted RSVP.
         canvas-confetti would otherwise append a canvas of its own to <body>, and the
         morph that follows the RSVP redirect deletes anything not in the new HTML — the
         burst would be wiped within a frame of appearing. This one is part of the
-        document and marked permanent, so the morph leaves it alone. Same
+        document and marked permanent, so the morph leaves it alone.
+
         A *stable* id, unlike the flash toast's random uuid: Turbo pairs permanent
         elements across renders by id, and a fresh uuid each render means nothing
         matches, so the node is replaced and the in-flight animation dies with it.

@@ -37,4 +37,7 @@
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
+# Generated from the originals at build time (see lib/garden_derivatives.rb).
+/app/assets/images/garden-derivatives
+
 /node_modules

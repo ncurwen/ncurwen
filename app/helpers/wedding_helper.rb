@@ -7,7 +7,7 @@
 #
 #   app/helpers/wedding_helper.rb          (this file)
 #   app/models/wedding.rb                  event date, venue, .ics
-#   app/models/guest.rb                    + db/migrate/*_create_guests.rb
+#   app/models/guest.rb
 #   app/controllers/invitations_controller.rb
 #   app/views/invitations/
 #   app/views/layouts/wedding.html.erb
@@ -18,6 +18,13 @@
 #   test/system/wedding_*.rb
 #   test/models/{wedding,guest}_test.rb
 #   test/controllers/invitations_controller_test.rb
+#   test/helpers/wedding_helper_test.rb
+#   test/fixtures/guests.yml
+#
+# Not the migration: production has a guests table by then, and deleting
+# db/migrate/*_create_guests.rb wouldn't drop it. Add a `DropGuests` migration
+# instead (`bin/rails g migration DropGuests`, with `drop_table :guests` and the
+# original columns so it's reversible) and let db/schema.rb regenerate.
 #
 # Then the edits, none of which are whole-file deletions:
 #
@@ -25,15 +32,25 @@
 #     `wedding-*` keyframes, and the `@import "./wedding.css"`. `default: true`
 #     currently sits on the `wedding` theme — move it back to `ncurwen-light`, or
 #     every page without a data-theme falls through to a theme that no longer exists.
+#     Likewise `prefersdark: true` back onto `ncurwen-dark`.
 #   * config/routes.rb: the `resources :invitations` block.
 #   * db/seeds.rb: the wedding roster.
 #   * public/robots.txt: `Disallow: /wedding/`.
 #   * package.json: the canvas-confetti dependency.
+#   * Gemfile: `rqrcode` and `chunky_png`, then `bundle install`.
+#   * config/cable.yml: the test adapter back to `test`.
+#   * TableOfContentsComponent: the `:plain` variant (only the invitation uses it),
+#     and its cases in test/components/table_of_contents_component_test.rb.
 #   * app/components/index.js: regenerate with
 #     `bin/rails view_component:stimulus_manifest:update`.
 #   * test/controllers/pages_controller_test.rb: the theme tripwire test, which only
 #     exists because of the `default: true` above.
 #   * test/components/theme_toggle_component_test.rb: the `wedding_toggle` cases.
+#
+# Staying put: FlashComponent and layouts/_flash.html.erb (the main site uses them),
+# and ThemeToggleComponent's light/dark/cookie parameters, which are harmless.
+#
+# Done when `git grep -Iin wedding` comes back empty.
 module WeddingHelper
   # The invitation's theme names, and the cookie values a guest's explicit choice is
   # stored under. Returns nil when they haven't chosen, which makes the layout render
@@ -61,6 +78,20 @@ module WeddingHelper
     tag.p(class: "badge badge-lg gap-2 #{classes}") do
       safe_join([ lucide_icon(icon, class: "h-4 w-4"), label ])
     end
+  end
+
+  # The caterer's dietary shorthand, spelled out for the <abbr> title so a guest
+  # (or a screen reader) doesn't have to guess what VEG means. Vegan dishes are
+  # marked VEG too: for choosing what to eat, the distinction didn't earn a badge.
+  DIETARY_TAGS = { "GF" => "Gluten-free", "VEG" => "Vegetarian" }.freeze
+
+  # A trailing asterisk ("VEG*") marks a dish that's only partly suitable, like a
+  # taco bar with one vegetarian filling.
+  def dietary_badge(code)
+    meaning = DIETARY_TAGS.fetch(code.delete_suffix("*"))
+    meaning = "#{meaning} option available" if code.end_with?("*")
+
+    tag.abbr(code, title: meaning, class: "badge badge-sm badge-outline no-underline")
   end
 
   # An answered guest is being offered a second thought, not asked the question again.

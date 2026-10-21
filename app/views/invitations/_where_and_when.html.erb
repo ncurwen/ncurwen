@@ -1,12 +1,14 @@
 <%# locals: (guest:) %>
-<section>
+<section id="where-and-when" class="flex scroll-mt-8 flex-col">
   <h2 class="wedding-display mb-4 text-center text-3xl">Where &amp; when</h2>
   <p class="mx-auto mb-8 max-w-xl text-center text-base-content/70">
     Quick heads up: the ceremony is a private, just-the-two-of-us elopement.
     This invite is for the good part &mdash; the party.
   </p>
 
-  <article class="card mx-auto max-w-sm bg-base-200">
+  <%# Full column width on desktop (rather than max-w-sm) so the lines wrap less
+      and the card sits level with Gifts beside it. %>
+  <article class="card mx-auto w-full max-w-sm bg-base-200 lg:max-w-none lg:flex-1">
     <div class="card-body">
       <h3 class="card-title gap-2">
         <%= lucide_icon "party-popper", class: "h-5 w-5 text-primary" %>
@@ -22,6 +24,18 @@
           <a href="<%= Wedding.map_url %>" target="_blank" rel="noopener"
              class="link link-primary text-sm"><%= Wedding::ADDRESS %></a>
         </span>
+      </p>
+      <%# Pointers, not details: the menu and the hotel each have a section of
+          their own, and repeating them here is what made the two blur together. %>
+      <p class="flex items-start gap-2 text-base-content/80">
+        <%= lucide_icon "martini", class: "h-4 w-4 shrink-0 mt-1" %>
+        <span>Open bar &amp; buffet all night &mdash;
+          <a href="#food-and-drinks" class="link link-primary">see the menu</a></span>
+      </p>
+      <p class="flex items-start gap-2 text-base-content/80">
+        <%= lucide_icon "bed-double", class: "h-4 w-4 shrink-0 mt-1" %>
+        <span>Staying over? The Hard Rock is a short walk away &mdash;
+          <a href="#stay" class="link link-primary">group rate</a></span>
       </p>
 
       <div class="card-actions mt-2 flex-col">
