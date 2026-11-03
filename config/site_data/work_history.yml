@@ -2,10 +2,13 @@ rows:
   - company: Info-Tech Research Group
     location: London, Ontario, Canada
     period: Jan 2014 — Present
-    summary: Over ten years of full-stack Rails development, from intern to a senior software developer role. Designed and implemented solutions to complex and evolving feature requirements; strong focus on modernization, optimization, and componentization.
+    summary: Over ten years of full-stack Rails development, from intern to Technical Architect. Designed and implemented solutions to complex and evolving feature requirements; strong focus on modernization, optimization, and componentization.
     roles:
+      - title: Technical Architect
+        period: Aug 2026 — Present
+
       - title: Senior Software Developer
-        period: Aug 2022 — Present
+        period: Aug 2022 — Jul 2026
         bullets:
           - Led Rails modernization to Turbo 8, implementing Stimulus controllers and morphs across the application; reduced frontend complexity and improved page responsiveness
           - Drove adoption of component-driven architecture, establishing a reusable component library that reduced feature development time and improved consistency
