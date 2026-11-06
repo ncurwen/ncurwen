@@ -1,0 +1,10 @@
+<%# locals: (name:, description: nil, tags: []) %>
+<li>
+  <p class="flex flex-wrap items-center gap-x-2 gap-y-1 font-semibold">
+    <span><%= name %></span>
+    <% tags.each do |code| %><%= dietary_badge(code) %><% end %>
+  </p>
+  <% if description %>
+    <p class="mt-0.5 text-sm text-base-content/70"><%= description %></p>
+  <% end %>
+</li>

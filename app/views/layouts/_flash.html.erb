@@ -1,0 +1,12 @@
+<%# Flash messages as toasts, shared by layouts/application and layouts/wedding.
+
+    Fixed to the viewport, not placed in the document: redirects morph the page
+    with the scroll position preserved, so a banner at the top of <main> would
+    land far above where the reader is actually looking. The wrapper renders
+    unconditionally — daisyUI's .toast is position:fixed with no background, so
+    an empty one is invisible and non-interactive. %>
+<div class="toast toast-end toast-bottom z-50">
+  <% flash.each do |type, message| %>
+    <%= flash_tag(message: message, type: type) %>
+  <% end %>
+</div>

@@ -1,9 +1,13 @@
 <div data-controller="table-of-contents-component" aria-label="Page sections">
-  <aside class="hidden 2xl:block fixed right-8 top-1/2 -translate-y-1/2 z-20 w-56">
-    <p class="font-mono text-xs tracking-wider text-base-content/50 mb-3">
-      <span class="text-primary">$</span> <span class="text-base-content/80">go</span><span class="text-base-content/40">to</span>
-    </p>
-    <ul class="space-y-2 font-mono text-sm border-l border-base-300 pl-3">
+  <aside class="hidden 2xl:block fixed <%= variant[:aside] %> top-1/2 -translate-y-1/2 z-20">
+    <% if terminal? %>
+      <p class="font-mono text-xs tracking-wider text-base-content/50 mb-3">
+        <span class="text-primary">$</span> <span class="text-base-content/80">go</span><span class="text-base-content/40">to</span>
+      </p>
+    <% else %>
+      <p class="text-xs uppercase tracking-[0.2em] text-base-content/50 mb-3">Navigation</p>
+    <% end %>
+    <ul class="space-y-2 <%= variant[:font] %> text-sm border-l border-base-300 pl-3">
       <% sections.each do |section| %>
         <li>
           <a href="#<%= section[:id] %>"
@@ -40,9 +44,13 @@
       <%= lucide_icon "list", class: "h-5 w-5" %>
     </label>
     <ul tabindex="0"
-        class="toc-menu menu dropdown-content mb-3 p-2 shadow bg-base-200 rounded-box w-60 font-mono max-h-[70vh] overflow-y-auto">
+        class="toc-menu menu dropdown-content mb-3 p-2 shadow bg-base-200 rounded-box w-60 <%= variant[:font] %> max-h-[70vh] overflow-y-auto">
       <li class="menu-title text-xs">
-        <span><span class="text-primary">$</span> <span class="text-base-content/80">go</span><span class="text-base-content/40">to</span></span>
+        <% if terminal? %>
+          <span><span class="text-primary">$</span> <span class="text-base-content/80">go</span><span class="text-base-content/40">to</span></span>
+        <% else %>
+          <span>Navigation</span>
+        <% end %>
       </li>
       <% sections.each do |section| %>
         <li>

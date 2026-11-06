@@ -1,0 +1,84 @@
+<%# Linked from "Where & when", hence the id and scroll margin. %>
+<section id="stay" class="scroll-mt-8 pb-16">
+  <h2 class="wedding-display mb-4 text-center text-3xl">Make a night of it</h2>
+  <p class="mx-auto mb-8 max-w-xl text-center text-base-content/70">
+    No cabs and no designated drivers: the hotel is a short walk from the party.
+  </p>
+
+  <article class="card overflow-hidden bg-base-200 lg:card-side">
+    <figure class="lg:w-1/2 lg:shrink-0">
+      <img src="<%= image_path("wedding/venue/hard-rock-exterior.jpg") %>"
+           alt="The Hard Rock Hotel London at dusk, with its giant guitar sculpture out front"
+           loading="lazy" class="aspect-[3/2] h-full w-full object-cover">
+    </figure>
+
+    <div class="card-body gap-4">
+      <span class="badge badge-soft badge-primary">Canada&rsquo;s first Hard Rock Hotel</span>
+      <h3 class="card-title text-2xl"><%= Wedding::HOTEL %></h3>
+      <p class="text-base-content/80">
+        It&rsquo;s part of the same 100 Kellogg Lane complex as the party, so the walk
+        back to bed takes a few minutes. Make a weekend of it:
+      </p>
+
+      <ul class="space-y-2 text-base-content/80">
+        <li class="flex items-start gap-2">
+          <%= lucide_icon "waves", class: "h-4 w-4 shrink-0 mt-1 text-primary" %>
+          <span>An indoor/outdoor pool, open year round, with underwater sound</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <%= lucide_icon "martini", class: "h-4 w-4 shrink-0 mt-1 text-primary" %>
+          <span>The 1913 speakeasy, mixing cereal-infused cocktails as a nod to the factory</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <%= lucide_icon "guitar", class: "h-4 w-4 shrink-0 mt-1 text-primary" %>
+          <span>Music memorabilia from Shania Twain and Gord Downie</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <%= lucide_icon "utensils", class: "h-4 w-4 shrink-0 mt-1 text-primary" %>
+          <span>Sessions restaurant for the morning after, and a nightcap at the GMT lobby bar</span>
+        </li>
+      </ul>
+
+      <div class="rounded-box border border-dashed border-primary/40 bg-base-100 p-4">
+        <p class="flex items-center gap-2 font-semibold">
+          <%= lucide_icon "ticket-percent", class: "h-5 w-5 text-primary" %>
+          Group rate for our guests
+        </p>
+        <p class="mt-2 flex flex-wrap items-center gap-2 text-sm text-base-content/70">
+          Use the code
+          <kbd class="kbd kbd-lg select-all"><%= Wedding::HOTEL_CODE %></kbd>
+          when you book.
+        </p>
+      </div>
+
+      <div class="card-actions flex-col sm:flex-row">
+        <a href="<%= Wedding::HOTEL_URL %>" target="_blank" rel="noopener"
+           class="btn btn-primary w-full gap-2 sm:w-auto">
+          <%= lucide_icon "bed-double", class: "h-4 w-4" %>
+          Book your room
+        </a>
+        <a href="tel:<%= Wedding::HOTEL_PHONE.delete("-") %>" class="btn btn-ghost w-full gap-2 sm:w-auto">
+          <%= lucide_icon "phone", class: "h-4 w-4" %>
+          <%= Wedding::HOTEL_PHONE.delete_prefix("+1-") %>
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <div class="mt-6 grid gap-6 sm:grid-cols-2">
+    <% [
+         { src: "wedding/venue/hard-rock-pool.jpg", alt: "The hotel's indoor/outdoor pool with cabana seating",
+           caption: "The pool deck, if you need a morning-after float." },
+         { src: "wedding/venue/hard-rock-1913-speakeasy.jpg", alt: "The bar at the 1913 speakeasy",
+           caption: "1913, the speakeasy, for one more round." }
+       ].each do |photo| %>
+      <figure class="card overflow-hidden bg-base-200">
+        <img src="<%= image_path(photo[:src]) %>" alt="<%= photo[:alt] %>" loading="lazy"
+             class="aspect-[3/2] w-full object-cover">
+        <figcaption class="p-4 text-sm text-base-content/70"><%= photo[:caption] %></figcaption>
+      </figure>
+    <% end %>
+  </div>
+
+  <p class="mt-3 text-center text-xs text-base-content/50">Photos courtesy of <%= Wedding::HOTEL %>.</p>
+</section>

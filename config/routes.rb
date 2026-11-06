@@ -10,4 +10,8 @@ Rails.application.routes.draw do
   get "/garden"     => "pages#garden",     as: :garden
   get "/contact"    => "pages#contact",    as: :contact
   post "/contact"   => "contact_forms#create"
+
+  resources :invitations, path: "/wedding/:token", only: %i[index update] do
+    get :calendar, on: :collection
+  end
 end
